@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import loader from "../assets/loader.gif";
 import lens from "../assets/lens.png";
-import "../styles/Home.module.css";
+import styles from "../styles/Home.module.css";
 import { API_URL } from "../api";
 
 function App() {
@@ -46,12 +46,12 @@ function App() {
   }, [prompt]);
 
   return (
-    <div className="app">
-      <div className="app-container">
-        <div className="spotlight__wrapper">
+    <div className={styles.app}>
+      <div className={styles.app_container}>
+        <div className={styles.spotlight__wrapper}>
           <input
             type="text"
-            className="spotlight__input"
+            className={styles.spotlight__input}
             disabled={loading}
             onChange={(e) => updatePrompt(e.target.value)}
             onKeyDown={(e) => sendPrompt(e)}
@@ -60,7 +60,7 @@ function App() {
               backgroundImage: loading ? `url(${loader})` : `url(${lens})`,
             }}
           />
-          <div className="spotlight__answer">{answer && <p>{answer}</p>}</div>
+          <div className={styles.spotlight__answer}>{answer && <p>{answer}</p>}</div>
         </div>
       </div>
     </div>
