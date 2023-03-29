@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { BsPencilSquare } from "react-icons/bs";
+import Link from "next/link";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -10,10 +11,12 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200 w-full z-50">
       <nav className="flex items-center justify-between px-6 py-3 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1 gap-4">
-          <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=gray&shade=800" alt="" />
-          </a>
+          <div className="-m-1.5 p-1.5">
+            <Link href="/">
+              <span className="sr-only">Your Company</span>
+              <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=gray&shade=800" alt="" />
+            </Link>
+          </div>
           <div>
             <div>
               <input
@@ -38,9 +41,10 @@ export default function Header() {
         </div>
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
-          <a href="/posts/new" className="text-sm font-light leading-6 text-gray-900 flex gap-2">
-            Write <BsPencilSquare className="my-auto text-gray-500" />
-          </a>
+          <span className="text-sm font-light leading-6 text-gray-900 flex gap-2">
+            <Link href="/posts/new">Write</Link>
+            <BsPencilSquare className="my-auto text-gray-500" />
+          </span>
           <a href="#" className="text-sm font-light leading-6 text-gray-900">
             Log in <span aria-hidden="true">&rarr;</span>
           </a>

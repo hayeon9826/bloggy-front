@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import SideBar from "./SideBar";
 
 const posts = [
   {
@@ -106,7 +105,7 @@ const posts = [
   },
 ];
 
-export default function PostList() {
+export default function SideBar() {
   const router = useRouter();
 
   const handleClickLink = (id: number) => {
@@ -114,51 +113,44 @@ export default function PostList() {
   };
 
   return (
-    <div className="bg-white pb-24 sm:pb-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 flex">
-        <div className="mx-auto max-w-2xl">
-          <div className="space-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 overflow-y-scroll">
-            {posts.map((post) => (
-              <article
-                role="presentation"
-                onClick={() => handleClickLink(post.id)}
-                key={post.id}
-                className="flex max-w-xl flex-col items-start justify-between cursor-pointer"
-              >
-                <div className="flex items-center gap-x-4 text-xs">
-                  <time dateTime={post.datetime} className="text-gray-500">
-                    {post.date}
-                  </time>
-                  <a href={post.category.href} className="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">
-                    {post.category.title}
-                  </a>
-                </div>
-                <div className="group relative">
-                  <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                    <span>
-                      <span className="absolute inset-0" />
-                      {post.title}
-                    </span>
-                  </h3>
-                  <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">{post.description}</p>
-                </div>
-                <div className="relative mt-8 flex items-center gap-x-4">
-                  <img src={post.author.imageUrl} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
-                  <div className="text-sm leading-6">
-                    <p className="font-semibold text-gray-900">
-                      <span>
-                        <span className="absolute inset-0" />
-                        {post.author.name}
-                      </span>
-                    </p>
-                    <p className="text-gray-600">{post.author.role}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-        <SideBar />
+    <div className="mx-auto max-w-xs border-l border-gray-200 min-h-screen">
+      <div className="space-y-16 pt-10  overflow-y-scroll pl-12">
+        {posts.map((post) => (
+          <article
+            role="presentation"
+            onClick={() => handleClickLink(post.id)}
+            key={post.id}
+            className="flex max-w-xl flex-col items-start justify-between cursor-pointer"
+          >
+            <div className="flex items-center gap-x-4 text-xs">
+              <time dateTime={post.datetime} className="text-gray-500">
+                {post.date}
+              </time>
+              <span className="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">{post.category.title}</span>
+            </div>
+            <div className="group relative">
+              <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                <span>
+                  <span className="absolute inset-0" />
+                  {post.title}
+                </span>
+              </h3>
+              <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">{post.description}</p>
+            </div>
+            <div className="relative mt-8 flex items-center gap-x-4">
+              <img src={post.author.imageUrl} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
+              <div className="text-sm leading-6">
+                <p className="font-semibold text-gray-900">
+                  <span>
+                    <span className="absolute inset-0" />
+                    {post.author.name}
+                  </span>
+                </p>
+                <p className="text-gray-600">{post.author.role}</p>
+              </div>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   );
