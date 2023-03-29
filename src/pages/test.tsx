@@ -20,7 +20,7 @@ function App() {
         body: JSON.stringify({ prompt }),
       };
 
-      const res = await fetch(`/api/ask`, requestOptions);
+      const res = await fetch(`/api/gpt`, requestOptions);
 
       if (!res.ok) {
         throw new Error("Something went wrong");
