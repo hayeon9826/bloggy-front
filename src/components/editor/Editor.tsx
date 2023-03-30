@@ -27,5 +27,5 @@ const formats = ["header", "font", "size", "bold", "italic", "underline", "strik
 
 export default function Editor() {
   const [value, setValue] = useState("");
-  return <QuillWrapper theme="snow" value={value} onChange={setValue} modules={modules} formats={formats} />;
+  return <QuillWrapper theme="snow" value={value} onChange={setValue} modules={modules} formats={formats} placeholder="Write your story..." />;
 }

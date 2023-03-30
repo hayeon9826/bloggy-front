@@ -2,6 +2,28 @@
   min-height: 90vh;
 }
 
+.ql-toolbar {
+  display: flex;
+  justify-content: center;
+}
+
+.ql-editor {
+  max-width: 1048px;
+  margin: 0 auto;
+  margin-top: 120px;
+}
+
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  max-width: 1048px;
+  margin: 0 auto;
+  font-size: 18px;
+  padding-left: 14px;
+}
+
+.ql-container {
+  font-size: 18px !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
