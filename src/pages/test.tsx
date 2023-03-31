@@ -54,10 +54,14 @@ function App() {
             onKeyDown={(e) => sendPrompt(e)}
             placeholder="Ask me anything..."
             style={{
-              backgroundImage: loading ? `url("/assets/loader.gif")` : `url("/assets/lens.png")`,
+              backgroundImage: loading
+                ? `url("/images/loader.gif")`
+                : `url("/images/lens.png")`,
             }}
           />
-          <div className={styles.spotlight__answer}>{answer && <p>{answer}</p>}</div>
+          <div className={styles.spotlight__answer}>
+            {answer && <p>{answer}</p>}
+          </div>
         </div>
       </div>
     </div>

@@ -3,8 +3,10 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { BsPencilSquare } from "react-icons/bs";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
+  const { status } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -48,14 +50,30 @@ export default function Header() {
         </div>
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
-          <span className="text-sm font-light leading-6 text-gray-900 flex gap-2">
-            <Link href="/posts/new">Write</Link>
-            <BsPencilSquare className="my-auto text-gray-500" />
-          </span>
+          {status === "authenticated" && (
+            <span className="text-sm font-light leading-6 text-gray-900 flex gap-2">
+              <Link href="/posts/new">Write</Link>
+              <BsPencilSquare className="my-auto text-gray-500" />
+            </span>
+          )}
+
           <span className="text-sm font-light leading-6 text-gray-900">
-            <Link href="/api/auth/signin">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </Link>
+            {status === "authenticated" ? (
+              <button
+                type="button"
+                onClick={() =>
+                  signOut({
+                    callbackUrl: "/",
+                  })
+                }
+              >
+                Log out
+              </button>
+            ) : (
+              <Link href="/api/auth/signin">
+                Log in <span aria-hidden="true">&rarr;</span>
+              </Link>
+            )}
           </span>
         </div>
       </nav>
