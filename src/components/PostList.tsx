@@ -116,7 +116,7 @@ export default function PostList() {
   return (
     <div className="bg-white pb-24 sm:pb-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 flex">
-        <div className="mx-auto max-w-2xl">
+        <div className="mx-auto max-w-2xl mt-20">
           <div className="space-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 overflow-y-scroll">
             {posts.map((post) => (
               <article
@@ -158,7 +158,7 @@ export default function PostList() {
             ))}
           </div>
         </div>
-        <SideBar />
+        <SideBar className="mt-28" />
       </div>
     </div>
   );

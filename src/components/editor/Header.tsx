@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { BsPencilSquare } from "react-icons/bs";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -10,10 +11,12 @@ export default function Header() {
     <header className="bg-white border-b border-gray-200 w-full z-50">
       <nav className="flex items-center justify-between px-6 py-3 lg:px-8 max-w-5xl mx-auto" aria-label="Global">
         <div className="flex lg:flex-1 gap-4">
-          <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=gray&shade=800" alt="" />
-          </a>
+          <span className="-m-1.5">
+            <Link href="/">
+              <span className="sr-only">Your Company</span>
+              <Image width={32} height={32} className="h-8 w-auto" src="/images/logo_white_lg.png" alt="" />
+            </Link>
+          </span>
           <div className="text-sm my-auto font-normal">Draft in Hayeonkim</div>
           <div className="text-sm my-auto font-normal text-gray-500">Saved</div>
         </div>

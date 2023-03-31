@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import cn from "classnames";
 
 const posts = [
   {
@@ -105,7 +106,7 @@ const posts = [
   },
 ];
 
-export default function SideBar() {
+export default function SideBar({ className = "" }) {
   const router = useRouter();
 
   const handleClickLink = (id: number) => {
@@ -113,8 +114,8 @@ export default function SideBar() {
   };
 
   return (
-    <div className="mx-auto max-w-xs border-l border-gray-200 min-h-screen">
-      <div className="space-y-16 pt-10  overflow-y-scroll pl-12">
+    <div className={cn("mx-auto max-w-xs border-l border-gray-200 min-h-screen")}>
+      <div className={cn("space-y-16 pt-10  overflow-y-scroll pl-12", className)}>
         {posts.map((post) => (
           <article
             role="presentation"

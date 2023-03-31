@@ -1,8 +1,19 @@
+import { useState } from "react";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import { useRouter } from "next/router";
 
 export default function Banner() {
-  return (
-    <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 py-2.5 px-6 sm:px-3.5 sm:before:flex-1 border-b border-gray-200">
+  const [isShow, setIsShow] = useState<boolean>(true);
+  const router = useRouter();
+  const handleClickBanner = () => {
+    router.push("/pricing");
+  };
+  // session 하루 처리
+  return isShow ? (
+    <div
+      role="presentation"
+      className="w-full isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 py-2.5 px-6 sm:px-3.5 sm:before:flex-1 border-b border-gray-200 fixed top-[60px] z-50"
+    >
       <svg
         viewBox="0 0 577 310"
         aria-hidden="true"
@@ -28,21 +39,23 @@ export default function Banner() {
       >
         <use href="#a906133b-f855-4023-a54c-38d70c72fe9c" />
       </svg>
-      <p className="text-sm leading-6 text-gray-900">
+      <p className="text-sm leading-6 text-gray-900" role="presentation" onClick={handleClickBanner}>
         <a href="#">
-          <strong className="font-semibold">GeneriCon 2023</strong>
+          <strong className="font-semibold">Get membership</strong>
           <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true">
             <circle cx={1} cy={1} r={1} />
           </svg>
-          Join us in Denver from June 7 – 9 to see what’s coming next&nbsp;<span aria-hidden="true">&rarr;</span>
+          Get unlimited access to all of Bloggy for less than $1/week.&nbsp;<span aria-hidden="true">&rarr;</span>
         </a>
       </p>
       <div className="flex flex-1 justify-end">
-        <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
+        <button type="button" onClick={() => setIsShow(false)} className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
           <span className="sr-only">Dismiss</span>
           <XMarkIcon className="h-5 w-5 text-gray-900" aria-hidden="true" />
         </button>
       </div>
     </div>
+  ) : (
+    <></>
   );
 }
