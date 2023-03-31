@@ -1,18 +1,23 @@
-import { LockClosedIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
+import FullPageLoader from "@/components/FullPageLoader";
 
 export default function SignInPage() {
   const { status, data: session } = useSession();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const checkUser = useCallback(async () => {
+    setIsLoading(true);
     let isSuccess;
     try {
-      const res = await axios.post("/api/authUser", { email: session?.user?.email });
+      const res = await axios.post("/api/authUser", {
+        email: session?.user?.email,
+      });
       if (res && res?.data?.email) {
         isSuccess = true;
       } else {
@@ -27,6 +32,7 @@ export default function SignInPage() {
       console.log(err);
     }
     if (isSuccess) router.replace("/", undefined, { shallow: true });
+    setIsLoading(false);
   }, [router, session]);
 
   useEffect(() => {
@@ -37,14 +43,26 @@ export default function SignInPage() {
 
   return (
     <>
+      {isLoading && <FullPageLoader />}
       <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8 flex-col">
         <div className="w-full max-w-md space-y-8">
           <div>
-            <Image className="mx-auto h-24 w-auto" width={96} height={96} src="/images/logo_text_white.png" alt="Your Company" />
-            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+            <Image
+              className="mx-auto h-24 w-auto"
+              width={96}
+              height={96}
+              src="/images/logo_text_white.png"
+              alt="Your Company"
+            />
+            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+              Sign in to your account
+            </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Or{" "}
-              <a href="#" className="font-medium text-gray-600 hover:text-gray-500">
+              <a
+                href="#"
+                className="font-medium text-gray-600 hover:text-gray-500"
+              >
                 start your 14-day free trial
               </a>
             </p>
