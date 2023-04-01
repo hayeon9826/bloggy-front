@@ -5,6 +5,8 @@ import { useQuery } from "react-query";
 import { PostListSkeleton } from "./posts/Skeleton";
 import SideBar from "./SideBar";
 import { BsPersonCircle } from "react-icons/bs";
+import dayjs from "dayjs";
+dayjs().format();
 
 export default function PostList() {
   const router = useRouter();
@@ -36,8 +38,8 @@ export default function PostList() {
   return (
     <div className="bg-white pb-24 sm:pb-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 lg:flex">
-        <div className="mx-auto max-w-2xl mt-40 lg:mt-20">
-          <div className="space-y-16 pt-10 sm:mt-12 sm:pt-16 overflow-y-scroll">
+        <div className="mx-auto max-w-2xl mt-32 lg:mt-20">
+          <div className="space-y-16 pt-10 sm:pt-16 overflow-y-scroll">
             {isFetching && <PostListSkeleton />}
             {posts && posts?.length > 0 ? (
               posts?.map((post: Post) => (
@@ -49,7 +51,7 @@ export default function PostList() {
                 >
                   <div className="flex items-center gap-x-4 text-xs">
                     <time dateTime={post?.createdAt} className="text-gray-500">
-                      {post?.createdAt}
+                      {dayjs(post?.createdAt).format("YYYY-MM-DD")}
                     </time>
                     {/* <a href={post.category.href} className="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">
                     {post.category.title}

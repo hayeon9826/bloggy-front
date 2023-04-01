@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
+import { createCookie, getCookieValue } from "@/hooks/useCookie";
 
 export default function Banner() {
   const [isShow, setIsShow] = useState<boolean>(true);
@@ -8,7 +9,19 @@ export default function Banner() {
   const handleClickBanner = () => {
     router.push("/pricing");
   };
-  // session 하루 처리
+
+  const handleCloseBanner = useCallback(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    createCookie("bannerClose", "close", date);
+    setIsShow(false);
+  }, []);
+
+  useEffect(() => {
+    const value = getCookieValue("bannerClose");
+    setIsShow(!value);
+  }, []);
+
   return isShow ? (
     <div
       role="presentation"
@@ -34,8 +47,8 @@ export default function Banner() {
             y2="96.115"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#9089FC" />
-            <stop offset={1} stopColor="#FF80B5" />
+            <stop stopColor="#c3bffd" />
+            <stop offset={1} stopColor="#ffb6d5" />
           </linearGradient>
         </defs>
       </svg>
@@ -67,7 +80,7 @@ export default function Banner() {
       <div className="flex flex-1 justify-end">
         <button
           type="button"
-          onClick={() => setIsShow(false)}
+          onClick={handleCloseBanner}
           className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
         >
           <span className="sr-only">Dismiss</span>

@@ -38,7 +38,7 @@ export default async function handler(
       // trigger OpenAI completion
       const response = await openai.createCompletion({
         model: "text-davinci-003",
-        max_tokens: 100,
+        max_tokens: 2000,
         prompt: `${PromptPrefix[type]}${prompt}`,
       });
 

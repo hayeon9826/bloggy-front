@@ -54,18 +54,20 @@ export default function Header() {
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
           {status === "authenticated" && (
-            <span className="text-sm font-light leading-6 text-gray-900 flex gap-2">
+            <span className="text-sm font-light leading-6 text-gray-900 hover:text-blue-600 hover:stroke-blue-600 flex gap-2">
               <Link href="/posts/new">Write</Link>
-              <BsPencilSquare className="my-auto text-gray-500" />
+              <BsPencilSquare className="my-auto text-gray-500 hover:text-blue-600 cursor-pointer" />
             </span>
           )}
           {status === "authenticated" && (
-            <span className="text-sm font-light leading-6 text-gray-900">
-              <Link href={`/@${session?.user?.email}`}>Profile</Link>
+            <span className="text-sm font-light leading-6 text-gray-900 hover:text-blue-600">
+              <Link href={`/@${session?.user?.email?.split("@")?.[0]}`}>
+                Profile
+              </Link>
             </span>
           )}
           {status === "authenticated" ? (
-            <span className="text-sm font-light leading-6 text-gray-900">
+            <span className="text-sm font-light leading-6 text-gray-900 hover:text-blue-600">
               <button
                 type="button"
                 onClick={() =>
@@ -78,7 +80,7 @@ export default function Header() {
               </button>
             </span>
           ) : (
-            <span className="text-sm font-light leading-6 text-gray-900">
+            <span className="text-sm font-light leading-6 text-gray-900 hover:text-blue-600">
               <Link href="/api/auth/signin">
                 Log in <span aria-hidden="true">&rarr;</span>
               </Link>
@@ -118,6 +120,13 @@ export default function Header() {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="py-6">
                 <span className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-light leading-7 text-gray-900 hover:bg-gray-50">
+                  {status === "authenticated" && (
+                    <div className="mb-2">
+                      <Link href={`/@${session?.user?.email?.split("@")?.[0]}`}>
+                        Profile
+                      </Link>
+                    </div>
+                  )}
                   {status === "authenticated" ? (
                     <button
                       type="button"

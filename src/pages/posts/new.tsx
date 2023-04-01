@@ -6,14 +6,14 @@ import { AiOutlineWarning, AiFillCheckCircle } from "react-icons/ai";
 import axios from "axios";
 import { Post } from "@/interface";
 import { useSession } from "next-auth/react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import FullPageLoader from "@/components/FullPageLoader";
 import ReactQuill from "react-quill";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 
 export default function PostNewPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const quillRef = useRef<ReactQuill | null>(null);
@@ -78,6 +78,13 @@ export default function PostNewPage() {
     toast("Please upgrade your account to continue");
   };
 
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      toast.error("Please login to continue");
+      router.replace("/users/login");
+    }
+  }, [router, status]);
+
   return (
     <>
       {loading && <FullPageLoader />}
@@ -105,7 +112,7 @@ export default function PostNewPage() {
               className="rounded-md bg-blue-600 text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-blue-600/75"
             >
               <AiFillCheckCircle />
-              Create blog post
+              Write blog post
             </button>
             <button
               onClick={handleClickContinue}

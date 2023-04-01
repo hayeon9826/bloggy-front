@@ -5,8 +5,8 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { BsPersonCircle } from "react-icons/bs";
-import Prism from "prismjs";
-import { useEffect } from "react";
+import dayjs from "dayjs";
+dayjs().format();
 
 export default function PostPage() {
   const router = useRouter();
@@ -53,7 +53,7 @@ export default function PostPage() {
                 <p className="font-normal text-xs mt-1 text-gray-500">
                   <span>
                     <span className="absolute inset-0" />
-                    {post?.createdAt}
+                    {dayjs(post?.createdAt).format("YYYY-MM-DD")}
                   </span>
                 </p>
               </div>

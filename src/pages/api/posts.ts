@@ -37,14 +37,12 @@ export default async function handler(
     res.json(object);
   } else {
     const { id, email } = req.query;
-    console.log(email, "##email");
     let user;
 
     if (email) {
       user = await prisma.user.findMany({
         where: { email: email },
       });
-      console.log(user, "##user");
     }
 
     const objects = await prisma.post.findMany({
