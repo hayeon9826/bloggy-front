@@ -6,13 +6,17 @@ import { AiOutlineWarning, AiFillCheckCircle } from "react-icons/ai";
 import axios from "axios";
 import { Post } from "@/interface";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import FullPageLoader from "@/components/FullPageLoader";
+import ReactQuill from "react-quill";
+import toast from "react-hot-toast";
+import { Tooltip } from "react-tooltip";
 
 export default function PostNewPage() {
   const { data: session } = useSession();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const quillRef = useRef<ReactQuill | null>(null);
   const {
     register,
     handleSubmit,
@@ -32,30 +36,24 @@ export default function PostNewPage() {
     trigger("content");
   };
 
-  const handleClickAiButton = async () => {
-    console.log("click!");
+  const handleClickCreatePost = useCallback(async () => {
     const val = getValues("title");
-
-    console.log(val, val.length);
     if (val.length > 0) {
       try {
         setLoading(true);
-
-        const requestOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: val }),
-        };
-
-        const res = await fetch(`/api/gpt`, requestOptions);
-        console.log(res, "@@RES");
-        if (!res.ok) {
+        const res = await axios.post("/api/aiRecords", {
+          prompt: val,
+          type: "CREATE_POST",
+          email: session?.user?.email,
+        });
+        if (!res.data) {
           throw new Error("Something went wrong");
         }
-
-        const { message } = await res.json();
-        console.log(message, "@@@message");
-        setValue("content", message);
+        const { message } = res.data;
+        if (quillRef?.current?.editor) {
+          quillRef?.current?.editor.insertText(0, message);
+        }
+        handleChangeEditor(message);
         trigger("content");
         setLoading(false);
       } catch (err) {
@@ -63,36 +61,102 @@ export default function PostNewPage() {
         console.log("err", err);
       }
       console.log("prompt", prompt);
+    } else {
+      toast.error("Please fill in the title.");
     }
+  }, []);
+
+  const handleClickContinue = () => {
+    toast("Please upgrade your account to continue");
   };
 
-  console.log(loading);
+  const handleClickEnhancement = () => {
+    toast("Please upgrade your account to continue");
+  };
+
+  const handleClickSummarize = () => {
+    toast("Please upgrade your account to continue");
+  };
 
   return (
     <>
       {loading && <FullPageLoader />}
       <form
         onSubmit={handleSubmit(async (data) => {
-          console.log(data);
-          const res = await axios.post<Post>("/api/posts", { ...data, email: session?.user?.email });
+          const res = await axios.post<Post>("/api/posts", {
+            ...data,
+            email: session?.user?.email,
+          });
 
-          console.log(res);
           if (res.data) {
+            toast.success("Successfully created!");
             router.replace("/");
           }
         })}
       >
         <Header />
         <div className="relative hidden md:block">
-          <Editor handleChangeEditor={handleChangeEditor} />
-          <button
-            onClick={handleClickAiButton}
-            type="button"
-            className="absolute top-[60px] right-10 rounded-md bg-black text-white px-4 py-1.5 text-sm flex gap-2 items-center"
-          >
-            <AiFillCheckCircle />
-            AI Content Generator
-          </button>
+          <Editor handleChangeEditor={handleChangeEditor} quillRef={quillRef} />
+          <div className="w-full mx-auto absolute inset-x-0 flex gap-4 justify-center bottom-[60px]">
+            <button
+              onClick={handleClickCreatePost}
+              id="create-blog-btn"
+              type="button"
+              className="rounded-md bg-blue-600 text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-blue-600/75"
+            >
+              <AiFillCheckCircle />
+              Create blog post
+            </button>
+            <button
+              onClick={handleClickContinue}
+              id="continue-writing-btn"
+              type="button"
+              className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
+            >
+              <AiFillCheckCircle />
+              Continue writing
+            </button>
+
+            <button
+              onClick={handleClickEnhancement}
+              id="enhancement-btn"
+              type="button"
+              className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
+            >
+              <AiFillCheckCircle />
+              Enhancement
+            </button>
+            <button
+              onClick={handleClickSummarize}
+              id="summarize-btn"
+              type="button"
+              className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
+            >
+              <AiFillCheckCircle />
+              Summarize
+            </button>
+            <Tooltip
+              anchorSelect="#create-blog-btn"
+              place="top"
+              content="Fill in the title to create a blog post"
+            />
+            <Tooltip
+              anchorSelect="#continue-writing-btn"
+              place="top"
+              content={`Select the paragraph that you want to start continue writing`}
+            />
+            <Tooltip
+              anchorSelect="#enhancement-btn"
+              place="top"
+              content={`Select the paragraph that you want to enhance`}
+            />
+            <Tooltip
+              anchorSelect="#summarize-btn"
+              place="top"
+              content={`Select the paragraph that you want to summarize`}
+            />
+          </div>
+
           <input
             required
             {...register("title", { required: true })}
@@ -103,9 +167,15 @@ export default function PostNewPage() {
         <div className="min-h-screen md:hidden flex flex-col justify-center bg-black/50">
           <div className="bg-white rounded-lg w-[80vw] mx-auto text-center shadow px-8 py-12">
             <div className="text-2xl text-yellow-400 font-bold">Ooooops!</div>
-            <div className="mt-2 text-base text-gray-800">Please use PC to continue with Bloggy Editor</div>
+            <div className="mt-2 text-base text-gray-800">
+              Please use PC to continue with Bloggy Editor
+            </div>
             <AiOutlineWarning className="mx-auto w-20 h-20 mt-8 text-gray-600" />
-            <button type="button" className="bg-black text-sm rounded-md px-4 py-2 mt-8 text-white shadow" onClick={handleClickMain}>
+            <button
+              type="button"
+              className="bg-black text-sm rounded-md px-4 py-2 mt-8 text-white shadow"
+              onClick={handleClickMain}
+            >
               Back to main page
             </button>
           </div>

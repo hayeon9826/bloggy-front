@@ -21,6 +21,12 @@
 - [] 게시글 수정
 - [] 게시글 삭제
 - [] 사이드 바 구성
-- [] profile 페이지 작업
+- [] 헤더 profile 이미지 & sub 헤더 추가
+- [x] profile 페이지 작업
 - [] 임시저장 작업
-- [] generate AI 버튼 추가
+- [x] AI create blog post 버튼 추가
+- [] AI continue writing 버튼 기능 추가
+- [] AI enhancement 버튼 추가
+- [] AI summarize 버튼 추가
+- [] infinite scroll 추가
+- [] get membership 배너 localstorage 작업 (24시간)

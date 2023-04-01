@@ -28,6 +28,8 @@ export default function SignInPage() {
         await axios.post("/api/users", data);
         isSuccess = true;
       }
+
+      // localstorage에 user id 추가
     } catch (err) {
       console.log(err);
     }

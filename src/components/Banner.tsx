@@ -26,7 +26,14 @@ export default function Banner() {
           d="m142.787 168.697-75.331 62.132L.016 88.702l142.771 79.995 135.671-111.9c-16.495 64.083-23.088 173.257 82.496 97.291C492.935 59.13 494.936-54.366 549.339 30.385c43.523 67.8 24.892 159.548 10.136 196.946l-128.493-95.28-36.628 177.599-251.567-140.953Z"
         />
         <defs>
-          <linearGradient id="be47b6c9-9c22-49b2-a209-168b52fa0ada" x1="614.778" x2="-42.453" y1="26.617" y2="96.115" gradientUnits="userSpaceOnUse">
+          <linearGradient
+            id="be47b6c9-9c22-49b2-a209-168b52fa0ada"
+            x1="614.778"
+            x2="-42.453"
+            y1="26.617"
+            y2="96.115"
+            gradientUnits="userSpaceOnUse"
+          >
             <stop stopColor="#9089FC" />
             <stop offset={1} stopColor="#FF80B5" />
           </linearGradient>
@@ -39,17 +46,30 @@ export default function Banner() {
       >
         <use href="#a906133b-f855-4023-a54c-38d70c72fe9c" />
       </svg>
-      <p className="text-sm leading-6 text-gray-900" role="presentation" onClick={handleClickBanner}>
+      <p
+        className="text-sm leading-6 text-gray-900"
+        role="presentation"
+        onClick={handleClickBanner}
+      >
         <a href="#">
           <strong className="font-semibold">Get membership</strong>
-          <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true">
+          <svg
+            viewBox="0 0 2 2"
+            className="mx-2 inline h-0.5 w-0.5 fill-current"
+            aria-hidden="true"
+          >
             <circle cx={1} cy={1} r={1} />
           </svg>
-          Get unlimited access to all of Bloggy for less than $1/week.&nbsp;<span aria-hidden="true">&rarr;</span>
+          Get unlimited access to all of Bloggy for less than $1/week.&nbsp;
+          <span aria-hidden="true">&rarr;</span>
         </a>
       </p>
       <div className="flex flex-1 justify-end">
-        <button type="button" onClick={() => setIsShow(false)} className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
+        <button
+          type="button"
+          onClick={() => setIsShow(false)}
+          className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
+        >
           <span className="sr-only">Dismiss</span>
           <XMarkIcon className="h-5 w-5 text-gray-900" aria-hidden="true" />
         </button>

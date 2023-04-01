@@ -35,7 +35,11 @@ export default function PostPage() {
           <div className="max-w-3xl lg:min-w-[576px]">
             <div className="relative mt-8 flex items-center gap-x-4">
               {post?.user?.imageUrl ? (
-                <img src={post?.user?.imageUrl} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
+                <img
+                  src={post?.user?.imageUrl}
+                  alt=""
+                  className="h-10 w-10 rounded-full bg-gray-50"
+                />
               ) : (
                 <BsPersonCircle className="w-10 h-10 text-gray-300" />
               )}
@@ -54,8 +58,13 @@ export default function PostPage() {
                 </p>
               </div>
             </div>
-            <h1 className="mt-8 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{post?.title}</h1>
-            <div className="mt-6 text-xl leading-8" dangerouslySetInnerHTML={{ __html: post?.content as string }} />
+            <h1 className="mt-8 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              {post?.title}
+            </h1>
+            <div
+              className="mt-6 leading-7 whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: post?.content as string }}
+            />
           </div>
           <SideBar />
         </div>

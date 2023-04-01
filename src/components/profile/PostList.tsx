@@ -2,11 +2,14 @@ import { Post } from "@/interface";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import { PostListSkeleton } from "./posts/Skeleton";
-import SideBar from "./SideBar";
+import { PostListSkeleton } from "../posts/Skeleton";
+import cn from "classnames";
+import { useSession } from "next-auth/react";
+
 import { BsPersonCircle } from "react-icons/bs";
 
 export default function PostList() {
+  const { data: session } = useSession();
   const router = useRouter();
 
   const handleClickLink = (id: string) => {
@@ -14,7 +17,7 @@ export default function PostList() {
   };
 
   const config = {
-    url: "/api/posts",
+    url: `/api/posts?email=${session?.user?.email}`,
   };
 
   const { data: posts, isFetching } = useQuery(
@@ -66,25 +69,6 @@ export default function PostList() {
                       {RemoveHTMLTags(post?.content)}
                     </p>
                   </div>
-                  <div className="relative mt-4 flex items-center gap-x-4">
-                    {post?.user?.imageUrl ? (
-                      <img
-                        src={post?.user?.imageUrl}
-                        alt=""
-                        className="h-10 w-10 rounded-full bg-gray-50"
-                      />
-                    ) : (
-                      <BsPersonCircle className="w-10 h-10 text-gray-300" />
-                    )}
-                    <div className="text-sm leading-6">
-                      <p className="font-normal text-xs text-gray-900">
-                        <span>
-                          <span className="absolute inset-0" />
-                          {post?.user?.email}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
                 </article>
               ))
             ) : (
@@ -94,7 +78,42 @@ export default function PostList() {
             )}
           </div>
         </div>
-        <SideBar className="mt-28" />
+        <div
+          className={cn(
+            "mx-auto lg:max-w-xs lg:border-l border-gray-200 min-h-screen"
+          )}
+        >
+          <div
+            className={cn(
+              "space-y-16 pt-10  overflow-y-scroll lg:pl-12",
+              "mt-28"
+            )}
+          >
+            <div className="text-sm leading-6">
+              <div className="relative mt-4 flex items-center gap-x-4">
+                {session?.user?.image ? (
+                  <img
+                    src={session?.user?.image}
+                    alt=""
+                    className="h-20 w-20 rounded-full bg-gray-50"
+                  />
+                ) : (
+                  <BsPersonCircle className="w-20 h-20 text-gray-300" />
+                )}
+              </div>
+              <p className="mt-4 text-sm font-medium text-gray-900">
+                <div>
+                  <span className="absolute inset-0" />
+                  {session?.user?.email}
+                </div>
+                <div className="mt-2">
+                  <span className="absolute inset-0" />
+                  {session?.user?.name}
+                </div>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
