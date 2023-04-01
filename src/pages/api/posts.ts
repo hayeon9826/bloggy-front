@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Configuration, OpenAIApi } from "openai";
+import prisma from "../../lib/prisma";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -14,29 +15,32 @@ type Data = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === "POST") {
-    const prompt = req.body.prompt;
-    try {
-      if (prompt == null) {
-        throw new Error("No prompt was provided");
-      }
-      // trigger OpenAI completion
-      const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        max_tokens: 2048,
-        prompt,
-      });
+    let object;
+    const { title, content, email } = req.body;
+    const user = await prisma.user.findMany({
+      where: { email: email },
+    });
 
-      // retrieve the completion text from response
-      const completion = response.data.choices[0].text;
-
-      return res.status(200).json({
-        success: true,
-        message: completion,
+    if (user) {
+      object = await prisma["post"].create({
+        data: {
+          title: title,
+          content: content,
+          userId: user[0]?.id,
+        },
       });
-    } catch (error: any) {
-      console.log(error.message);
     }
+
+    res.json(object);
   } else {
-    res.status(200).json({ message: "TEST" });
+    const { id } = req.query;
+    const objects = await prisma.post.findMany({
+      orderBy: { createdAt: "desc" },
+      where: {
+        ...(id ? { id } : {}),
+      },
+      include: { user: true },
+    });
+    return res.json(id ? objects[0] : objects);
   }
 }

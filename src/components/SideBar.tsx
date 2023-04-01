@@ -114,8 +114,8 @@ export default function SideBar({ className = "" }) {
   };
 
   return (
-    <div className={cn("mx-auto max-w-xs border-l border-gray-200 min-h-screen")}>
-      <div className={cn("space-y-16 pt-10  overflow-y-scroll pl-12", className)}>
+    <div className={cn("mx-auto lg:max-w-xs lg:border-l border-gray-200 min-h-screen")}>
+      <div className={cn("space-y-16 pt-10  overflow-y-scroll lg:pl-12", className)}>
         {posts.map((post) => (
           <article
             role="presentation"

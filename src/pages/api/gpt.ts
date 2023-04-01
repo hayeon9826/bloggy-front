@@ -13,7 +13,7 @@ type Data = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  if (req.method === "POST") {
+  if (req.method === "GET") {
     const prompt = req.body.prompt;
     try {
       if (prompt == null) {
@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       const response = await openai.createCompletion({
         model: "text-davinci-003",
         max_tokens: 2048,
-        prompt,
+        prompt: `Write a blog post about: ${prompt}`,
       });
 
       // retrieve the completion text from response
