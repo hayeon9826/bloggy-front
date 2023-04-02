@@ -33,7 +33,6 @@ function App() {
       setLoading(false);
       console.log("err", err);
     }
-    console.log("prompt", prompt);
   };
 
   useEffect(() => {

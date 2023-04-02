@@ -59,7 +59,6 @@ export default function PostNewPage() {
       user?.ai_records &&
       user?.ai_records?.length >= 10
     ) {
-      console.log(user, "@@user");
       setOpen(true);
       return false;
     }
@@ -82,7 +81,6 @@ export default function PostNewPage() {
         handleChangeEditor(message);
         trigger("content");
       } catch (err: any) {
-        console.log("err", err?.response?.data?.error);
         if (err?.response?.data?.error) {
           toast.error(err?.response?.data?.error);
         } else {
@@ -112,8 +110,6 @@ export default function PostNewPage() {
     const res = await axios.post("/api/waitLists", {
       email: session?.user?.email,
     });
-
-    console.log(res);
 
     if (res?.data) {
       toast.success("Successfully joined the waitlist!");

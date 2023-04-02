@@ -34,7 +34,6 @@ export default function PostNewPage() {
     {
       enabled: !!quillLoaded,
       onSuccess: () => {
-        console.log(post);
         if (quillRef?.current?.editor) {
           const delta = quillRef?.current?.editor?.clipboard?.convert(
             post?.content

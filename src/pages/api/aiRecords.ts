@@ -72,7 +72,6 @@ export default async function handler(
         record: object,
       });
     } catch (error: any) {
-      console.log(error, "@@@ERR");
       const MAX_RETRIES = 3;
       if (error?.response?.status === 429) {
         let retries = 0;
