@@ -11,12 +11,43 @@ import FullPageLoader from "@/components/FullPageLoader";
 import ReactQuill from "react-quill";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
+import { useQuery } from "react-query";
 
 export default function PostNewPage() {
   const { data: session, status } = useSession();
+  const [quillLoaded, setQuillLoaded] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const quillRef = useRef<ReactQuill | null>(null);
+  const { id } = router.query;
+
+  const config = {
+    url: `/api/posts?id=${id}`,
+  };
+
+  const { data: post, isFetching } = useQuery(
+    [config],
+    async () => {
+      const { data } = await axios(config);
+      return data as Post;
+    },
+    {
+      enabled: !!quillLoaded,
+      onSuccess: () => {
+        console.log(post);
+        if (quillRef?.current?.editor) {
+          const delta = quillRef?.current?.editor?.clipboard?.convert(post?.content);
+          quillRef?.current?.editor?.setContents(delta, "silent");
+          handleChangeEditor(post?.content as string);
+          setValue("title", post?.title);
+          trigger("title");
+        }
+      },
+    }
+  );
+
+  console.log(quillRef?.current?.editor);
+
   const {
     register,
     handleSubmit,
@@ -85,14 +116,21 @@ export default function PostNewPage() {
     }
   }, [router, status]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setQuillLoaded(true);
+    }, 500);
+  }, []);
+
   return (
     <>
-      {loading && <FullPageLoader />}
+      {(loading || isFetching || !quillLoaded) && <FullPageLoader />}
       <form
         onSubmit={handleSubmit(async (data) => {
-          const res = await axios.post<Post>("/api/posts", {
+          const res = await axios.put<Post>("/api/posts", {
             ...data,
             email: session?.user?.email,
+            id: post?.id,
           });
 
           if (res.data) {
@@ -150,6 +188,7 @@ export default function PostNewPage() {
 
           <input
             required
+            defaultValue={getValues("title")}
             {...register("title", { required: true })}
             className="absolute top-[100px] inset-x-0 mx-auto w-full px-8 lg:px-0 max-w-5xl text-2xl border-transparent focus:border-transparent focus:ring-0 !outline-none placeholder:text-gray-400"
             placeholder="Title"

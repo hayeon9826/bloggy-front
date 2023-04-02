@@ -13,10 +13,7 @@ type Data = {
   message?: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === "POST") {
     let object;
     const { title, content, email } = req.body;
@@ -35,6 +32,20 @@ export default async function handler(
     }
 
     res.json(object);
+  } else if (req.method === "PUT") {
+    const { title, content, id } = req.body;
+    const object = await prisma.post.update({
+      where: { id },
+      data: {
+        title,
+        content,
+      },
+    });
+    return res.json(object);
+  } else if (req.method === "DELETE") {
+    const { id } = req.query;
+    const object = await prisma.post.delete({ where: { id } });
+    return res.json(object);
   } else {
     const { id, email } = req.query;
     let user;

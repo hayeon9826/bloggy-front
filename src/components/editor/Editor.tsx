@@ -8,15 +8,7 @@ import ReactQuill from "react-quill";
 import hljs from "highlight.js";
 
 hljs.configure({
-  languages: [
-    "javascript",
-    "ruby",
-    "python",
-    "rust",
-    "node",
-    "typescript",
-    "jsx",
-  ],
+  languages: ["javascript", "ruby", "python", "rust", "node", "typescript", "jsx"],
 });
 
 const QuillWrapper = dynamic(
@@ -40,12 +32,7 @@ const modules = {
     [{ header: "1" }, { header: "2" }, { font: [] }],
     [{ size: [] }],
     ["bold", "italic", "underline", "strike", "blockquote"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
+    [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
     ["link", "image", "video"],
     ["clean", "code-block"],
   ],
@@ -74,19 +61,13 @@ const formats = [
 ];
 
 interface Props {
+  contentValue?: any;
   handleChangeEditor: (value: string) => void;
   quillRef: React.MutableRefObject<ReactQuill | null>;
 }
 
 export default function Editor({ handleChangeEditor, quillRef }: Props) {
   return (
-    <QuillWrapper
-      forwardedRef={quillRef}
-      theme="snow"
-      onChange={handleChangeEditor}
-      modules={modules}
-      formats={formats}
-      placeholder="Write your story..."
-    />
+    <QuillWrapper forwardedRef={quillRef} theme="snow" onChange={handleChangeEditor} modules={modules} formats={formats} placeholder="Write your story..." />
   );
 }

@@ -37,8 +37,8 @@ export default function PostList() {
 
   return (
     <div className="bg-white pb-24 sm:pb-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 lg:flex">
-        <div className="mx-auto max-w-2xl mt-32 lg:mt-20">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 md:flex">
+        <div className="mx-auto max-w-2xl mt-32 lg:mt-20 pr-8 lg:pr-0">
           <div className="space-y-16 pt-10 sm:pt-16 overflow-y-scroll">
             {isFetching && <PostListSkeleton />}
             {posts && posts?.length > 0 ? (
@@ -64,17 +64,11 @@ export default function PostList() {
                         {post?.title}
                       </span>
                     </h3>
-                    <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">
-                      {RemoveHTMLTags(post?.content)}
-                    </p>
+                    <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">{RemoveHTMLTags(post?.content)}</p>
                   </div>
                   <div className="relative mt-4 flex items-center gap-x-4">
                     {post?.user?.imageUrl ? (
-                      <img
-                        src={post?.user?.imageUrl}
-                        alt=""
-                        className="h-10 w-10 rounded-full bg-gray-50"
-                      />
+                      <img src={post?.user?.imageUrl} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
                     ) : (
                       <BsPersonCircle className="w-10 h-10 text-gray-300" />
                     )}
@@ -90,9 +84,7 @@ export default function PostList() {
                 </article>
               ))
             ) : (
-              <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">
-                No Posts Yet 😂
-              </div>
+              <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">No Posts Yet 😂</div>
             )}
           </div>
         </div>
