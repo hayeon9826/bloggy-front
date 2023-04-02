@@ -7,16 +7,19 @@ type User = {
   id: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<User>) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<User>
+) {
   const { email } = req.query;
   if (req.method === "POST") {
     let object;
-    object = await prisma.user.findMany({
+    object = await prisma.user.findFirst({
       where: {
         email,
       },
     });
 
-    return res.json(object[0]);
+    return res.json(object);
   }
 }

@@ -10,7 +10,11 @@ dayjs().format();
 
 import { BsPersonCircle } from "react-icons/bs";
 
-export default function PostList() {
+interface Props {
+  email: string;
+}
+
+export default function PostList({ email }: Props) {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -19,7 +23,7 @@ export default function PostList() {
   };
 
   const config = {
-    url: `/api/posts?email=${session?.user?.email}`,
+    url: `/api/posts?email=${email}`,
   };
 
   const { data: posts, isFetching } = useQuery(
@@ -74,9 +78,13 @@ export default function PostList() {
                 </article>
               ))
             ) : (
-              <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">
-                No Posts Yet 😂
-              </div>
+              <>
+                {!isFetching && (
+                  <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">
+                    No Posts Yet 😂
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

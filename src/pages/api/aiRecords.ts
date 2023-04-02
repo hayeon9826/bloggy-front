@@ -34,27 +34,34 @@ export default async function handler(
       if (prompt == null) {
         throw new Error("No prompt was provided");
       }
-      console.log("prompt:", `${PromptPrefix[type]}${prompt}`);
+      const user = await prisma.user.findFirst({
+        where: { email: email },
+        include: { ai_records: true },
+      });
+
+      if (user == null) {
+        throw new Error("No user");
+      }
+
+      if (user?.ai_records?.length >= 10) {
+        throw new Error("Free Trial Expired");
+      }
       // trigger OpenAI completion
       const response = await openai.createCompletion({
         model: "text-davinci-003",
-        max_tokens: 2000,
+        max_tokens: 100,
         prompt: `${PromptPrefix[type]}${prompt}`,
       });
 
       // retrieve the completion text from response
       const result = response.data.choices[0]?.text;
 
-      const user = await prisma.user.findMany({
-        where: { email: email },
-      });
-
       if (result && user) {
         object = await prisma["aiRecord"].create({
           data: {
             prompt,
             answer: result,
-            userId: user?.[0]?.id,
+            userId: user?.id,
           },
         });
       }
@@ -65,9 +72,9 @@ export default async function handler(
         record: object,
       });
     } catch (error: any) {
+      console.log(error, "@@@ERR");
       const MAX_RETRIES = 3;
-      console.log("error", error.message);
-      if (error.response.status === 429) {
+      if (error?.response?.status === 429) {
         let retries = 0;
         while (retries < MAX_RETRIES) {
           const waitTime = 2 ** retries * 1000;
@@ -75,14 +82,14 @@ export default async function handler(
           await new Promise((resolve) => setTimeout(resolve, waitTime));
           retries++;
         }
-        return res.status(500).json({
-          success: false,
-          error: error,
-        });
       } else {
         console.log(error);
         throw error;
       }
+      return res.status(500).json({
+        success: false,
+        error: error?.message,
+      });
     }
   } else {
     res.status(200).json({ message: "" });

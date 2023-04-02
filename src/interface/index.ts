@@ -9,6 +9,8 @@ export interface Post {
 }
 
 export interface User {
+  ai_records?: AiRecord[];
+  userType?: "FREE" | "PAID";
   id: string;
   email: string;
   name?: string;

@@ -21,6 +21,7 @@ const tiers = [
       "48-hour support response time",
     ],
     mostPopular: false,
+    buttonText: "Get Started",
   },
   {
     name: "Paid",
@@ -36,6 +37,7 @@ const tiers = [
       "Marketing automations",
     ],
     mostPopular: true,
+    buttonText: "Buy Plan",
   },
 ];
 
@@ -61,7 +63,7 @@ export default function Pricing() {
             engaging your audience, creating customer loyalty, and driving
             sales.
           </p>
-          <div className="mt-16 flex justify-center">
+          {/* <div className="mt-16 flex justify-center">
             <RadioGroup
               value={frequency}
               onChange={setFrequency}
@@ -85,8 +87,8 @@ export default function Pricing() {
                 </RadioGroup.Option>
               ))}
             </RadioGroup>
-          </div>
-          <div className="isolate mx-auto mt-10 flex justify-center gap-8">
+          </div> */}
+          <div className="isolate mx-auto mt-20 flex justify-center gap-8">
             {tiers.map((tier) => (
               <div
                 key={tier.id}
@@ -119,7 +121,7 @@ export default function Pricing() {
                 <p className="mt-6 flex items-baseline gap-x-1">
                   {/* <span className="text-4xl font-bold tracking-tight text-gray-900">{tier?.price?.[frequency?.value]}</span> */}
                   <span className="text-sm font-semibold leading-6 text-gray-600">
-                    {frequency.priceSuffix}
+                    {/* {frequency.priceSuffix} */}
                   </span>
                 </p>
                 <a
@@ -132,7 +134,7 @@ export default function Pricing() {
                     "mt-6 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   )}
                 >
-                  Buy plan
+                  {tier.buttonText}
                 </a>
                 <ul
                   role="list"

@@ -6,13 +6,12 @@ import { useRouter } from "next/router";
 function ProfilePage() {
   const router = useRouter();
   const { email } = router.query;
-  console.log(email?.slice(1));
 
   return (
     <>
       <Header />
       <Banner />
-      <PostList />
+      <PostList email={email as string} />
     </>
   );
 }

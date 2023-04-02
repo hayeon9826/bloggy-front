@@ -24,6 +24,16 @@ model User {
   posts    Post[] @relation("posts")
   userType    UserType    @default(FREE)
   ai_records   AiRecord[] @relation("ai_records")
+  wait_lists    WaitList[]   @relation("wait_lists")
+}
+
+model WaitList {
+  id           String @id @default(uuid())
+  userId       String?
+  user         User?  @relation("wait_lists", fields: [userId], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now())
+  @@index([userId])
 }
 
 model Post {

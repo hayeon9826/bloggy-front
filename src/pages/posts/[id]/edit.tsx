@@ -36,7 +36,9 @@ export default function PostNewPage() {
       onSuccess: () => {
         console.log(post);
         if (quillRef?.current?.editor) {
-          const delta = quillRef?.current?.editor?.clipboard?.convert(post?.content);
+          const delta = quillRef?.current?.editor?.clipboard?.convert(
+            post?.content
+          );
           quillRef?.current?.editor?.setContents(delta, "silent");
           handleChangeEditor(post?.content as string);
           setValue("title", post?.title);
@@ -45,8 +47,6 @@ export default function PostNewPage() {
       },
     }
   );
-
-  console.log(quillRef?.current?.editor);
 
   const {
     register,
@@ -180,10 +180,26 @@ export default function PostNewPage() {
               <AiFillCheckCircle />
               Summarize
             </button>
-            <Tooltip anchorSelect="#create-blog-btn" place="top" content="Fill in the title to create a blog post" />
-            <Tooltip anchorSelect="#continue-writing-btn" place="top" content={`Select the paragraph that you want to start continue writing`} />
-            <Tooltip anchorSelect="#enhancement-btn" place="top" content={`Select the paragraph that you want to enhance`} />
-            <Tooltip anchorSelect="#summarize-btn" place="top" content={`Select the paragraph that you want to summarize`} />
+            <Tooltip
+              anchorSelect="#create-blog-btn"
+              place="top"
+              content="Fill in the title to create a blog post"
+            />
+            <Tooltip
+              anchorSelect="#continue-writing-btn"
+              place="top"
+              content={`Select the paragraph that you want to start continue writing`}
+            />
+            <Tooltip
+              anchorSelect="#enhancement-btn"
+              place="top"
+              content={`Select the paragraph that you want to enhance`}
+            />
+            <Tooltip
+              anchorSelect="#summarize-btn"
+              place="top"
+              content={`Select the paragraph that you want to summarize`}
+            />
           </div>
 
           <input
@@ -197,9 +213,15 @@ export default function PostNewPage() {
         <div className="min-h-screen md:hidden flex flex-col justify-center bg-black/50">
           <div className="bg-white rounded-lg w-[80vw] mx-auto text-center shadow px-8 py-12">
             <div className="text-2xl text-yellow-400 font-bold">Ooooops!</div>
-            <div className="mt-2 text-base text-gray-800">Please use PC to continue with Bloggy Editor</div>
+            <div className="mt-2 text-base text-gray-800">
+              Please use PC to continue with Bloggy Editor
+            </div>
             <AiOutlineWarning className="mx-auto w-20 h-20 mt-8 text-gray-600" />
-            <button type="button" className="bg-black text-sm rounded-md px-4 py-2 mt-8 text-white shadow" onClick={handleClickMain}>
+            <button
+              type="button"
+              className="bg-black text-sm rounded-md px-4 py-2 mt-8 text-white shadow"
+              onClick={handleClickMain}
+            >
               Back to main page
             </button>
           </div>

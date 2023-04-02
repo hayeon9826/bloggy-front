@@ -13,11 +13,14 @@ type Data = {
   message?: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
   if (req.method === "POST") {
     let object;
     const { title, content, email } = req.body;
-    const user = await prisma.user.findMany({
+    const user = await prisma.user.findFirst({
       where: { email: email },
     });
 
@@ -26,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         data: {
           title: title,
           content: content,
-          userId: user[0]?.id,
+          userId: user?.id,
         },
       });
     }
@@ -51,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     let user;
 
     if (email) {
-      user = await prisma.user.findMany({
+      user = await prisma.user.findFirst({
         where: { email: email },
       });
     }
@@ -60,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       orderBy: { createdAt: "desc" },
       where: {
         id: id ? id : {},
-        userId: email ? user?.[0]?.id : {},
+        userId: email ? user?.id : {},
       },
       include: { user: true },
     });
