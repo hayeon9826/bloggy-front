@@ -22,19 +22,21 @@
 - [x] AI create blog post 버튼 추가
 - [x] get membership 배너 cookie 작업 (24시간)
 - [x] 랜딩 페이지 작업
-- [] 게시글 수정
-- [] 게시글 삭제
-- [] 사이드 바 구성
-- [] FREE 멤버십 API 호출 월 10회 제한
-- [] AI continue writing 버튼 기능 추가
-- [] AI enhancement 버튼 추가
-- [] AI summarize 버튼 추가
-- [] infinite scroll 추가
-- [] 유료 멤버십 request access 페이지 작업
-- [] amplitude 세팅
-- [] 공개 url 작업
-- [] public profile 작업
-- [] sns 공유 작업
-- [] 검색창 작업
-- [] 임시저장 작업
-- [] 헤더 드롭 다운 항목 추가 (이미지 사진 -> profile, logout)
+- [ ] 게시글 수정
+- [ ] 게시글 삭제
+- [ ] 사이드 바 구성
+- [ ] FREE 멤버십 API 호출 월 10회 제한
+- [ ] AI continue writing 버튼 기능 추가
+- [ ] AI enhancement 버튼 추가
+- [ ] AI summarize 버튼 추가
+- [ ] infinite scroll 추가
+- [ ] 유료 멤버십 request access 페이지 작업
+- [ ] amplitude 세팅
+- [ ] 공개 url 작업
+- [ ] public profile 작업
+- [ ] sns 공유 작업
+- [ ] 전체 복사 작업
+- [ ] 타 플랫폼 연동 작업 (?)
+- [ ] 검색창 작업
+- [ ] 임시저장 작업
+- [ ] 헤더 드롭 다운 항목 추가 (이미지 사진 -> profile, logout)
