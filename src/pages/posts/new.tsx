@@ -10,10 +10,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import FullPageLoader from "@/components/FullPageLoader";
 import ReactQuill from "react-quill";
 import toast from "react-hot-toast";
-import { Tooltip } from "react-tooltip";
+// import { Tooltip } from "react-tooltip";
+import { Tooltip } from "@nextui-org/react";
 import { useQuery } from "react-query";
 import Modal from "@/components/Modal";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 
 export default function PostNewPage() {
@@ -40,28 +41,28 @@ export default function PostNewPage() {
   };
 
   const { data: user, isFetching: fetchingUser } = useQuery(
-    [config],
+    ["user"],
     async () => {
       const { data } = await axios(config);
       return data as User;
+    },
+    {
+      enabled: !!session?.user?.email,
+      refetchOnWindowFocus: true,
     }
   );
 
   const handleChangeEditor = (value: String) => {
     setValue("content", value === "<p><br></p>" ? "" : value);
-    //onChange 됐는지 안됐는지 react-hook-form에 notice
     trigger("content");
   };
 
   const handleClickCreatePost = useCallback(async () => {
-    if (
-      user?.userType === "FREE" &&
-      user?.ai_records &&
-      user?.ai_records?.length >= 10
-    ) {
+    if (user?.userType === "FREE" && user?.ai_records && user?.ai_records?.length >= 10) {
       setOpen(true);
       return false;
     }
+
     const val = getValues("title");
     if (val.length > 0) {
       try {
@@ -147,67 +148,54 @@ export default function PostNewPage() {
         <div className="relative hidden md:block">
           <Editor handleChangeEditor={handleChangeEditor} quillRef={quillRef} />
           <div className="w-full mx-auto fixed inset-x-0 flex gap-4 justify-center bottom-[60px]">
-            <button
-              disabled={fetchingUser}
-              onClick={handleClickCreatePost}
-              id="create-blog-btn"
-              type="button"
-              className="rounded-md bg-blue-600 text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-blue-600/75"
-            >
-              <AiFillCheckCircle />
-              Write blog post
-            </button>
-            <button
-              disabled={fetchingUser}
-              onClick={handleClickContinue}
-              id="continue-writing-btn"
-              type="button"
-              className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
-            >
-              <AiFillCheckCircle />
-              Continue writing
-            </button>
-
-            <button
-              disabled={fetchingUser}
-              onClick={handleClickEnhancement}
-              id="enhancement-btn"
-              type="button"
-              className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
-            >
-              <AiFillCheckCircle />
-              Enhancement
-            </button>
-            <button
-              disabled={fetchingUser}
-              onClick={handleClickSummarize}
-              id="summarize-btn"
-              type="button"
-              className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
-            >
-              <AiFillCheckCircle />
-              Summarize
-            </button>
-            <Tooltip
-              anchorSelect="#create-blog-btn"
-              place="top"
-              content="Fill in the title to create a blog post"
-            />
-            <Tooltip
-              anchorSelect="#continue-writing-btn"
-              place="top"
-              content={`Select the paragraph that you want to start continue writing`}
-            />
-            <Tooltip
-              anchorSelect="#enhancement-btn"
-              place="top"
-              content={`Select the paragraph that you want to enhance`}
-            />
-            <Tooltip
-              anchorSelect="#summarize-btn"
-              place="top"
-              content={`Select the paragraph that you want to summarize`}
-            />
+            <Tooltip rounded content="Fill in the title to create a blog post" color="primary">
+              <button
+                disabled={fetchingUser}
+                onClick={handleClickCreatePost}
+                id="create-blog-btn"
+                type="button"
+                className="rounded-md bg-blue-600 text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-blue-600/75"
+              >
+                <AiFillCheckCircle />
+                Write blog post
+              </button>
+            </Tooltip>
+            <Tooltip rounded content={`Select the paragraph that you want to start continue writing`} color="invert">
+              <button
+                disabled={fetchingUser}
+                onClick={handleClickContinue}
+                id="continue-writing-btn"
+                type="button"
+                className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
+              >
+                <AiFillCheckCircle />
+                Continue writing
+              </button>
+            </Tooltip>
+            <Tooltip rounded content={`Select the paragraph that you want to enhance`} color="invert">
+              <button
+                disabled={fetchingUser}
+                onClick={handleClickEnhancement}
+                id="enhancement-btn"
+                type="button"
+                className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
+              >
+                <AiFillCheckCircle />
+                Enhancement
+              </button>
+            </Tooltip>
+            <Tooltip rounded content={`Select the paragraph that you want to summarize`} color="invert">
+              <button
+                disabled={fetchingUser}
+                onClick={handleClickSummarize}
+                id="summarize-btn"
+                type="button"
+                className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
+              >
+                <AiFillCheckCircle />
+                Summarize
+              </button>
+            </Tooltip>
           </div>
 
           <input
@@ -220,15 +208,9 @@ export default function PostNewPage() {
         <div className="min-h-screen md:hidden flex flex-col justify-center bg-black/50">
           <div className="bg-white rounded-lg w-[80vw] mx-auto text-center shadow px-8 py-12">
             <div className="text-2xl text-yellow-400 font-bold">Ooooops!</div>
-            <div className="mt-2 text-base text-gray-800">
-              Please use PC to continue with Bloggy Editor
-            </div>
+            <div className="mt-2 text-base text-gray-800">Please use PC to continue with Bloggy Editor</div>
             <AiOutlineWarning className="mx-auto w-20 h-20 mt-8 text-gray-600" />
-            <button
-              type="button"
-              className="bg-black text-sm rounded-md px-4 py-2 mt-8 text-white shadow"
-              onClick={handleClickMain}
-            >
+            <button type="button" className="bg-black text-sm rounded-md px-4 py-2 mt-8 text-white shadow" onClick={handleClickMain}>
               Back to main page
             </button>
           </div>
@@ -240,10 +222,7 @@ export default function PostNewPage() {
             <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
           </div>
           <div className="mt-3 text-center sm:mt-5">
-            <Dialog.Title
-              as="h3"
-              className="text-base font-semibold leading-6 text-gray-900"
-            >
+            <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
               Join the waitlist
             </Dialog.Title>
             <div className="mt-2">

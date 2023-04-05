@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { AiOutlineWarning, AiFillCheckCircle } from "react-icons/ai";
 import axios from "axios";
-import { Post } from "@/interface";
+import { Post, User } from "@/interface";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import FullPageLoader from "@/components/FullPageLoader";
@@ -12,10 +12,14 @@ import ReactQuill from "react-quill";
 import toast from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 import { useQuery } from "react-query";
+import Modal from "@/components/Modal";
+import { Dialog } from "@headlessui/react";
+import { CheckIcon } from "@heroicons/react/24/outline";
 
 export default function PostNewPage() {
   const { data: session, status } = useSession();
   const [quillLoaded, setQuillLoaded] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const quillRef = useRef<ReactQuill | null>(null);
@@ -35,15 +39,25 @@ export default function PostNewPage() {
       enabled: !!quillLoaded,
       onSuccess: () => {
         if (quillRef?.current?.editor) {
-          const delta = quillRef?.current?.editor?.clipboard?.convert(
-            post?.content
-          );
+          const delta = quillRef?.current?.editor?.clipboard?.convert(post?.content);
           quillRef?.current?.editor?.setContents(delta, "silent");
           handleChangeEditor(post?.content as string);
           setValue("title", post?.title);
           trigger("title");
         }
       },
+    }
+  );
+
+  const { data: user, isFetching: fetchingUser } = useQuery(
+    ["user"],
+    async () => {
+      const { data } = await axios(config);
+      return data as User;
+    },
+    {
+      enabled: !!session?.user?.email,
+      refetchOnWindowFocus: true,
     }
   );
 
@@ -60,13 +74,30 @@ export default function PostNewPage() {
     router.push("/");
   };
 
+  const handleRequestAccess = async () => {
+    const res = await axios.post("/api/waitLists", {
+      email: session?.user?.email,
+    });
+
+    if (res?.data) {
+      toast.success("Successfully joined the waitlist!");
+    } else {
+      toast.error("Sorry, something went worng... Please try again");
+    }
+
+    setOpen(false);
+  };
+
   const handleChangeEditor = (value: String) => {
     setValue("content", value === "<p><br></p>" ? "" : value);
-    //onChange 됐는지 안됐는지 react-hook-form에 notice
     trigger("content");
   };
 
   const handleClickCreatePost = useCallback(async () => {
+    if (user?.userType === "FREE" && user?.ai_records && user?.ai_records?.length >= 10) {
+      setOpen(true);
+      return false;
+    }
     const val = getValues("title");
     if (val.length > 0) {
       try {
@@ -179,26 +210,10 @@ export default function PostNewPage() {
               <AiFillCheckCircle />
               Summarize
             </button>
-            <Tooltip
-              anchorSelect="#create-blog-btn"
-              place="top"
-              content="Fill in the title to create a blog post"
-            />
-            <Tooltip
-              anchorSelect="#continue-writing-btn"
-              place="top"
-              content={`Select the paragraph that you want to start continue writing`}
-            />
-            <Tooltip
-              anchorSelect="#enhancement-btn"
-              place="top"
-              content={`Select the paragraph that you want to enhance`}
-            />
-            <Tooltip
-              anchorSelect="#summarize-btn"
-              place="top"
-              content={`Select the paragraph that you want to summarize`}
-            />
+            <Tooltip anchorSelect="#create-blog-btn" place="top" content="Fill in the title to create a blog post" />
+            <Tooltip anchorSelect="#continue-writing-btn" place="top" content={`Select the paragraph that you want to start continue writing`} />
+            <Tooltip anchorSelect="#enhancement-btn" place="top" content={`Select the paragraph that you want to enhance`} />
+            <Tooltip anchorSelect="#summarize-btn" place="top" content={`Select the paragraph that you want to summarize`} />
           </div>
 
           <input
@@ -212,20 +227,51 @@ export default function PostNewPage() {
         <div className="min-h-screen md:hidden flex flex-col justify-center bg-black/50">
           <div className="bg-white rounded-lg w-[80vw] mx-auto text-center shadow px-8 py-12">
             <div className="text-2xl text-yellow-400 font-bold">Ooooops!</div>
-            <div className="mt-2 text-base text-gray-800">
-              Please use PC to continue with Bloggy Editor
-            </div>
+            <div className="mt-2 text-base text-gray-800">Please use PC to continue with Bloggy Editor</div>
             <AiOutlineWarning className="mx-auto w-20 h-20 mt-8 text-gray-600" />
-            <button
-              type="button"
-              className="bg-black text-sm rounded-md px-4 py-2 mt-8 text-white shadow"
-              onClick={handleClickMain}
-            >
+            <button type="button" className="bg-black text-sm rounded-md px-4 py-2 mt-8 text-white shadow" onClick={handleClickMain}>
               Back to main page
             </button>
           </div>
         </div>
       </form>
+      <Modal open={open} setOpen={setOpen}>
+        <div>
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+          </div>
+          <div className="mt-3 text-center sm:mt-5">
+            <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+              Join the waitlist
+            </Dialog.Title>
+            <div className="mt-2">
+              <p className="text-sm text-gray-500">
+                Your free trial has expired!
+                <br />
+                Join the waitlist for advanced features.
+                <br />
+                We{`'`}ll send you an email for updated features soon.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="mt-8 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+          <button
+            type="button"
+            className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2"
+            onClick={handleRequestAccess}
+          >
+            Request Access
+          </button>
+          <button
+            type="button"
+            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      </Modal>
     </>
   );
 }
