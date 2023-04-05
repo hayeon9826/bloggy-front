@@ -5,6 +5,9 @@ import { useCallback, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
 import FullPageLoader from "@/components/FullPageLoader";
+import * as amplitude from "@amplitude/analytics-browser";
+
+amplitude.track("Login");
 
 export default function SignInPage() {
   const { status, data: session } = useSession();

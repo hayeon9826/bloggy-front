@@ -8,6 +8,7 @@ import { BsPersonCircle } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
 import { toast } from "react-hot-toast";
+import * as amplitude from "@amplitude/analytics-browser";
 dayjs().format();
 
 export default function PostPage() {
@@ -29,6 +30,8 @@ export default function PostPage() {
       refetchOnWindowFocus: false,
     }
   );
+
+  amplitude.track("Post view");
 
   return (
     <>

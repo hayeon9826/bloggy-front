@@ -22,7 +22,7 @@
 - [x] AI create blog post 버튼 추가
 - [x] get membership 배너 cookie 작업 (24시간)
 - [x] 랜딩 페이지 작업
-- [ ] 게시글 수정 - 작업중 (editor 간헐적으로 내용 뜨지 않는 문제)
+- [x] 게시글 수정 - 작업중 (editor 간헐적으로 내용 뜨지 않는 문제)
 - [x] 게시글 삭제
 - [ ] 사이드 바 구성
 - [x] FREE 멤버십 API 호출 월 10회 제한

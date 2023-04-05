@@ -30,24 +30,26 @@ export default function PostNewPage() {
   };
 
   const { data: post, isFetching } = useQuery(
-    [config],
+    [`post-${id}`],
     async () => {
       const { data } = await axios(config);
       return data as Post;
     },
     {
-      enabled: !!quillLoaded,
-      onSuccess: () => {
+      enabled: !!quillLoaded && !!id,
+      onSuccess: (data) => {
         if (quillRef?.current?.editor) {
-          const delta = quillRef?.current?.editor?.clipboard?.convert(post?.content);
+          const delta = quillRef?.current?.editor?.clipboard?.convert(data?.content);
           quillRef?.current?.editor?.setContents(delta, "silent");
-          handleChangeEditor(post?.content as string);
-          setValue("title", post?.title);
+          handleChangeEditor(data?.content as string);
+          setValue("title", data?.title);
           trigger("title");
         }
       },
     }
   );
+
+  // console.log(post);
 
   const { data: user, isFetching: fetchingUser } = useQuery(
     ["user"],

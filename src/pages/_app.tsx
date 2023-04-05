@@ -5,6 +5,11 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import "react-tooltip/dist/react-tooltip.css";
 const queryClient = new QueryClient();
+import * as amplitude from "@amplitude/analytics-browser";
+
+amplitude.init(process.env.AMPLITUDE_KEY as string, undefined, {
+  defaultTracking: { sessions: true, pageViews: true, formInteractions: true, fileDownloads: true },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
