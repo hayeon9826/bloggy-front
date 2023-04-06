@@ -16,6 +16,7 @@ export interface User {
   name?: string;
   posts?: Post[];
   imageUrl?: string;
+  adminType?: "NONE" | "NORMAL" | "SUPER";
 }
 
 export enum PromptType {
@@ -27,8 +28,7 @@ export enum PromptType {
 
 export const PromptPrefix = {
   [PromptType.CREATE_POST]: "Write a blog post about ",
-  [PromptType.CONTINUE_POST]:
-    "Continue writing blog post after the paragraph: ",
+  [PromptType.CONTINUE_POST]: "Continue writing blog post after the paragraph: ",
   [PromptType.ENHANCE_POST]: "Enhance the paragrph: ",
   [PromptType.SUMMARIZE_POST]: "Summarize the paragrph: ",
 };

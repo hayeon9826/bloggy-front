@@ -16,6 +16,12 @@ enum UserType {
   PAID
 }
 
+enum AdminType {
+  NONE
+  NORMAL
+  SUPER
+}
+
 model User {
   id    String     @id @default(uuid())
   email String  @unique
@@ -23,6 +29,7 @@ model User {
   imageUrl  String?
   posts    Post[] @relation("posts")
   userType    UserType    @default(FREE)
+  adminType    AdminType    @default(NONE)
   ai_records   AiRecord[] @relation("ai_records")
   wait_lists    WaitList[]   @relation("wait_lists")
 }

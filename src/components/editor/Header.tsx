@@ -11,21 +11,12 @@ export default function Header() {
 
   return (
     <header className="bg-white border-b border-gray-200 w-full z-50">
-      <nav
-        className="flex items-center justify-between px-6 py-3 lg:px-8 max-w-5xl mx-auto"
-        aria-label="Global"
-      >
+      <nav className="flex items-center justify-between px-6 py-3 lg:px-8 max-w-5xl mx-auto" aria-label="Global">
         <div className="flex lg:flex-1 gap-4">
           <span className="-m-1.5">
             <Link href="/">
               <span className="sr-only">Your Company</span>
-              <Image
-                width={32}
-                height={32}
-                className="h-8 w-auto"
-                src="/images/logo_white_lg.png"
-                alt=""
-              />
+              <Image width={32} height={32} className="h-8 w-auto" src="/images/logo_white_lg.png" alt="" />
             </Link>
           </span>
           <div className="text-xs my-auto font-normal md:block hidden max-w-[200px] lg:max-w-[220px] whitespace-nowrap truncate">
@@ -53,39 +44,22 @@ export default function Header() {
           </button>
           {status === "authenticated" && (
             <span className="text-xs font-light leading-6 text-gray-900">
-              <Link href={`/@${session?.user?.email?.split("@")?.[0]}`}>
-                Profile
-              </Link>
+              <Link href={`/profile/@${session?.user?.email?.split("@")?.[0]}`}>Profile</Link>
             </span>
           )}
         </div>
       </nav>
-      <Dialog
-        as="div"
-        className="lg:hidden"
-        open={mobileMenuOpen}
-        onClose={setMobileMenuOpen}
-      >
+      <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
         <div className="fixed inset-0 z-10" />
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-3 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <span className="-m-1.5">
               <Link href="/">
                 <span className="sr-only">Your Company</span>
-                <Image
-                  width={32}
-                  height={32}
-                  className="h-8 w-auto"
-                  src="/images/logo_white_lg.png"
-                  alt=""
-                />
+                <Image width={32} height={32} className="h-8 w-auto" src="/images/logo_white_lg.png" alt="" />
               </Link>
             </span>
-            <button
-              type="button"
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
-              onClick={() => setMobileMenuOpen(false)}
-            >
+            <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700" onClick={() => setMobileMenuOpen(false)}>
               <span className="sr-only">Close menu</span>
               <XMarkIcon className="h-6 w-6" aria-hidden="true" />
             </button>
@@ -96,9 +70,7 @@ export default function Header() {
                 <span className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-light leading-7 text-gray-900 hover:bg-gray-50">
                   {status === "authenticated" && (
                     <div className="mb-2">
-                      <Link href={`/@${session?.user?.email?.split("@")?.[0]}`}>
-                        Profile
-                      </Link>
+                      <Link href={`/profile/@${session?.user?.email?.split("@")?.[0]}`}>Profile</Link>
                     </div>
                   )}
                   {status === "authenticated" ? (

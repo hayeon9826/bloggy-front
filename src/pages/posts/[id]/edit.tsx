@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import FullPageLoader from "@/components/FullPageLoader";
 import ReactQuill from "react-quill";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { Tooltip } from "@nextui-org/react";
 import { useQuery } from "react-query";
 import Modal from "@/components/Modal";
@@ -38,6 +38,7 @@ export default function PostNewPage() {
     },
     {
       enabled: !!quillLoaded && !!id,
+      refetchOnWindowFocus: false,
       onSuccess: (data) => {
         if (quillRef?.current?.editor) {
           const delta = quillRef?.current?.editor?.clipboard?.convert(data?.content);
@@ -60,7 +61,7 @@ export default function PostNewPage() {
     },
     {
       enabled: !!session?.user?.email,
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
     }
   );
 

@@ -24,14 +24,15 @@
 - [x] 랜딩 페이지 작업
 - [x] 게시글 수정 - 작업중 (editor 간헐적으로 내용 뜨지 않는 문제)
 - [x] 게시글 삭제
-- [ ] 사이드 바 구성
 - [x] FREE 멤버십 API 호출 월 10회 제한
 - [ ] AI continue writing 버튼 기능 추가
 - [ ] AI enhancement 버튼 추가
 - [ ] AI summarize 버튼 추가
 - [ ] infinite scroll 추가
+- [ ] 사이드 바 구성
 - [ ] 유료 멤버십 request access 페이지 작업
-- [ ] amplitude 세팅
+- [x] amplitude 세팅
+- [ ] admin 작업
 - [ ] 공개 url 작업
 - [ ] public profile 작업
 - [ ] sns 공유 작업
