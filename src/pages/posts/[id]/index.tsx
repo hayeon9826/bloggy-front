@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
 import { toast } from "react-hot-toast";
 import * as amplitude from "@amplitude/analytics-browser";
+import { useEffect } from "react";
 dayjs().format();
 
 export default function PostPage() {
@@ -31,7 +32,13 @@ export default function PostPage() {
     }
   );
 
-  amplitude.track("Post view");
+  useEffect(() => {
+    const eventProperties = {
+      id: id,
+    };
+
+    amplitude.track(`posts_[id]`, eventProperties);
+  }, [id]);
 
   return (
     <>
@@ -63,18 +70,37 @@ export default function PostPage() {
               </div>
               {session?.user?.email === post?.user?.email && (
                 <div className="flex gap-x-4 items-center text-xs text-gray-400 pr-4">
-                  <button onClick={() => router.push(`/posts/${post?.id}/edit`)} type="button" className="hover:text-gray-500">
+                  <button
+                    onClick={() => {
+                      const eventProperties = {
+                        id: id,
+                        btn: "edit",
+                      };
+
+                      router.push(`/posts/${post?.id}/edit`);
+                      amplitude.track(`posts_[id]`, eventProperties);
+                    }}
+                    type="button"
+                    className="hover:text-gray-500"
+                  >
                     Edit
                   </button>
                   <button
                     type="button"
                     onClick={async () => {
+                      const eventProperties = {
+                        id: id,
+                        btn: "delete",
+                      };
+
                       try {
                         await axios.delete(`/api/posts?id=${post?.id}`);
-                        toast.success("삭제되었습니다.");
+                        amplitude.track(`SUCCESS_posts_[id]`, eventProperties);
+                        toast.success("Successfully deleted");
                         router.replace("/");
                       } catch (error) {
-                        toast.error("삭제에 실패하였습니다.");
+                        amplitude.track(`ERR_posts_[id]`, eventProperties);
+                        toast.error("Error. Please try again.");
                       }
                     }}
                     className="hover:text-gray-500"

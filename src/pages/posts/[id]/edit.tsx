@@ -10,11 +10,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import FullPageLoader from "@/components/FullPageLoader";
 import ReactQuill from "react-quill";
 import toast from "react-hot-toast";
-import { Tooltip } from "react-tooltip";
+import { Tooltip } from "@nextui-org/react";
 import { useQuery } from "react-query";
 import Modal from "@/components/Modal";
 import { Dialog } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import * as amplitude from "@amplitude/analytics-browser";
 
 export default function PostNewPage() {
   const { data: session, status } = useSession();
@@ -77,13 +78,19 @@ export default function PostNewPage() {
   };
 
   const handleRequestAccess = async () => {
+    const eventProperties = {
+      btn: "request_access",
+    };
+
     const res = await axios.post("/api/waitLists", {
       email: session?.user?.email,
     });
 
     if (res?.data) {
+      amplitude.track(`[SUCCESS_request_access]_posts_edit`, eventProperties);
       toast.success("Successfully joined the waitlist!");
     } else {
+      amplitude.track(`[ERR_request_access]_posts_edit`, eventProperties);
       toast.error("Sorry, something went worng... Please try again");
     }
 
@@ -96,8 +103,14 @@ export default function PostNewPage() {
   };
 
   const handleClickCreatePost = useCallback(async () => {
+    const eventProperties = {
+      id: id,
+      btn: "create_post",
+    };
+    amplitude.track(`posts_edit`, eventProperties);
     if (user?.userType === "FREE" && user?.ai_records && user?.ai_records?.length >= 10) {
       setOpen(true);
+      amplitude.track(`[request_access]_posts_edit`, eventProperties);
       return false;
     }
     const val = getValues("title");
@@ -110,6 +123,7 @@ export default function PostNewPage() {
           email: session?.user?.email,
         });
         if (!res.data) {
+          amplitude.track(`[ERR_create_post]_posts_edit`, eventProperties);
           throw new Error("Something went wrong");
         }
         const { message } = res.data;
@@ -118,11 +132,16 @@ export default function PostNewPage() {
         }
         handleChangeEditor(message);
         trigger("content");
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        console.log("err", err);
+
+        amplitude.track(`[SUCCESS_create_post]_posts_edit`, eventProperties);
+      } catch (err: any) {
+        if (err?.response?.data?.error) {
+          toast.error(err?.response?.data?.error);
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
       }
+      setLoading(false);
       console.log("prompt", prompt);
     } else {
       toast.error("Please fill in the title.");
@@ -130,21 +149,37 @@ export default function PostNewPage() {
   }, []);
 
   const handleClickContinue = () => {
+    const eventProperties = {
+      id: id,
+      btn: "continue",
+    };
     toast("Please upgrade your account to continue");
+    amplitude.track(`posts_edit`, eventProperties);
   };
 
   const handleClickEnhancement = () => {
+    const eventProperties = {
+      id: id,
+      btn: "enhancement",
+    };
     toast("Please upgrade your account to continue");
+    amplitude.track(`posts_edit`, eventProperties);
   };
 
   const handleClickSummarize = () => {
+    const eventProperties = {
+      id: id,
+      btn: "summarize",
+    };
     toast("Please upgrade your account to continue");
+    amplitude.track(`posts_edit`, eventProperties);
   };
 
   useEffect(() => {
     if (status === "unauthenticated") {
       toast.error("Please login to continue");
       router.replace("/users/login");
+      amplitude.track(`[unauth_err]_posts_edit`);
     }
   }, [router, status]);
 
@@ -153,6 +188,14 @@ export default function PostNewPage() {
       setQuillLoaded(true);
     }, 500);
   }, []);
+
+  useEffect(() => {
+    const eventProperties = {
+      id: id,
+    };
+
+    amplitude.track(`posts_edit`, eventProperties);
+  }, [id]);
 
   return (
     <>
@@ -175,47 +218,54 @@ export default function PostNewPage() {
         <div className="relative hidden md:block">
           <Editor handleChangeEditor={handleChangeEditor} quillRef={quillRef} />
           <div className="w-full mx-auto fixed inset-x-0 flex gap-4 justify-center bottom-[60px]">
-            <button
-              onClick={handleClickCreatePost}
-              id="create-blog-btn"
-              type="button"
-              className="rounded-md bg-blue-600 text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-blue-600/75"
-            >
-              <AiFillCheckCircle />
-              Write blog post
-            </button>
-            <button
-              onClick={handleClickContinue}
-              id="continue-writing-btn"
-              type="button"
-              className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
-            >
-              <AiFillCheckCircle />
-              Continue writing
-            </button>
-
-            <button
-              onClick={handleClickEnhancement}
-              id="enhancement-btn"
-              type="button"
-              className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
-            >
-              <AiFillCheckCircle />
-              Enhancement
-            </button>
-            <button
-              onClick={handleClickSummarize}
-              id="summarize-btn"
-              type="button"
-              className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
-            >
-              <AiFillCheckCircle />
-              Summarize
-            </button>
-            <Tooltip anchorSelect="#create-blog-btn" place="top" content="Fill in the title to create a blog post" />
-            <Tooltip anchorSelect="#continue-writing-btn" place="top" content={`Select the paragraph that you want to start continue writing`} />
-            <Tooltip anchorSelect="#enhancement-btn" place="top" content={`Select the paragraph that you want to enhance`} />
-            <Tooltip anchorSelect="#summarize-btn" place="top" content={`Select the paragraph that you want to summarize`} />
+            <Tooltip rounded content="Fill in the title to create a blog post" color="primary">
+              <button
+                disabled={fetchingUser}
+                onClick={handleClickCreatePost}
+                id="create-blog-btn"
+                type="button"
+                className="rounded-md bg-blue-600 text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-blue-600/75"
+              >
+                <AiFillCheckCircle />
+                Write blog post
+              </button>
+            </Tooltip>
+            <Tooltip rounded content={`Select the paragraph that you want to start continue writing`} color="invert">
+              <button
+                disabled={fetchingUser}
+                onClick={handleClickContinue}
+                id="continue-writing-btn"
+                type="button"
+                className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
+              >
+                <AiFillCheckCircle />
+                Continue writing
+              </button>
+            </Tooltip>
+            <Tooltip rounded content={`Select the paragraph that you want to enhance`} color="invert">
+              <button
+                disabled={fetchingUser}
+                onClick={handleClickEnhancement}
+                id="enhancement-btn"
+                type="button"
+                className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
+              >
+                <AiFillCheckCircle />
+                Enhancement
+              </button>
+            </Tooltip>
+            <Tooltip rounded content={`Select the paragraph that you want to summarize`} color="invert">
+              <button
+                disabled={fetchingUser}
+                onClick={handleClickSummarize}
+                id="summarize-btn"
+                type="button"
+                className="rounded-md bg-black text-white px-4 py-2 text-sm flex gap-2 items-center hover:bg-black/75"
+              >
+                <AiFillCheckCircle />
+                Summarize
+              </button>
+            </Tooltip>
           </div>
 
           <input

@@ -7,8 +7,6 @@ import axios from "axios";
 import FullPageLoader from "@/components/FullPageLoader";
 import * as amplitude from "@amplitude/analytics-browser";
 
-amplitude.track("Login");
-
 export default function SignInPage() {
   const { status, data: session } = useSession();
   const router = useRouter();
@@ -42,10 +40,16 @@ export default function SignInPage() {
   }, [router, session]);
 
   useEffect(() => {
+    const eventProperties = {
+      session: session,
+      action: "check_user",
+    };
+
     if (status === "authenticated") {
       checkUser();
+      amplitude.track(`users_login`, eventProperties);
     }
-  }, [checkUser, router, status]);
+  }, [checkUser, router, session, status]);
 
   return (
     <>

@@ -10,12 +10,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import FullPageLoader from "@/components/FullPageLoader";
 import ReactQuill from "react-quill";
 import toast from "react-hot-toast";
-// import { Tooltip } from "react-tooltip";
 import { Tooltip } from "@nextui-org/react";
 import { useQuery } from "react-query";
 import Modal from "@/components/Modal";
 import { Dialog } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import * as amplitude from "@amplitude/analytics-browser";
 
 export default function PostNewPage() {
   const { data: session, status } = useSession();
@@ -58,8 +58,14 @@ export default function PostNewPage() {
   };
 
   const handleClickCreatePost = useCallback(async () => {
+    const eventProperties = {
+      btn: "create_post",
+    };
+    amplitude.track(`posts_new`, eventProperties);
+
     if (user?.userType === "FREE" && user?.ai_records && user?.ai_records?.length >= 10) {
       setOpen(true);
+      amplitude.track(`[request_access]_posts_new`, eventProperties);
       return false;
     }
 
@@ -73,6 +79,7 @@ export default function PostNewPage() {
           email: session?.user?.email,
         });
         if (!res.data) {
+          amplitude.track(`[ERR_create_post]_posts_new`, eventProperties);
           throw new Error("Something went wrong");
         }
         const { message } = res.data;
@@ -81,6 +88,7 @@ export default function PostNewPage() {
         }
         handleChangeEditor(message);
         trigger("content");
+        amplitude.track(`[SUCCESS_create_post]_posts_new`, eventProperties);
       } catch (err: any) {
         if (err?.response?.data?.error) {
           toast.error(err?.response?.data?.error);
@@ -96,25 +104,43 @@ export default function PostNewPage() {
   }, []);
 
   const handleClickContinue = () => {
+    const eventProperties = {
+      btn: "continue",
+    };
+    amplitude.track(`posts_new`, eventProperties);
     toast("Please upgrade your account to continue");
   };
 
   const handleClickEnhancement = () => {
+    const eventProperties = {
+      btn: "enhancement",
+    };
+    amplitude.track(`posts_new`, eventProperties);
     toast("Please upgrade your account to continue");
   };
 
   const handleClickSummarize = () => {
+    const eventProperties = {
+      btn: "summarize",
+    };
+    amplitude.track(`posts_new`, eventProperties);
     toast("Please upgrade your account to continue");
   };
 
   const handleRequestAccess = async () => {
+    const eventProperties = {
+      btn: "request_access",
+    };
+
     const res = await axios.post("/api/waitLists", {
       email: session?.user?.email,
     });
 
     if (res?.data) {
+      amplitude.track(`[SUCCESS_request_access]_posts_new`, eventProperties);
       toast.success("Successfully joined the waitlist!");
     } else {
+      amplitude.track(`[ERR_request_access]_posts_new`, eventProperties);
       toast.error("Sorry, something went worng... Please try again");
     }
 
@@ -127,6 +153,10 @@ export default function PostNewPage() {
       router.replace("/users/login");
     }
   }, [router, status]);
+
+  useEffect(() => {
+    amplitude.track(`post_new`);
+  }, []);
 
   return (
     <>
