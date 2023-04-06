@@ -29,40 +29,26 @@ interface HeaderProps {
 
 const menus = [
   {
-    name: "대시보드",
+    name: "Dashboard",
     path: "/admin",
   },
   {
-    name: "사용자 관리",
+    name: "Users",
     path: "/admin/users",
   },
   {
-    name: "상품 관리",
-    path: "/admin/items",
+    name: "Posts",
+    path: "/admin/posts",
     menus: [
       {
-        name: "카테고리 관리",
-        path: "/admin/categories",
-      },
-      {
-        name: "옵션 관리",
-        path: "/admin/options",
+        name: "Ai Records",
+        path: "/admin/ai_records",
       },
     ],
   },
   {
-    name: "주문 관리",
-    path: "/admin/orders",
-    menus: [{ name: "결제 관리", path: "/admin/payments" }],
-  },
-  {
-    name: "채팅 관리",
-    path: "/admin/chats",
-    menus: [{ name: "메시지 관리", path: "/admin/messages" }],
-  },
-  {
-    name: "문의 관리",
-    path: "/admin/contacts",
+    name: "Wait Lists",
+    path: "/admin/wait_lists",
   },
 ];
 
@@ -70,7 +56,11 @@ export const Meta = (props: MetaProps) => (
   <>
     <Head>
       <meta charSet="UTF-8" />
-      <meta name="viewport" content="width=device-width,initial-scale=1" key="viewport" />
+      <meta
+        name="viewport"
+        content="width=device-width,initial-scale=1"
+        key="viewport"
+      />
       {/* <link rel="apple-touch-icon" href={`${process.env.baseUrl}/apple-touch-icon.png`} key="apple" /> */}
     </Head>
     <NextSeo
@@ -88,13 +78,18 @@ export const Meta = (props: MetaProps) => (
   </>
 );
 
-export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy Admin" />, children }: LayoutProps) => {
+export const Layout = ({
+  meta = <Meta title="Bloggy Admin" description="Bloggy Admin" />,
+  children,
+}: LayoutProps) => {
   const { currentUser, isFetching } = useCurrentUser();
   const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
   const Icon = showMenu ? IoIosClose : IoIosMenu;
 
-  const isActive = (path: string) => (path !== "/admin" && router.asPath.includes(path)) || (router.asPath === "/admin" && path === "/admin");
+  const isActive = (path: string) =>
+    (path !== "/admin" && router.asPath.includes(path)) ||
+    (router.asPath === "/admin" && path === "/admin");
 
   useEffect(() => {
     console.log(currentUser, isFetching);
@@ -109,31 +104,58 @@ export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy A
       {currentUser && (
         <>
           {meta}
-          <div className="h-screen flex overflow-hidden bg-gray-100" style={{ zIndex: 10000 }}>
+          <div
+            className="h-screen flex overflow-hidden bg-gray-100"
+            style={{ zIndex: 10000 }}
+          >
             <button
               onClick={() => {
                 setShowMenu(!showMenu);
               }}
-              className={`md:hidden h-16 w-16 justify-center items-center flex fixed top-0 ${showMenu && "left-64"}`}
+              className={`md:hidden h-16 w-16 justify-center items-center flex fixed top-0 ${
+                showMenu && "left-64"
+              }`}
             >
               <Icon className="text-gray-500 text-3xl" />
             </button>
-            <div className={`h-screen fixed ${!showMenu && "hidden"} md:static md:flex bg-indigo-800`}>
+            <div
+              className={`h-screen fixed ${
+                !showMenu && "hidden"
+              } md:static md:flex bg-indigo-800`}
+            >
               <div className="w-64 overflow-y-auto">
                 <div className="text-2xl text-white font-bold p-4 ">Bloggy</div>
                 {menus.map((menu) => (
                   <>
                     <Link href={menu.path} key={menu.path}>
-                      <span className={`flex justify-between items-center text-white text-xm py-3 px-4 ${isActive(menu.path) && "bg-indigo-900"}`}>
+                      <span
+                        className={`flex justify-between items-center text-white text-xm py-3 px-4 ${
+                          isActive(menu.path) && "bg-indigo-900"
+                        }`}
+                      >
                         {menu.name}
                         {menu.menus && <MdOutlineKeyboardArrowDown />}
                       </span>
                     </Link>
                     {menu.menus && (
-                      <div className={`flex-col ${!isActive(menu.path) && !menu.menus.some((subMenu) => isActive(subMenu.path)) && "hidden"}`}>
+                      <div
+                        className={`flex-col ${
+                          !isActive(menu.path) &&
+                          !menu.menus.some((subMenu) =>
+                            isActive(subMenu.path)
+                          ) &&
+                          "hidden"
+                        }`}
+                      >
                         {menu.menus.map((subMenu) => (
                           <Link href={subMenu.path} key={subMenu.path}>
-                            <span className={`block text-gray-100 text-xm py-3 px-8 ${isActive(subMenu.path) && "bg-indigo-900"}`}>{subMenu.name}</span>
+                            <span
+                              className={`block text-gray-100 text-xm py-3 px-8 ${
+                                isActive(subMenu.path) && "bg-indigo-900"
+                              }`}
+                            >
+                              {subMenu.name}
+                            </span>
                           </Link>
                         ))}
                       </div>
@@ -142,7 +164,7 @@ export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy A
                 ))}
                 <div className="p-4">
                   <button
-                    className="button"
+                    className="button text-white font-semibold underline"
                     onClick={() =>
                       signOut({
                         callbackUrl: "/",
@@ -162,16 +184,22 @@ export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy A
   );
 };
 
-export const Header = ({ title = "", children = null, model = null }: HeaderProps) => {
+export const Header = ({
+  title = "",
+  children = null,
+  model = null,
+}: HeaderProps) => {
   return (
     <div className="bg-white border-b flex h-16 items-center p-4 justify-between">
-      <h2 className="text-xl font-bold pl-12 md:pl-0">{title || `데이터 관리`}</h2>
+      <h2 className="text-xl font-bold pl-12 md:pl-0">{title || `Data`}</h2>
       <div className="space-x-3 text-sm">
         {children}
         {model && (
           <div className="flex">
             <Link href={`/admin/${pluralize(model)}/new`}>
-              <span className="button flex items-center justify-center px-4 h-10 w-40">만들기</span>
+              <span className="button flex items-center justify-center px-4 h-10 w-40">
+                Create
+              </span>
             </Link>
           </div>
         )}
