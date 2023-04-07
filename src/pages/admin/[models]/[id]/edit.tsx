@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Layout, Show } from "@/components/admin";
+import { Form, Layout } from "@/components/admin";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { camelCase } from "change-case";
@@ -13,6 +13,7 @@ const ModelPage = () => {
   const { page = "0" }: any = router.query;
   const model = models && camelCase(pluralize.singular(models));
   const [params, setParams] = useState({});
+  const [userParams, setUserParams] = useState({});
 
   const { data, refetch } = useQuery(
     ["objects", params],
@@ -27,6 +28,13 @@ const ModelPage = () => {
     }
   );
 
+  const { data: users } = useQuery(["objects", userParams], async () => {
+    const result = await axios.get("/api/admin/objects", {
+      params: userParams,
+    });
+    return result.data;
+  });
+
   useEffect(() => {
     setParams({
       id: id,
@@ -38,11 +46,31 @@ const ModelPage = () => {
       },
       include: null,
     });
+
+    setUserParams({
+      model: "user",
+      limit: 100,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   }, [id, model, page]);
 
   return (
     <Layout>
-      <Show model={model} data={data} />
+      <Form
+        model={model}
+        data={data}
+        fields={{
+          title: { type: "text", required: true },
+          content: { type: "textarea", required: true },
+          userId: {
+            type: "select",
+            required: true,
+            options: users && users?.map((user: any) => [user.id, user.name]),
+          },
+        }}
+      />
     </Layout>
   );
 };

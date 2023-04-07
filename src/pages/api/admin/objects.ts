@@ -1,7 +1,10 @@
 import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { where } = req.query;
   let objects;
   if (req.method === "GET") {
@@ -21,6 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (model !== undefined) {
+      console.log(model);
       objects = await prisma[model].findMany({
         where: { ...where, id: id || {} },
         orderBy: JSON.parse((req.query.orderBy as string) || "{}"),
