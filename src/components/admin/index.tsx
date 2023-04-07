@@ -9,12 +9,13 @@ import { useRouter } from "next/router";
 
 import { toast } from "react-hot-toast";
 import { IoIosMenu, IoIosClose } from "react-icons/io";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
 import pluralize from "pluralize";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { snakeCase } from "change-case";
 import FullPageLoader from "../FullPageLoader";
+import cn from "classnames";
 
 export interface MetaProps {
   title: string;
@@ -73,6 +74,7 @@ export const Meta = (props: MetaProps) => (
 
 export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy Admin" />, children }: LayoutProps) => {
   const { currentUser, isFetching } = useCurrentUser();
+  const [isOpen, setIsOpen] = useState<boolean>(true);
   const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
   const Icon = showMenu ? IoIosClose : IoIosMenu;
@@ -119,26 +121,50 @@ export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy A
               <Icon className="text-gray-500 text-3xl" />
             </button>
             <div className={`h-screen fixed ${!showMenu && "hidden"} md:static md:flex bg-blue-800`}>
-              <div className="w-64 overflow-y-auto">
-                <Link href="/">
-                  <div className="text-2xl text-white font-bold p-4 ">Bloggy</div>
-                </Link>
-                <Link href="/admin">
-                  <span className={`flex justify-between items-center text-white text-xm py-3 px-4 ${isActive("/admin") && "bg-blue-900"}`}>Admin</span>
-                </Link>
-                {menus &&
-                  menus.map((menu: menuInterface) => (
-                    <>
+              <div className={cn("overflow-y-auto relative", { "w-64": isOpen }, { "w-20": !isOpen })}>
+                <div className="text-2xl text-white font-bold p-4 flex justify-between items-center">
+                  <div className={cn({ hidden: !isOpen }, { block: isOpen })}>
+                    <Link href="/">Bloggy</Link>
+                  </div>
+
+                  <button
+                    className={cn(
+                      "button rounded-full bg-white hover:bg-blue-100 w-10 h-10 text-white text-sm font-semibold underline",
+                      { hidden: isOpen },
+                      { block: !isOpen }
+                    )}
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <AiOutlineDoubleRight className="text-blue-900 m-auto font-bold text-lg" />
+                  </button>
+                  <button
+                    className={cn(
+                      "button rounded-full bg-white hover:bg-blue-100 w-10 h-10 text-white text-sm font-semibold underline",
+                      { hidden: !isOpen },
+                      { block: isOpen }
+                    )}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <AiOutlineDoubleLeft className="text-blue-900 m-auto font-bold text-lg" />
+                  </button>
+                </div>
+                <div className={cn({ hidden: !isOpen }, { block: isOpen })}>
+                  <Link href="/admin">
+                    <span className={`flex justify-between items-center text-white text-xm py-3 px-4 ${isActive("/admin") && "bg-blue-900"}`}>Admin</span>
+                  </Link>
+                  {menus &&
+                    menus.map((menu: menuInterface) => (
                       <Link href={menu.path} key={menu.path}>
                         <span className={`flex justify-between items-center text-white text-xm py-3 px-4 ${isActive(menu.path) && "bg-blue-900"}`}>
                           {menu.name}
                         </span>
                       </Link>
-                    </>
-                  ))}
-                <div className="p-4">
+                    ))}
+                </div>
+
+                <div className="p-2 absolute bottom-4 w-full text-center">
                   <button
-                    className="button text-white font-semibold underline"
+                    className="button text-white text-sm font-semibold underline"
                     onClick={() =>
                       signOut({
                         callbackUrl: "/",
@@ -205,36 +231,39 @@ export const Table = ({ model, data, refetch }: TableProps) => {
               </th>
             </tr>
           </thead>
-          {data?.objects?.map((object: any, index: number) => (
-            <tr key={object.id}>
-              {Object.entries(object).map(([key, value], index) => (
-                <td key={index} className="whitespace-wrap px-4 py-4 text-sm text-gray-700">
-                  {typeof value == "string" && value?.length > 200 ? value?.substring(0, 200) + "..." : (value as string)}
+          <tbody className="bg-white divide-y divide-gray-200">
+            {data?.objects?.map((object: any, index: number) => (
+              <tr key={object.id}>
+                {Object.entries(object).map(([key, value], index) => (
+                  <td key={index} className="whitespace-wrap px-4 py-4 text-sm text-gray-700">
+                    {typeof value == "string" && value?.length > 200 ? value?.substring(0, 200) + "..." : (value as string)}
+                  </td>
+                ))}
+                <td className="whitespace-nowrap px-3 py-4 text-xs text-gray-700">
+                  <Link href={`/admin/${pluralize(model)}/${object.id}`}>
+                    <span className="text-gray-800 font-semibold underline">More</span>
+                  </Link>
+                  <Link href={`/admin/${pluralize(model)}/${object.id}/edit`}>
+                    <span className="text-gray-600 font-semibold underline ml-2">Edit</span>
+                  </Link>
+                  <button
+                    className="ml-2 text-red-600 font-semibold underline"
+                    onClick={async () => {
+                      if (confirm("Delete the data permanently?")) {
+                        await axios.delete(`/api/admin/objects`, {
+                          params: { id: object.id, model },
+                        });
+                      }
+                      refetch();
+                      toast.success("Successfully Deleted");
+                    }}
+                  >
+                    Delete
+                  </button>
                 </td>
-              ))}
-              <td className="whitespace-nowrap px-3 py-4 text-xs text-gray-700">
-                <Link href={`/admin/${pluralize(model)}/${object.id}`}>
-                  <span className="text-gray-800 font-semibold underline">More</span>
-                </Link>
-                <Link href={`/admin/${pluralize(model)}/${object.id}/edit`}>
-                  <span className="text-gray-600 font-semibold underline ml-2">Edit</span>
-                </Link>
-                <button
-                  className="ml-2 text-red-600 font-semibold underline"
-                  onClick={async () => {
-                    if (confirm("Delete the data permanently?")) {
-                      await axios.delete(`/api/admin/objects`, {
-                        params: { id: object.id, model },
-                      });
-                    }
-                    refetch();
-                  }}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
+              </tr>
+            ))}
+          </tbody>
         </table>
       ) : (
         <FullPageLoader />

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { RadioGroup } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import Header from "@/components/Header";
-import * as amplitude from "@amplitude/analytics-browser";
+import useAmplitude from "@/hooks/useAmplitude";
 import { Layout } from "@/components";
 
 const frequencies = [
@@ -38,10 +38,11 @@ function classNames(...classes: string[]) {
 
 export default function Pricing() {
   const [frequency, setFrequency] = useState(frequencies[0]);
+  const { amplitude } = useAmplitude();
 
   useEffect(() => {
     amplitude.track(`pricing_page`);
-  }, []);
+  }, [amplitude]);
 
   return (
     <>

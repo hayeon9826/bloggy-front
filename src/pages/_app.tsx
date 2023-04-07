@@ -4,16 +4,9 @@ import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { DefaultSeo } from "next-seo";
-import * as amplitude from "@amplitude/analytics-browser";
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
-  const SESSION_EMAIL = pageProps?.session?.user?.email;
-
-  amplitude.init(process.env.AMPLITUDE_KEY as string, SESSION_EMAIL, {
-    defaultTracking: { sessions: true, pageViews: true, formInteractions: true, fileDownloads: true },
-  });
-
   return (
     <>
       <DefaultSeo

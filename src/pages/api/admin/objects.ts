@@ -43,5 +43,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
     return res.json(objects);
+  } else if (req.method === "DELETE") {
+    const { model, id }: any = req.query;
+    const ids = req.query["ids[]"];
+    if (id) {
+      await prisma[model].delete({ where: { id } });
+    } else if (ids) {
+      await prisma[model].deleteMany({
+        where: { id: { in: ids } },
+      });
+    }
+    return res.json({});
   }
 }
