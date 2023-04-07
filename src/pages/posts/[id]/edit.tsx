@@ -15,10 +15,11 @@ import { useQuery } from "react-query";
 import Modal from "@/components/Modal";
 import { Dialog } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
-import * as amplitude from "@amplitude/analytics-browser";
+import useAmplitude from "@/hooks/useAmplitude";
 
 export default function PostNewPage() {
   const { data: session, status } = useSession();
+  const { amplitude } = useAmplitude({ session });
   const [quillLoaded, setQuillLoaded] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -50,8 +51,6 @@ export default function PostNewPage() {
       },
     }
   );
-
-  // console.log(post);
 
   const { data: user, isFetching: fetchingUser } = useQuery(
     ["user"],
@@ -143,7 +142,6 @@ export default function PostNewPage() {
         }
       }
       setLoading(false);
-      console.log("prompt", prompt);
     } else {
       toast.error("Please fill in the title.");
     }

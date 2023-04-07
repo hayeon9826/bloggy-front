@@ -5,10 +5,11 @@ import { useCallback, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
 import FullPageLoader from "@/components/FullPageLoader";
-import * as amplitude from "@amplitude/analytics-browser";
+import useAmplitude from "@/hooks/useAmplitude";
 
 export default function SignInPage() {
   const { status, data: session } = useSession();
+  const { amplitude } = useAmplitude({ session });
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -49,7 +50,7 @@ export default function SignInPage() {
       checkUser();
       amplitude.track(`users_login`, eventProperties);
     }
-  }, [checkUser, router, session, status]);
+  }, [amplitude, checkUser, router, session, status]);
 
   return (
     <>

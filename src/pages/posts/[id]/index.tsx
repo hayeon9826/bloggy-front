@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar";
 import { Post } from "@/interface";
@@ -8,12 +10,13 @@ import { BsPersonCircle } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
 import { toast } from "react-hot-toast";
-import * as amplitude from "@amplitude/analytics-browser";
-import { useEffect } from "react";
+
+import useAmplitude from "@/hooks/useAmplitude";
 dayjs().format();
 
 export default function PostPage() {
   const { data: session } = useSession();
+  const { amplitude } = useAmplitude({ session });
   const router = useRouter();
   const { id } = router.query;
 

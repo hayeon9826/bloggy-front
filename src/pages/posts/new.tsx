@@ -15,10 +15,11 @@ import { useQuery } from "react-query";
 import Modal from "@/components/Modal";
 import { Dialog } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
-import * as amplitude from "@amplitude/analytics-browser";
+import useAmplitude from "@/hooks/useAmplitude";
 
 export default function PostNewPage() {
   const { data: session, status } = useSession();
+  const { amplitude } = useAmplitude({ session });
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
