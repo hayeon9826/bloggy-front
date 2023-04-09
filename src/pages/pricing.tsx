@@ -4,6 +4,7 @@ import { CheckIcon } from "@heroicons/react/20/solid";
 import Header from "@/components/Header";
 import useAmplitude from "@/hooks/useAmplitude";
 import { Layout } from "@/components";
+import { useSession } from "next-auth/react";
 
 const frequencies = [
   { value: "monthly", label: "Monthly", priceSuffix: "/month" },
@@ -37,8 +38,9 @@ function classNames(...classes: string[]) {
 }
 
 export default function Pricing() {
+  const { data: session } = useSession();
   const [frequency, setFrequency] = useState(frequencies[0]);
-  const { amplitude } = useAmplitude();
+  const { amplitude } = useAmplitude({ session });
 
   useEffect(() => {
     amplitude.track(`pricing_page`);
