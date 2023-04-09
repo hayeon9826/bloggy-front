@@ -35,3 +35,11 @@ export const modelFields: any = {
     userId: { type: "relations", required: true },
   },
 };
+
+export const IncludeFields: any = {
+  user: {
+    posts: true,
+    ai_records: true,
+    wait_lists: true,
+  },
+};

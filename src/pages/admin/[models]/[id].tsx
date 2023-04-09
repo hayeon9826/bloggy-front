@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { camelCase } from "change-case";
 import pluralize from "pluralize";
 import axios from "axios";
+import { IncludeFields } from "@/lib/admin/fields";
 
 const ModelPage = () => {
   const router = useRouter();
@@ -13,6 +14,8 @@ const ModelPage = () => {
   const { page = "0" }: any = router.query;
   const model = models && camelCase(pluralize.singular(models));
   const [params, setParams] = useState({});
+
+  console.log(params);
 
   const { data, refetch } = useQuery(
     ["objects", params],
@@ -23,7 +26,7 @@ const ModelPage = () => {
       return result.data;
     },
     {
-      enabled: !!id,
+      enabled: !!id && !!model,
     }
   );
 
@@ -36,7 +39,7 @@ const ModelPage = () => {
       orderBy: {
         createdAt: "desc",
       },
-      include: null,
+      include: IncludeFields?.[model] || "null",
     });
   }, [id, model, page]);
 

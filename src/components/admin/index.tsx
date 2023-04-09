@@ -323,6 +323,7 @@ export const Table = ({ model, data, refetch }: TableProps) => {
 };
 
 export const Show = ({ model, data }: ShowProps) => {
+  console.log(data);
   return (
     <div className="bg-white min-h-screen px-10 py-20">
       {data ? (

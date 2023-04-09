@@ -4,7 +4,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let objects;
   if (req.method === "GET") {
-    const { model, id, limit = "30", page }: any = req.query;
+    const { model, id, limit = "30", page, include }: any = req.query;
+
     if (model === "models") {
       const objects = prisma._dmmf.datamodel.models.map((modelInfo: any) => ({
         name: modelInfo.name,
@@ -14,6 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.json(objects);
     }
     const where = JSON.parse((req.query.where as any) || "{}");
+
+    console.log(where, req.query.include, "###INCLUDE", req.query.orderBy);
 
     const count = await prisma[model]?.count({
       where,
