@@ -1,10 +1,11 @@
-import { Layout, Header, Table } from "@/components/admin";
+import { Layout, Header, Table, Pagination } from "@/components/admin";
 import axios from "axios";
 import { useRouter } from "next/router";
 import pluralize from "pluralize";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { camelCase } from "change-case";
+import Link from "next/link";
 
 const ModelsIndex = () => {
   const router = useRouter();
@@ -27,6 +28,8 @@ const ModelsIndex = () => {
     }
   );
 
+  console.log(data);
+
   useEffect(() => {
     setParams({
       model,
@@ -42,6 +45,7 @@ const ModelsIndex = () => {
   return (
     <Layout>
       <Table refetch={refetch} model={model} data={data} />
+      <Pagination model={model} data={data} page={page} />
     </Layout>
   );
 };

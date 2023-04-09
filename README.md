@@ -32,7 +32,7 @@
 - [ ] 사이드 바 구성
 - [ ] 유료 멤버십 request access 페이지 작업
 - [x] amplitude 세팅
-- [ ] admin 작업
+- [x] admin 작업
 - [ ] 공개 url 작업
 - [ ] public profile 작업
 - [ ] sns 공유 작업

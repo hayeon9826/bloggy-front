@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { camelCase } from "change-case";
 import pluralize from "pluralize";
 import axios from "axios";
+import { modelFields } from "@/lib/admin/fields";
 
 const ModelPage = () => {
   const router = useRouter();
@@ -28,12 +29,18 @@ const ModelPage = () => {
     }
   );
 
-  const { data: users } = useQuery(["objects", userParams], async () => {
-    const result = await axios.get("/api/admin/objects", {
-      params: userParams,
-    });
-    return result.data;
-  });
+  const { data: users } = useQuery(
+    ["objects", userParams],
+    async () => {
+      const result = await axios.get("/api/admin/objects", {
+        params: userParams,
+      });
+      return result.data;
+    },
+    {
+      enabled: !!userParams,
+    }
+  );
 
   useEffect(() => {
     setParams({
@@ -58,19 +65,7 @@ const ModelPage = () => {
 
   return (
     <Layout>
-      <Form
-        model={model}
-        data={data}
-        fields={{
-          title: { type: "text", required: true },
-          content: { type: "textarea", required: true },
-          userId: {
-            type: "select",
-            required: true,
-            options: users && users?.map((user: any) => [user.id, user.name]),
-          },
-        }}
-      />
+      <Form model={model} data={data} fields={modelFields?.[model]} />
     </Layout>
   );
 };

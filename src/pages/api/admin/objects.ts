@@ -1,11 +1,7 @@
 import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const { where } = req.query;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let objects;
   if (req.method === "GET") {
     const { model, id, limit = "30", page }: any = req.query;
@@ -24,7 +20,6 @@ export default async function handler(
     });
 
     if (model !== undefined) {
-      console.log(model);
       objects = await prisma[model].findMany({
         where: { ...where, id: id || {} },
         orderBy: JSON.parse((req.query.orderBy as string) || "{}"),
@@ -58,5 +53,21 @@ export default async function handler(
       });
     }
     return res.json({});
+  } else if (req.method === "PUT") {
+    const { id, model, ...data } = req.body;
+    const object = await prisma[model].update({
+      where: { id },
+      data,
+    });
+    return res.json(object);
+  } else if (req.method === "POST") {
+    const { id, model, ...data } = req.body;
+
+    const object = await prisma[model].create({
+      data: {
+        ...data,
+      },
+    });
+    return res.json(object);
   }
 }

@@ -1,7 +1,7 @@
 import { Post } from "@/interface";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
+import { useQuery, useInfiniteQuery } from "react-query";
 import { PostListSkeleton } from "./posts/Skeleton";
 import SideBar from "./SideBar";
 import { BsPersonCircle } from "react-icons/bs";
@@ -64,17 +64,11 @@ export default function PostList() {
                         {post?.title}
                       </span>
                     </h3>
-                    <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">
-                      {RemoveHTMLTags(post?.content)}
-                    </p>
+                    <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">{RemoveHTMLTags(post?.content)}</p>
                   </div>
                   <div className="relative mt-4 flex items-center gap-x-4">
                     {post?.user?.imageUrl ? (
-                      <img
-                        src={post?.user?.imageUrl}
-                        alt=""
-                        className="h-10 w-10 rounded-full bg-gray-50"
-                      />
+                      <img src={post?.user?.imageUrl} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
                     ) : (
                       <BsPersonCircle className="w-10 h-10 text-gray-300" />
                     )}
@@ -90,13 +84,7 @@ export default function PostList() {
                 </article>
               ))
             ) : (
-              <>
-                {!isFetching && (
-                  <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">
-                    No Posts Yet 😂
-                  </div>
-                )}
-              </>
+              <>{!isFetching && <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">No Posts Yet 😂</div>}</>
             )}
           </div>
         </div>
