@@ -16,8 +16,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     const where = JSON.parse((req.query.where as any) || "{}");
 
-    console.log(where, req.query.include, "###INCLUDE", req.query.orderBy);
-
     const count = await prisma[model]?.count({
       where,
     });
