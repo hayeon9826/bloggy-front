@@ -19,15 +19,12 @@ type Data = {
 type RequestData = {
   prompt: string;
   type: PromptType;
-  email: string;
+  userId: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === "POST") {
-    const { prompt, type, email }: RequestData = req.body;
+    const { prompt, type, userId }: RequestData = req.body;
     let object;
 
     try {
@@ -35,7 +32,7 @@ export default async function handler(
         throw new Error("No prompt was provided");
       }
       const user = await prisma.user.findFirst({
-        where: { email: email },
+        where: { id: userId },
         include: { ai_records: true },
       });
 

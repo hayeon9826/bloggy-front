@@ -7,12 +7,9 @@ type User = {
   id: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<User>
-) {
-  const { email, name } = req.body;
+export default async function handler(req: NextApiRequest, res: NextApiResponse<User>) {
   if (req.method === "POST") {
+    const { email, name } = req.body;
     const object = await prisma.user.create({
       data: { name, email },
     });
@@ -25,6 +22,7 @@ export default async function handler(
       where: { email: email },
       include: { ai_records: true },
     });
+
     return res.json(object);
   }
 }

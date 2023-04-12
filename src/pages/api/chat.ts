@@ -11,6 +11,7 @@ const openai = new OpenAIApi(configuration);
 type Data = {
   success?: boolean;
   message?: string;
+  error?: any;
 };
 
 type RequestData = {
@@ -18,12 +19,10 @@ type RequestData = {
   type: PromptType;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === "POST") {
     const { prompt, type }: RequestData = req.body;
+
     try {
       if (prompt == null) {
         throw new Error("No prompt was provided");
@@ -31,8 +30,8 @@ export default async function handler(
 
       // trigger OpenAI completion
       const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        max_tokens: 2048,
+        model: "gpt-3.5-turbo",
+        max_tokens: 100,
         prompt: `${PromptPrefix[type]}${prompt}`,
       });
 
@@ -45,6 +44,10 @@ export default async function handler(
       });
     } catch (error: any) {
       console.log(error.message);
+      return res.status(500).json({
+        success: false,
+        error: error?.message,
+      });
     }
   } else {
     res.status(200).json({ message: "TEST" });

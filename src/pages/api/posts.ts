@@ -13,10 +13,7 @@ type Data = {
   message?: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === "POST") {
     let object;
     const { title, content, email } = req.body;
@@ -63,7 +60,7 @@ export default async function handler(
       orderBy: { createdAt: "desc" },
       where: {
         id: id ? id : {},
-        userId: email ? user?.id : {},
+        userId: email ? user?.id || "" : {},
       },
       include: { user: true },
     });

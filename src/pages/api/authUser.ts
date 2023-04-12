@@ -7,18 +7,19 @@ type User = {
   id: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<User>
-) {
-  const { email } = req.query;
+export default async function handler(req: NextApiRequest, res: NextApiResponse<User>) {
+  const { email } = req.body;
+
   if (req.method === "POST") {
     let object;
-    object = await prisma.user.findFirst({
-      where: {
-        email,
-      },
-    });
+
+    if (email !== undefined) {
+      object = await prisma.user.findFirst({
+        where: {
+          email,
+        },
+      });
+    }
 
     return res.json(object);
   }

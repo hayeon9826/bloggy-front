@@ -52,7 +52,7 @@ export default function Header() {
           )}
           {status === "authenticated" && (
             <span className="text-sm font-light leading-6 text-gray-900 hover:text-blue-600">
-              <Link href={`/profile/@${session?.user?.email?.split("@")?.[0]}`}>Profile</Link>
+              <Link href={`/profile/${session?.user?.email}`}>Profile</Link>
             </span>
           )}
           {status === "authenticated" ? (
@@ -96,7 +96,7 @@ export default function Header() {
                 <span className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-light leading-7 text-gray-900 hover:bg-gray-50">
                   {status === "authenticated" && (
                     <div className="mb-2">
-                      <Link href={`/profile/@${session?.user?.email?.split("@")?.[0]}`}>Profile</Link>
+                      <Link href={`/profile/${session?.user?.email}`}>Profile</Link>
                     </div>
                   )}
                   {status === "authenticated" ? (

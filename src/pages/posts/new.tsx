@@ -49,7 +49,7 @@ export default function PostNewPage() {
     },
     {
       enabled: !!session?.user?.email,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
     }
   );
 
@@ -72,12 +72,13 @@ export default function PostNewPage() {
 
     const val = getValues("title");
     if (val.length > 0) {
+      console.log(user?.id, "@@USER ID", user);
       try {
         setLoading(true);
         const res = await axios.post("/api/aiRecords", {
           prompt: val,
           type: "CREATE_POST",
-          email: session?.user?.email,
+          userId: user?.id,
         });
         if (!res.data) {
           amplitude.track(`[ERR_create_post]_posts_new`, eventProperties);
@@ -102,7 +103,7 @@ export default function PostNewPage() {
     } else {
       toast.error("Please fill in the title.");
     }
-  }, []);
+  }, [amplitude, getValues, handleChangeEditor, trigger, user]);
 
   const handleClickContinue = () => {
     const eventProperties = {

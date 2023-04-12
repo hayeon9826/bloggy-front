@@ -24,6 +24,7 @@ export enum PromptType {
   CONTINUE_POST = "CONTINUE_POST",
   ENHANCE_POST = "ENHANCE_POST",
   SUMMARIZE_POST = "SUMMARIZE_POST",
+  NONE = "NONE",
 }
 
 export const PromptPrefix = {
@@ -31,6 +32,7 @@ export const PromptPrefix = {
   [PromptType.CONTINUE_POST]: "Continue writing blog post after the paragraph: ",
   [PromptType.ENHANCE_POST]: "Enhance the paragrph: ",
   [PromptType.SUMMARIZE_POST]: "Summarize the paragrph: ",
+  [PromptType.NONE]: "",
 };
 
 export interface AiRecord {

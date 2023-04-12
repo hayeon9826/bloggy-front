@@ -16,10 +16,12 @@ export default function SignInPage() {
   const checkUser = useCallback(async () => {
     setIsLoading(true);
     let isSuccess;
+
     try {
       const res = await axios.post("/api/authUser", {
         email: session?.user?.email,
       });
+
       if (res && res?.data?.email) {
         isSuccess = true;
       } else {
@@ -31,8 +33,6 @@ export default function SignInPage() {
         await axios.post("/api/users", data);
         isSuccess = true;
       }
-
-      // localstorage에 user id 추가
     } catch (err) {
       console.log(err);
     }
