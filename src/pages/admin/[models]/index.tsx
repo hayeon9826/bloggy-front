@@ -28,8 +28,6 @@ const ModelsIndex = () => {
     }
   );
 
-  console.log(data);
-
   useEffect(() => {
     setParams({
       model,

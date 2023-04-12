@@ -22,6 +22,11 @@ enum AdminType {
   SUPER
 }
 
+enum ChatType {
+  USER
+  AI
+}
+
 model User {
   id    String     @id @default(uuid())
   email String  @unique
@@ -32,6 +37,7 @@ model User {
   adminType    AdminType    @default(NONE)
   ai_records   AiRecord[] @relation("ai_records")
   wait_lists    WaitList[]   @relation("wait_lists")
+  chats Chat[]
 }
 
 model WaitList {
@@ -63,4 +69,22 @@ model AiRecord {
   userId       String?
   user         User?  @relation("ai_records", fields: [userId], references: [id]) 
   @@index([userId])
+}
+
+model Chat {
+  id        String   @id @default(uuid())
+  chatType  ChatType   @default(USER)
+  body      String?
+  userId    String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+  messages Message[]
+}
+model Message {
+  id        String   @id @default(uuid())
+  chatId    String?
+  userId    String?
+  body      String
+  createdAt DateTime @default(now())
+  chat      Chat?    @relation(fields: [chatId], references: [id])
 }
