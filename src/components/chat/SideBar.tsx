@@ -29,7 +29,7 @@ export default function Sidebar({ datas }: Props) {
                       {index === 0 ? (
                         <a
                           key={index}
-                          className="flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 bg-gray-800 hover:bg-gray-800 group animate-flash"
+                          className="flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 mr-2.5 bg-gray-800 hover:bg-gray-800 group animate-flash"
                         >
                           <ChatIcon />
                           <div className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">{data}</div>
