@@ -34,6 +34,23 @@ export const modelFields: any = {
     answer: { type: "text" },
     userId: { type: "relations", required: true },
   },
+  chat: {
+    title: { type: "text", required: true },
+    userId: { type: "relations", required: true },
+  },
+  message: {
+    chatType: {
+      type: "select",
+      required: true,
+      options: [
+        ["USER", "USER"],
+        ["AI", "AI"],
+      ],
+    },
+    userId: { type: "relations", required: true },
+    body: { type: "textarea", required: true },
+    chatId: { type: "relations", required: true },
+  },
 };
 
 export const IncludeFields: any = {
