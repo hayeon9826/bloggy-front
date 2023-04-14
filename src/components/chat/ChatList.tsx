@@ -20,8 +20,8 @@ export default function ChatList({ data }: ChatProps) {
     <div className="text-white pb-28 w-full min-h-screen">
       {data === null ? (
         <>
-          <div className="flex flex-col items-center text-sm dark:bg-gray-800">
-            <div className="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 dark:text-gray-100">
+          <div className="flex flex-col items-center text-sm bg-gray-800">
+            <div className="w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 text-gray-100">
               <h1 className="text-3xl font-semibold text-center mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center">
                 ChatGPT
               </h1>
@@ -32,13 +32,11 @@ export default function ChatList({ data }: ChatProps) {
                     Examples
                   </h2>
                   <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <button className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">
-                      {`"Explain quantum computing in simple terms" →`}
-                    </button>
-                    <button className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">
+                    <button className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900">{`"Explain quantum computing in simple terms" →`}</button>
+                    <button className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900">
                       {` "Got any creative ideas for a 10 year old’s birthday?" →`}
                     </button>
-                    <button className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md hover:bg-gray-200 dark:hover:bg-gray-900">
+                    <button className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900">
                       {`"How do I make an HTTP request in Javascript?" →`}
                     </button>
                   </ul>
@@ -49,15 +47,9 @@ export default function ChatList({ data }: ChatProps) {
                     Capabilities
                   </h2>
                   <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                      Remembers what user said earlier in the conversation
-                    </li>
-                    <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                      Allows user to provide follow-up corrections
-                    </li>
-                    <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                      Trained to decline inappropriate requests
-                    </li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Remembers what user said earlier in the conversation</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Allows user to provide follow-up corrections</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Trained to decline inappropriate requests</li>
                   </ul>
                 </div>
                 <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
@@ -66,15 +58,9 @@ export default function ChatList({ data }: ChatProps) {
                     Limitations
                   </h2>
                   <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                      May occasionally generate incorrect information
-                    </li>
-                    <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                      May occasionally produce harmful instructions
-                    </li>
-                    <li className="w-full bg-gray-50 dark:bg-white/5 p-3 rounded-md">
-                      Limited knowledge of world and events after 2021
-                    </li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">May occasionally generate incorrect information</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">May occasionally produce harmful instructions</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Limited knowledge of world and events after 2021</li>
                   </ul>
                 </div>
               </div>
@@ -100,9 +86,7 @@ export default function ChatList({ data }: ChatProps) {
                 {chat.type === "USER" && <BiUser className="m-auto" />}
                 {chat.type === "AI" && <BsRobot className="m-auto" />}
               </div>
-              <div className="whitespace-pre-wrap w-full text-sm">
-                {chat.chat}
-              </div>
+              <div className="whitespace-pre-wrap w-full text-sm">{chat.chat}</div>
               <div className="flex gap-2 relative items-start rounded-sm flex-shrink-0">
                 <FiThumbsUp />
                 <FiThumbsDown />

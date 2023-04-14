@@ -3,7 +3,7 @@ import Link from "next/link";
 const navigation = {
   solutions: [
     { name: "Marketing", href: "#" },
-    { name: "Chat", href: "/chat" },
+    { name: "Chat", href: "/chats" },
     { name: "Commerce", href: "/shop" },
     { name: "Admin", href: "/admin" },
   ],
