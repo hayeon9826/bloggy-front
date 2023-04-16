@@ -4,11 +4,15 @@ import { BsRobot } from "react-icons/bs";
 import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { BsSun } from "react-icons/bs";
 import { AiOutlineThunderbolt, AiOutlineWarning } from "react-icons/ai";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
+import axios from "axios";
+import FullPageLoader from "../FullPageLoader";
 
 export interface MessageData {
   id: number;
-  type: "USER" | "AI";
-  chat: string;
+  chatType: "USER" | "AI";
+  body: string;
 }
 
 interface ChatProps {
@@ -16,9 +20,29 @@ interface ChatProps {
 }
 
 export default function ChatList({ data }: ChatProps) {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const config = {
+    url: `/api/chat?id=${id}`,
+  };
+
+  const { data: chat, isFetching } = useQuery(
+    [`chat-${id}`],
+    async () => {
+      const { data } = await axios(config);
+      return data;
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  if (isFetching) return <FullPageLoader />;
+
   return (
     <div className="text-white pb-28 w-full min-h-screen">
-      {data === null ? (
+      {chat?.messages?.length === 0 || !chat ? (
         <>
           <div className="flex flex-col items-center text-sm bg-gray-800">
             <div className="w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 text-gray-100">
@@ -68,9 +92,9 @@ export default function ChatList({ data }: ChatProps) {
           </div>
         </>
       ) : (
-        data?.map((chat, index) => (
+        chat?.messages?.map((message: MessageData, index: number) => (
           <div
-            key={chat.id}
+            key={message.id}
             className={cn("min-h-[85px]", {
               "bg-gray-700": index % 2 === 0,
             })}
@@ -79,14 +103,14 @@ export default function ChatList({ data }: ChatProps) {
               <div
                 className={cn(
                   "w-[30px] h-[30px] flex flex-col relative items-end rounded-sm flex-shrink-0",
-                  { "bg-green-300/60": chat.type === "USER" },
-                  { "bg-blue-300/60": chat.type === "AI" }
+                  { "bg-green-300/60": message.chatType === "USER" },
+                  { "bg-blue-300/60": message.chatType === "AI" }
                 )}
               >
-                {chat.type === "USER" && <BiUser className="m-auto" />}
-                {chat.type === "AI" && <BsRobot className="m-auto" />}
+                {message.chatType === "USER" && <BiUser className="m-auto" />}
+                {message.chatType === "AI" && <BsRobot className="m-auto" />}
               </div>
-              <div className="whitespace-pre-wrap w-full text-sm">{chat.chat}</div>
+              <div className="whitespace-pre-wrap w-full text-sm">{message.body}</div>
               <div className="flex gap-2 relative items-start rounded-sm flex-shrink-0">
                 <FiThumbsUp />
                 <FiThumbsDown />

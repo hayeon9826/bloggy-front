@@ -1,15 +1,22 @@
 import RegenerateIcon from "@/components/icons/RegenerateIcon";
 import { TbLoader } from "react-icons/tb";
 import ClickIcon from "@/components/icons/ClickIcon";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { useQueryClient } from "react-query";
 
 export default function ChatForm() {
-  const [prompt, updatePrompt] = useState<string>("");
+  const [prompt, setPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [answer, setAnswer] = useState<string>("");
+  const textareaRef = useRef<any>(null);
+  const router = useRouter();
+  const { id } = router.query;
+  const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
-  const sendPrompt = async (event: any) => {
+  const submitPrompt = async (event: any) => {
     if (event.key !== "Enter") {
       return;
     }
@@ -17,29 +24,47 @@ export default function ChatForm() {
     try {
       setLoading(true);
 
-      const res = await axios.post(`/api/chat`, {
-        prompt: prompt,
-        type: "NONE",
-      });
+      if (id) {
+        const res = await axios.post(`/api/messages`, {
+          prompt: prompt,
+          type: "CHAT",
+          chatId: id,
+          chatType: "USER",
+          email: session?.user?.email,
+        });
 
-      if (!res.data) {
-        throw new Error("Something went wrong");
+        if (!res.data) {
+          throw new Error("Something went wrong");
+        }
+      } else {
+        const res = await axios.post(`/api/chat`, {
+          prompt: prompt,
+          type: "CREATE_TITLE",
+          email: session?.user?.email,
+        });
+        if (!res.data) {
+          throw new Error("Something went wrong");
+        }
+        const { id } = res.data;
+        const message = await axios.post(`api/messages`, {
+          prompt: prompt,
+          type: "CHAT",
+          chatId: id,
+          chatType: "USER",
+          email: session?.user?.email,
+        });
+        router.replace(`/chats/${id}`);
       }
+      console.log("RRESET");
+      textareaRef?.current?.reset();
+      queryClient.invalidateQueries([`chat-${id}`]);
 
-      const { message } = res.data;
-      setAnswer(message);
       setLoading(false);
     } catch (err) {
       setLoading(false);
       console.log("err", err);
     }
   };
-
-  useEffect(() => {
-    if (prompt != null && prompt.trim() === "") {
-      setAnswer("");
-    }
-  }, [prompt]);
 
   return (
     <form className="stretch z-10 flex flex-row gap-3 pb-2 absolute w-full bottom-0 inset-x-0 mx-auto bg-gradient-to-t from-gray-800 to-gray-800/20">
@@ -54,10 +79,12 @@ export default function ChatForm() {
         </div>
         <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-gray-700 dark:border-gray-900/50 text-white rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
           <textarea
+            ref={textareaRef}
             rows={1}
             disabled={loading}
-            onChange={(e) => updatePrompt(e.target.value)}
-            onKeyDown={(e) => sendPrompt(e)}
+            autoFocus
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => submitPrompt(e)}
             placeholder="Send a message..."
             className="m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0"
             style={{
