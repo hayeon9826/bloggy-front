@@ -1,6 +1,7 @@
 ## 서비스 설명
 
-- Open AI의 text-davinci-003를 이용한 **블로그 앱**입니다.
+- Open AI의 text-davinci-003를 이용한 프로젝트
+- 크게 Blog, Chat, Commerce, Admin 네 가지로 구성되어 있음
 - Open AI API 참고 링크: [Tutorial: Build a Chatbot with React and OpenAI](https://blog.bitsrc.io/tutorial-build-a-chatbot-with-react-and-openai-2c183c50991e)
 
 ## 사용 기술
@@ -58,3 +59,10 @@
 - [ ] commerce: 주문 리스트
 - [ ] commerce: 마이페이지
 - [ ] commerce: 찜
+- [x] chat: 레이아웃 작업
+- [x] chat: 모바일 반응형 작업
+- [x] chat: api 작업
+- [x] chat: gpt 연동 작업
+- [ ] chat: 실시간 스트리밍
+- [ ] chat: regenerate 작업
+- [ ] chat: clear all 작업
