@@ -1,5 +1,5 @@
 import cn from "classnames";
-import { BiUser } from "react-icons/bi";
+import { BiUser, BiLoader } from "react-icons/bi";
 import { BsRobot } from "react-icons/bs";
 import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { BsSun } from "react-icons/bs";
@@ -15,11 +15,7 @@ export interface MessageData {
   body: string;
 }
 
-interface ChatProps {
-  data?: MessageData[] | null;
-}
-
-export default function ChatList({ data }: ChatProps) {
+export default function ChatList() {
   const router = useRouter();
   const { id } = router.query;
 
@@ -38,10 +34,8 @@ export default function ChatList({ data }: ChatProps) {
     }
   );
 
-  if (isFetching) return <FullPageLoader />;
-
   return (
-    <div className="text-white pb-28 w-full min-h-screen">
+    <div className="text-white pb-28 w-full min-h-screen mt-10 lg:mt-0">
       {chat?.messages?.length === 0 || !chat ? (
         <>
           <div className="flex flex-col items-center text-sm bg-gray-800">
@@ -96,7 +90,7 @@ export default function ChatList({ data }: ChatProps) {
           <div
             key={message.id}
             className={cn("min-h-[85px]", {
-              "bg-gray-700": index % 2 === 0,
+              "bg-gray-700": index % 2 === 1,
             })}
           >
             <div className="text-base gap-4 md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto">
@@ -119,6 +113,24 @@ export default function ChatList({ data }: ChatProps) {
           </div>
         ))
       )}
+      {/* {isFetching && (
+        <div
+          className={cn("min-h-[85px]", {
+            "bg-gray-700": chat?.messages?.length % 2 === 0,
+          })}
+        >
+          <div className="text-base gap-4 md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto items-center">
+            <div className={cn("w-[30px] h-[30px] flex flex-col relative items-end rounded-sm flex-shrink-0 bg-gray-300/50")}>
+              <BiLoader className="m-auto" />
+            </div>
+            <div className="whitespace-pre-wrap w-full text-sm">writing...</div>
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+            </span>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 }

@@ -32,33 +32,58 @@ export default function ChatForm() {
           chatType: "USER",
           email: session?.user?.email,
         });
-
         if (!res.data) {
           throw new Error("Something went wrong");
         }
+        queryClient.invalidateQueries([`chat-${id}`]);
+
+        const aiRes = await axios.post(`/api/aiMessages`, {
+          prompt: prompt,
+          type: "CHAT",
+          chatId: id,
+          email: session?.user?.email,
+        });
+        queryClient.invalidateQueries([`chat-${id}`]);
+        if (!aiRes.data) {
+          throw new Error("Something went wrong");
+        }
       } else {
-        const res = await axios.post(`/api/chat`, {
+        const chatRes = await axios.post(`/api/chat`, {
           prompt: prompt,
           type: "CREATE_TITLE",
           email: session?.user?.email,
         });
-        if (!res.data) {
+        if (!chatRes.data) {
           throw new Error("Something went wrong");
         }
-        const { id } = res.data;
-        const message = await axios.post(`api/messages`, {
+        const { id } = chatRes.data;
+        const res = await axios.post(`api/messages`, {
           prompt: prompt,
           type: "CHAT",
           chatId: id,
           chatType: "USER",
           email: session?.user?.email,
         });
+        if (!res.data) {
+          throw new Error("Something went wrong");
+        }
+
+        const aiRes = await axios.post(`/api/aiMessages`, {
+          prompt: prompt,
+          type: "CHAT",
+          chatId: id,
+          email: session?.user?.email,
+        });
+        queryClient.invalidateQueries([`chat-${id}`]);
+        if (!aiRes.data) {
+          throw new Error("Something went wrong");
+        }
+        setPrompt("");
+        queryClient.invalidateQueries([`chat-${id}`]);
         router.replace(`/chats/${id}`);
       }
-      console.log("RRESET");
+      setPrompt("");
       textareaRef?.current?.reset();
-      queryClient.invalidateQueries([`chat-${id}`]);
-
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -70,7 +95,7 @@ export default function ChatForm() {
     <form className="stretch z-10 flex flex-row gap-3 pb-2 absolute w-full bottom-0 inset-x-0 mx-auto bg-gradient-to-t from-gray-800 to-gray-800/20">
       <div className="relative lg:flex h-full flex-1 md:flex-col lg:mx-auto lg:max-w-2xl xl:max-w-3xl mx-4 last:mb-6 ">
         <div className="flex ml-1 md:w-full md:m-auto md:mb-2 mb-2 gap-0 md:gap-2 justify-center">
-          <button className="px-3 py-2 rounded-md relative text-sm border border-white/50 text-white bg-gray-800">
+          <button disabled={loading} className="px-3 py-2 rounded-md relative text-sm border border-white/50 text-white bg-gray-800">
             <div className="flex w-full items-center justify-center gap-2">
               <RegenerateIcon />
               Regenerate response
@@ -84,6 +109,7 @@ export default function ChatForm() {
             disabled={loading}
             autoFocus
             onChange={(e) => setPrompt(e.target.value)}
+            value={prompt}
             onKeyDown={(e) => submitPrompt(e)}
             placeholder="Send a message..."
             className="m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0"

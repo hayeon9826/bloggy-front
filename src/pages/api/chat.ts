@@ -27,12 +27,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (req.method === "POST") {
     let object;
     const { email, prompt, type }: RequestData = req.body;
-    console.log(email, prompt, type, "@@@email, prompt, type");
 
     const currentUser = await prisma.user.findFirst({
       where: { email },
     });
-    console.log(currentUser, "@@@currentUser");
 
     const response = await openai.createCompletion({
       model: "text-davinci-003",
@@ -40,11 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       prompt: `${PromptPrefix[type]}${prompt}`,
     });
 
-    console.log(response, "@@@response");
-
     const title = response.data.choices[0]?.text;
-
-    console.log(title, "@@@title");
 
     if (currentUser) {
       object = await prisma.chat.create({

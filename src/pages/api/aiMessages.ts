@@ -26,8 +26,7 @@ type RequestData = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === "POST") {
-    const { prompt, type, chatId, chatType, email }: RequestData = req.body;
-    let object;
+    const { prompt, type, chatId, email }: RequestData = req.body;
     let answer;
 
     try {
@@ -39,48 +38,49 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         where: { email },
       });
 
-      object = await prisma.message.create({
-        data: {
-          userId: user.id,
-          chatType,
-          chatId,
-          body: prompt,
-        },
-        include: {
-          chat: true,
-        },
-      });
-
-      // trigger OpenAI completion
-      // const response = await openai.createCompletion({
-      //   model: "text-davinci-003",
-      //   max_tokens: 50,
-      //   prompt: `${PromptPrefix[type]}${prompt} \nAI:`,
-      //   temperature: 0.9,
-      //   top_p: 1,
-      //   frequency_penalty: 0.0,
-      //   presence_penalty: 0.6,
-      //   stop: [" Human:", " AI:"],
-      // });
-
-      // retrieve the completion text from response
-      // const completion = response.data.choices[0]?.text;
-
-      // if (completion) {
-      //   answer = await prisma.message.create({
+      //   object = await prisma.message.create({
       //     data: {
-      //       chatType: "AI",
+      //       userId: user.id,
+      //       chatType,
       //       chatId,
-      //       body: completion,
+      //       body: prompt,
       //     },
       //     include: {
       //       chat: true,
       //     },
       //   });
-      // }
+
+      // trigger OpenAI completion
+      const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        max_tokens: 50,
+        prompt: `${PromptPrefix[type]}${prompt} \nAI:`,
+        temperature: 0.9,
+        top_p: 1,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.6,
+        stop: [" Human:", " AI:"],
+      });
+
+      // retrieve the completion text from response
+      const completion = response.data.choices[0]?.text;
+
+      if (completion) {
+        answer = await prisma.message.create({
+          data: {
+            chatType: "AI",
+            chatId,
+            body: completion,
+          },
+          include: {
+            chat: true,
+          },
+        });
+      }
+
       return res.status(200).json({
         success: true,
-        message: object,
+        answer: completion,
       });
     } catch (error: any) {
       console.log(error.message);
