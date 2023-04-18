@@ -13,7 +13,7 @@ type Data = {
   message?: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.method === "POST") {
     let object;
     const { title, content, email } = req.body;
@@ -47,7 +47,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const object = await prisma.post.delete({ where: { id } });
     return res.json(object);
   } else {
-    const { id, email } = req.query;
+    const { id, email, limit = "10", page }: any = req.query;
+    const where = JSON.parse((req.query.where as any) || "{}");
     let user;
 
     if (email) {
@@ -56,14 +57,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       });
     }
 
+    const count = await prisma.post.count({ where });
+
     const objects = await prisma.post.findMany({
       orderBy: { createdAt: "desc" },
       where: {
+        ...where,
         id: id ? id : {},
         userId: email ? user?.id || "" : {},
       },
+      skip: page === undefined ? 0 : parseInt(page) * parseInt(limit),
+      take: parseInt(limit),
       include: { user: true },
     });
+
+    if (page) {
+      return res.json({
+        page: parseInt(page),
+        objects,
+        total_pages: Math.ceil(count / limit),
+        total_count: count,
+      });
+    }
 
     return res.json(id ? objects[0] : objects);
   }

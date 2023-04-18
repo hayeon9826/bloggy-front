@@ -55,8 +55,8 @@ export const modelFields: any = {
 
 export const IncludeFields: any = {
   user: {
-    posts: true,
-    ai_records: true,
-    wait_lists: true,
+    posts: "true",
+    ai_records: "true",
+    wait_lists: "true",
   },
 };

@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let objects;
   if (req.method === "GET") {
-    const { model, id, limit = "30", page, include }: any = req.query;
+    const { model, id, limit = "30", page }: any = req.query;
 
     if (model === "models") {
       const objects = prisma._dmmf.datamodel.models.map((modelInfo: any) => ({

@@ -1,39 +1,65 @@
+import { useCallback, useEffect, useRef } from "react";
+
 import { Post } from "@/interface";
 import axios from "axios";
-import { useRouter } from "next/router";
-import { useQuery, useInfiniteQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import { PostListSkeleton } from "./posts/Skeleton";
 import SideBar from "./SideBar";
-import { BsPersonCircle } from "react-icons/bs";
 import dayjs from "dayjs";
+import useIntersectionObserver from "@/hooks/useIntersectionObserver";
+import PostArticle from "./posts/PostArticle";
+
+import Loader from "./Loader";
 dayjs().format();
 
 export default function PostList() {
-  const router = useRouter();
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const listEnd = useIntersectionObserver(listRef, {});
+  const isEndPage = !!listEnd?.isIntersecting;
 
-  const handleClickLink = (id: string) => {
-    router.push(`/posts/${id}`);
-  };
+  const {
+    data: posts,
+    isFetching,
+    fetchNextPage,
+    isFetchingNextPage,
+    isSuccess,
+    hasNextPage,
+  } = useInfiniteQuery(
+    ["posts"],
+    async ({ pageParam = 0 }) => {
+      const result = await axios("/api/posts", {
+        params: {
+          limit: 10,
+          page: pageParam,
+        },
+      });
 
-  const config = {
-    url: "/api/posts",
-  };
-
-  const { data: posts, isFetching } = useQuery(
-    [config],
-    async () => {
-      const { data } = await axios(config);
-      return data as Post[];
+      return result.data;
     },
     {
       refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      getNextPageParam: (lastPage: any) => (lastPage.objects?.length > 0 ? lastPage.page + 1 : undefined),
     }
   );
 
-  const RemoveHTMLTags = (html: string) => {
-    var regX = /(<([^>]+)>)/gi;
-    return html.replace(regX, "");
-  };
+  const fetchNext = useCallback(async () => {
+    const res = await fetchNextPage();
+    if (res.isError) {
+      console.log(res.error);
+    }
+  }, [fetchNextPage]);
+
+  useEffect(() => {
+    let timerId: NodeJS.Timeout | undefined;
+    if (isEndPage && hasNextPage) {
+      timerId = setTimeout(() => {
+        fetchNext();
+      }, 500);
+    }
+
+    return () => clearTimeout(timerId);
+  }, [fetchNext, hasNextPage, isEndPage]);
 
   return (
     <div className="bg-white pb-24 sm:pb-32">
@@ -41,51 +67,13 @@ export default function PostList() {
         <div className="mx-auto max-w-2xl mt-32 lg:mt-20 pr-8 lg:pr-0">
           <div className="space-y-16 pt-10 sm:pt-16 overflow-y-scroll">
             {isFetching && <PostListSkeleton />}
-            {posts && posts?.length > 0 ? (
-              posts?.map((post: Post) => (
-                <article
-                  role="presentation"
-                  onClick={() => handleClickLink(post.id)}
-                  key={post.id}
-                  className="flex max-w-xl flex-col items-start justify-between cursor-pointer"
-                >
-                  <div className="flex items-center gap-x-4 text-xs">
-                    <time dateTime={post?.createdAt} className="text-gray-500">
-                      {dayjs(post?.createdAt).format("YYYY-MM-DD")}
-                    </time>
-                    {/* <a href={post.category.href} className="relative z-10 rounded-full bg-gray-50 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-100">
-                    {post.category.title}
-                  </a> */}
-                  </div>
-                  <div className="group relative">
-                    <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                      <span>
-                        <span className="absolute inset-0" />
-                        {post?.title}
-                      </span>
-                    </h3>
-                    <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">{RemoveHTMLTags(post?.content)}</p>
-                  </div>
-                  <div className="relative mt-4 flex items-center gap-x-4">
-                    {post?.user?.imageUrl ? (
-                      <img src={post?.user?.imageUrl} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
-                    ) : (
-                      <BsPersonCircle className="w-10 h-10 text-gray-300" />
-                    )}
-                    <div className="text-sm leading-6">
-                      <p className="font-normal text-xs text-gray-900">
-                        <span>
-                          <span className="absolute inset-0" />
-                          {post?.user?.email}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </article>
-              ))
+            {isSuccess && posts?.pages?.length > 0 ? (
+              posts?.pages?.map((page) => page?.objects?.map((post: Post) => <PostArticle key={post.id} post={post} />))
             ) : (
               <>{!isFetching && <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">No Posts Yet 😂</div>}</>
             )}
+            {(isFetching || hasNextPage || isFetchingNextPage) && <Loader />}
+            <div className="w-full touch-none h-10" ref={listRef} />
           </div>
         </div>
         <SideBar className="mt-28" />

@@ -29,7 +29,7 @@
 - [ ] blog: AI continue writing 버튼 기능 추가
 - [ ] blog: AI enhancement 버튼 추가
 - [ ] blog: blog: AI summarize 버튼 추가
-- [ ] blog: infinite scroll 추가
+- [x] blog: infinite scroll 추가
 - [ ] blog: 사이드 바 구성 (recent, recommendation)
 - [ ] blog: 유료 멤버십 request access 페이지 작업
 - [x] blog: amplitude 세팅
@@ -45,7 +45,8 @@
 - [x] admin: 기본 CRUD 작업
 - [x] admin: 레이아웃 작업
 - [x] admin: pagination 작업
-- [ ] admin: relations 업데이트 작업
+- [x] admin: relations 업데이트 작업
+- [ ] admin: relations 보여주기 작업
 - [ ] admin: amplitude 세팅
 - [ ] admin: 이미지 업로드 작업 (단일)
 - [ ] admin: 이미지 업로드 작업 (다중)

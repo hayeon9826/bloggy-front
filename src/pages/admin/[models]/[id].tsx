@@ -15,8 +15,6 @@ const ModelPage = () => {
   const model = models && camelCase(pluralize.singular(models));
   const [params, setParams] = useState({});
 
-  console.log(params);
-
   const { data, refetch } = useQuery(
     ["objects", params],
     async () => {
@@ -30,6 +28,8 @@ const ModelPage = () => {
     }
   );
 
+  console.log(data, "@@data");
+
   useEffect(() => {
     setParams({
       id: id,
@@ -39,7 +39,7 @@ const ModelPage = () => {
       orderBy: {
         createdAt: "desc",
       },
-      include: IncludeFields?.[model] || "null",
+      include: IncludeFields?.[model] ? JSON.stringify(IncludeFields?.[model]) : "{}",
     });
   }, [id, model, page]);
 
