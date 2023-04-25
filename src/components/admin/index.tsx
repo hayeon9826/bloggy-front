@@ -16,6 +16,11 @@ import axios from "axios";
 import { snakeCase } from "change-case";
 import FullPageLoader from "../FullPageLoader";
 import cn from "classnames";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import { useForm } from "react-hook-form";
 import useFetchUsers from "@/hooks/useFetchUsers";
@@ -65,7 +70,11 @@ export const Meta = (props: MetaProps) => (
   <>
     <Head>
       <meta charSet="UTF-8" />
-      <meta name="viewport" content="width=device-width,initial-scale=1" key="viewport" />
+      <meta
+        name="viewport"
+        content="width=device-width,initial-scale=1"
+        key="viewport"
+      />
     </Head>
     <NextSeo
       title={props.title}
@@ -82,7 +91,10 @@ export const Meta = (props: MetaProps) => (
   </>
 );
 
-export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy Admin" />, children }: LayoutProps) => {
+export const Layout = ({
+  meta = <Meta title="Bloggy Admin" description="Bloggy Admin" />,
+  children,
+}: LayoutProps) => {
   const { currentUser, isFetching } = useCurrentUser();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const router = useRouter();
@@ -93,7 +105,9 @@ export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy A
     path: string;
   }
 
-  const isActive = (path: string) => (path !== "/admin" && router.asPath.includes(path)) || (router.asPath === "/admin" && path === "/admin");
+  const isActive = (path: string) =>
+    (path !== "/admin" && router.asPath.includes(path)) ||
+    (router.asPath === "/admin" && path === "/admin");
 
   const { data } = useQuery<any>(
     ["objects"],
@@ -127,17 +141,32 @@ export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy A
       {currentUser ? (
         <>
           {meta}
-          <div className="h-screen flex overflow-hidden bg-white" style={{ zIndex: 10000 }}>
+          <div
+            className="h-screen flex overflow-hidden bg-white"
+            style={{ zIndex: 10000 }}
+          >
             <button
               onClick={() => {
                 setShowMenu(!showMenu);
               }}
-              className={`md:hidden h-16 w-16 justify-center items-center flex fixed top-0 ${showMenu && "left-64"}`}
+              className={`md:hidden h-16 w-16 justify-center items-center flex fixed top-0 ${
+                showMenu && "left-64"
+              }`}
             >
               <Icon className="text-gray-500 text-3xl" />
             </button>
-            <div className={`h-screen fixed ${!showMenu && "hidden"} md:static md:flex bg-blue-800`}>
-              <div className={cn("overflow-y-auto relative", { "w-64": isOpen }, { "w-20": !isOpen })}>
+            <div
+              className={`h-screen fixed ${
+                !showMenu && "hidden"
+              } md:static md:flex bg-blue-800`}
+            >
+              <div
+                className={cn(
+                  "overflow-y-auto relative",
+                  { "w-64": isOpen },
+                  { "w-20": !isOpen }
+                )}
+              >
                 <div className="text-2xl text-white font-bold p-4 flex justify-between items-center">
                   <div className={cn({ hidden: !isOpen }, { block: isOpen })}>
                     <Link href="/">Bloggy</Link>
@@ -166,12 +195,22 @@ export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy A
                 </div>
                 <div className={cn({ hidden: !isOpen }, { block: isOpen })}>
                   <Link href="/admin">
-                    <span className={`flex justify-between items-center text-white text-xm py-3 px-4 ${isActive("/admin") && "bg-blue-900"}`}>Admin</span>
+                    <span
+                      className={`flex justify-between items-center text-white text-xm py-3 px-4 ${
+                        isActive("/admin") && "bg-blue-900"
+                      }`}
+                    >
+                      Admin
+                    </span>
                   </Link>
                   {menus &&
                     menus.map((menu: menuInterface) => (
                       <Link href={menu.path} key={menu.path}>
-                        <span className={`flex justify-between items-center text-white text-xm py-3 px-4 ${isActive(menu.path) && "bg-blue-900"}`}>
+                        <span
+                          className={`flex justify-between items-center text-white text-xm py-3 px-4 ${
+                            isActive(menu.path) && "bg-blue-900"
+                          }`}
+                        >
                           {menu.name}
                         </span>
                       </Link>
@@ -202,7 +241,11 @@ export const Layout = ({ meta = <Meta title="Bloggy Admin" description="Bloggy A
   );
 };
 
-export const Header = ({ title = "", children = null, model = null }: HeaderProps) => {
+export const Header = ({
+  title = "",
+  children = null,
+  model = null,
+}: HeaderProps) => {
   return (
     <div className="bg-white border-b flex h-16 items-center p-4 justify-between">
       <h2 className="text-xl font-bold pl-12 md:pl-0">{title || `Data`}</h2>
@@ -211,7 +254,9 @@ export const Header = ({ title = "", children = null, model = null }: HeaderProp
         {model && (
           <div className="flex">
             <Link href={`/admin/${pluralize(model)}/new`}>
-              <span className="button flex items-center justify-center px-4 h-10 w-40">Create</span>
+              <span className="button flex items-center justify-center px-4 h-10 w-40">
+                Create
+              </span>
             </Link>
           </div>
         )}
@@ -234,7 +279,13 @@ export const Pagination = ({ model, data, page }: PaginationProps) => {
               }}
               key={i}
             >
-              <span className={`px-3 py-2 rounded border shadow-sm bg-white mr-2 ${parseInt(page, 10) === i ? "text-blue-600 font-bold" : "text-gray-300"}`}>
+              <span
+                className={`px-3 py-2 rounded border shadow-sm bg-white mr-2 ${
+                  parseInt(page, 10) === i
+                    ? "text-blue-600 font-bold"
+                    : "text-gray-300"
+                }`}
+              >
                 {i + 1}
               </span>
             </Link>
@@ -242,6 +293,76 @@ export const Pagination = ({ model, data, page }: PaginationProps) => {
         </div>
       )}
     </>
+  );
+};
+
+export const ShowTable = ({ model, data }: ShowProps) => {
+  return (
+    <div className="overflow-x-scroll">
+      {data?.length > 0 ? (
+        <table className="bg-white divide-y divide-gray-300 w-full mb-16 table-auto overflow-scroll">
+          <thead>
+            <tr>
+              {Object?.keys(data?.[0])?.map((key: string) => (
+                <th
+                  key={key}
+                  scope="col"
+                  className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                >
+                  {snakeCase(key)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200 overflow-x-scroll">
+            {data?.map((object: any, index: number) => (
+              <tr key={object.id}>
+                {Object.entries(object).map(([key, value], index) => (
+                  <td
+                    key={index}
+                    className="whitespace-wrap px-4 py-4 text-sm text-gray-700"
+                  >
+                    {key?.includes("Id") && (
+                      <Link
+                        href={`/admin/${pluralize(
+                          key?.split("Id")[0]
+                        )}/${value}`}
+                      >
+                        <span className="underline text-blue-700">
+                          {value as string}
+                        </span>
+                      </Link>
+                    )}
+                    {key?.includes("Type") && (
+                      <span className=" rounded-full bg-green-100 px-2.5 py-1 text-xs">
+                        {value as string}
+                      </span>
+                    )}
+                    {!key?.includes("Id") &&
+                      !key?.includes("Type") &&
+                      (typeof value == "string" && value?.length > 200
+                        ? value?.substring(0, 200) + "..."
+                        : (value as string))}
+                  </td>
+                ))}
+                <td>
+                  {" "}
+                  <Link href={`/admin/${pluralize(model)}/${object.id}`}>
+                    <span className="text-blue-700 text-xs font-medium underline">
+                      More
+                    </span>
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div className="w-[98%] mx-auto mt-10 rounded p-4 border border-gray-200 text-gray-500">
+          No Data
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -267,12 +388,19 @@ export const Table = ({ model, data, refetch }: TableProps) => {
             <thead>
               <tr>
                 {Object?.keys(data?.objects?.[0])?.map((key: string) => (
-                  <th key={key} scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                  <th
+                    key={key}
+                    scope="col"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                  >
                     {snakeCase(key)}
                   </th>
                 ))}
 
-                <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6 text-xs">
+                <th
+                  scope="col"
+                  className="relative py-3.5 pl-3 pr-4 sm:pr-6 text-xs"
+                >
                   Settings
                 </th>
               </tr>
@@ -281,24 +409,43 @@ export const Table = ({ model, data, refetch }: TableProps) => {
               {data?.objects?.map((object: any, index: number) => (
                 <tr key={object.id}>
                   {Object.entries(object).map(([key, value], index) => (
-                    <td key={index} className="whitespace-wrap px-4 py-4 text-sm text-gray-700">
+                    <td
+                      key={index}
+                      className="whitespace-wrap px-4 py-4 text-sm text-gray-700"
+                    >
                       {key?.includes("Id") && (
-                        <Link href={`/admin/${pluralize(key?.split("Id")[0])}/${value}`}>
-                          <span className="underline text-blue-700">{value as string}</span>
+                        <Link
+                          href={`/admin/${pluralize(
+                            key?.split("Id")[0]
+                          )}/${value}`}
+                        >
+                          <span className="underline text-blue-700">
+                            {value as string}
+                          </span>
                         </Link>
                       )}
-                      {key?.includes("Type") && <span className=" rounded-full bg-green-100 px-2.5 py-1 text-xs">{value as string}</span>}
+                      {key?.includes("Type") && (
+                        <span className=" rounded-full bg-green-100 px-2.5 py-1 text-xs">
+                          {value as string}
+                        </span>
+                      )}
                       {!key?.includes("Id") &&
                         !key?.includes("Type") &&
-                        (typeof value == "string" && value?.length > 200 ? value?.substring(0, 200) + "..." : (value as string))}
+                        (typeof value == "string" && value?.length > 200
+                          ? value?.substring(0, 200) + "..."
+                          : (value as string))}
                     </td>
                   ))}
                   <td className="whitespace-nowrap px-3 py-4 text-xs text-gray-700">
                     <Link href={`/admin/${pluralize(model)}/${object.id}`}>
-                      <span className="text-gray-800 font-semibold underline">More</span>
+                      <span className="text-gray-800 font-semibold underline">
+                        More
+                      </span>
                     </Link>
                     <Link href={`/admin/${pluralize(model)}/${object.id}/edit`}>
-                      <span className="text-gray-600 font-semibold underline ml-2">Edit</span>
+                      <span className="text-gray-600 font-semibold underline ml-2">
+                        Edit
+                      </span>
                     </Link>
                     <button
                       className="ml-2 text-red-600 font-semibold underline"
@@ -320,7 +467,9 @@ export const Table = ({ model, data, refetch }: TableProps) => {
             </tbody>
           </table>
         ) : (
-          <div className="w-[98%] mx-auto mt-10 rounded p-4 border border-gray-200 text-gray-500">No Data</div>
+          <div className="w-[98%] mx-auto mt-10 rounded p-4 border border-gray-200 text-gray-500">
+            No Data
+          </div>
         )}
       </div>
     </div>
@@ -334,29 +483,70 @@ export const Show = ({ model, data }: ShowProps) => {
         <>
           <div className="flex justify-between items-center">
             <div>
-              <h3 className="text-base font-semibold leading-6 text-gray-900">{snakeCase(model)} Info</h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">Detailed info about and {snakeCase(model)}</p>
+              <h3 className="text-base font-semibold leading-6 text-gray-900">
+                {snakeCase(model)} Info
+              </h3>
+              <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                Detailed info about and {snakeCase(model)}
+              </p>
             </div>
-            <button className="bg-blue-500 text-white rounded-md px-4 py-1.5 h-10 hover:bg-blue-600 focus:bg-blue-600" type="button">
-              <Link href={`/admin/${pluralize(model)}/${data.id}/edit`}>Edit {model}</Link>
+            <button
+              className="bg-blue-500 text-white rounded-md px-4 py-1.5 h-10 hover:bg-blue-600 focus:bg-blue-600"
+              type="button"
+            >
+              <Link href={`/admin/${pluralize(model)}/${data.id}/edit`}>
+                Edit {model}
+              </Link>
             </button>
           </div>
           <div className="mt-5 border-t border-gray-200">
             <dl className="sm:divide-y sm:divide-gray-200">
               {Object?.entries(data).map(([key, value], index) =>
-                typeof value === "object" ? (
-                  <div key={index} className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                    <dt className="text-sm font-medium text-gray-500">{key}</dt>
-                    <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0 whitespace-pre-wrap">TBD</dd>
-                  </div>
+                typeof value === "object" && Array.isArray(value) ? (
+                  <>
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Typography>{key}</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                          <ShowTable model={key} data={value} />
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
+                  </>
                 ) : (
-                  <div key={index} className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+                  <div
+                    key={index}
+                    className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5"
+                  >
                     <dt className="text-sm font-medium text-gray-500">{key}</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0 whitespace-pre-wrap">
-                      {key?.includes("Type") && <span className=" rounded-full bg-green-100 px-2.5 py-1 text-xs">{value as string}</span>}
+                      {key?.includes("Type") && (
+                        <span className=" rounded-full bg-green-100 px-2.5 py-1 text-xs">
+                          {value as string}
+                        </span>
+                      )}
                       {!key?.includes("Id") &&
                         !key?.includes("Type") &&
-                        (typeof value == "string" && value?.length > 200 ? value?.substring(0, 200) + "..." : (value as string))}
+                        (typeof value == "string" && value?.length > 200
+                          ? value?.substring(0, 200) + "..."
+                          : (value as string))}
+                      {key?.includes("Id") && (
+                        <Link
+                          href={`/admin/${pluralize(
+                            key?.split("Id")[0]
+                          )}/${value}`}
+                        >
+                          <span className="underline text-blue-700">
+                            {value as string}
+                          </span>
+                        </Link>
+                      )}
                     </dd>
                   </div>
                 )
@@ -409,11 +599,20 @@ export const Form = ({ model, data = null, fields }: FormProps) => {
       );
     }
     if (fields[key]?.type === "textarea") {
-      field = <textarea rows={10} className="w-full border border-gray-300 rounded-md" {...register(key, { required: "Required field" })} />;
+      field = (
+        <textarea
+          rows={10}
+          className="w-full border border-gray-300 rounded-md"
+          {...register(key, { required: "Required field" })}
+        />
+      );
     }
     if (fields[key]?.type === "select") {
       field = (
-        <select className="w-full border border-gray-300 rounded-md" {...register(key, { required: "필수 입력 항목입니다" })}>
+        <select
+          className="w-full border border-gray-300 rounded-md"
+          {...register(key, { required: "필수 입력 항목입니다" })}
+        >
           <option value="">Select</option>
           {fields?.[key]?.options &&
             fields?.[key]?.options?.map((option: any) => (
@@ -427,7 +626,10 @@ export const Form = ({ model, data = null, fields }: FormProps) => {
     if (fields[key]?.type === "relations") {
       if (key === "userId") {
         field = (
-          <select className="w-full border border-gray-300 rounded-md" {...register(key, { required: "필수 입력 항목입니다" })}>
+          <select
+            className="w-full border border-gray-300 rounded-md"
+            {...register(key, { required: "필수 입력 항목입니다" })}
+          >
             <option value="">Select</option>
             {users &&
               users?.map((user: any) => (
@@ -440,7 +642,10 @@ export const Form = ({ model, data = null, fields }: FormProps) => {
       }
       if (key === "chatId") {
         field = (
-          <select className="w-full border border-gray-300 rounded-md" {...register(key, { required: "필수 입력 항목입니다" })}>
+          <select
+            className="w-full border border-gray-300 rounded-md"
+            {...register(key, { required: "필수 입력 항목입니다" })}
+          >
             <option value="">Select</option>
             {chats &&
               chats?.map((chat: any) => (
@@ -467,10 +672,15 @@ export const Form = ({ model, data = null, fields }: FormProps) => {
               ...props,
             };
 
-            const result = await axios[data ? "put" : "post"](`/api/admin/objects`, submitData);
+            const result = await axios[data ? "put" : "post"](
+              `/api/admin/objects`,
+              submitData
+            );
 
             if (result) {
-              toast?.success(`Successfully ${data ? "updated" : "created"} ${model}`);
+              toast?.success(
+                `Successfully ${data ? "updated" : "created"} ${model}`
+              );
             } else {
               toast?.error("Something went wrong. Please try again.");
             }
@@ -487,7 +697,10 @@ export const Form = ({ model, data = null, fields }: FormProps) => {
             <dl className="sm:divide-y sm:divide-gray-200">
               {data ? (
                 Object?.entries(data).map(([key, value], index) => (
-                  <div key={index} className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+                  <div
+                    key={index}
+                    className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5"
+                  >
                     <dt className="text-sm font-medium text-gray-500">{key}</dt>
                     <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0 whitespace-pre-wrap">
                       {fields?.[key] ? checkFields({ key }) : (value as string)}
@@ -497,9 +710,16 @@ export const Form = ({ model, data = null, fields }: FormProps) => {
               ) : (
                 <>
                   {Object.keys(fields).map((key) => (
-                    <div key={key} className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-                      <dt className="text-sm font-medium text-gray-500">{key}</dt>
-                      <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0 whitespace-pre-wrap">{fields?.[key] && checkFields({ key })}</dd>
+                    <div
+                      key={key}
+                      className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5"
+                    >
+                      <dt className="text-sm font-medium text-gray-500">
+                        {key}
+                      </dt>
+                      <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0 whitespace-pre-wrap">
+                        {fields?.[key] && checkFields({ key })}
+                      </dd>
                     </div>
                   ))}
                 </>
@@ -509,7 +729,9 @@ export const Form = ({ model, data = null, fields }: FormProps) => {
 
           <button
             type="submit"
-            className={`bg-blue-500 text-white rounded-md px-4 py-2 float-right mt-4 ${(isSubmitting || isSubmitted) && "bg-gray-300"}`}
+            className={`bg-blue-500 text-white rounded-md px-4 py-2 float-right mt-4 ${
+              (isSubmitting || isSubmitted) && "bg-gray-300"
+            }`}
             disabled={isSubmitting || isSubmitted}
           >
             {data?.id ? "Edit" : "Create"} {model}

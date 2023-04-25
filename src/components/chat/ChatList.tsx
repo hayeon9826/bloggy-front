@@ -15,7 +15,11 @@ export interface MessageData {
   body: string;
 }
 
-export default function ChatList() {
+interface Props {
+  inputPrompt: string;
+}
+
+export default function ChatList({ inputPrompt }: Props) {
   const router = useRouter();
   const { id } = router.query;
 
@@ -65,9 +69,15 @@ export default function ChatList() {
                     Capabilities
                   </h2>
                   <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Remembers what user said earlier in the conversation</li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Allows user to provide follow-up corrections</li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Trained to decline inappropriate requests</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
+                      Remembers what user said earlier in the conversation
+                    </li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
+                      Allows user to provide follow-up corrections
+                    </li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
+                      Trained to decline inappropriate requests
+                    </li>
                   </ul>
                 </div>
                 <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
@@ -76,9 +86,15 @@ export default function ChatList() {
                     Limitations
                   </h2>
                   <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">May occasionally generate incorrect information</li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">May occasionally produce harmful instructions</li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Limited knowledge of world and events after 2021</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
+                      May occasionally generate incorrect information
+                    </li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
+                      May occasionally produce harmful instructions
+                    </li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
+                      Limited knowledge of world and events after 2021
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -104,7 +120,9 @@ export default function ChatList() {
                 {message.chatType === "USER" && <BiUser className="m-auto" />}
                 {message.chatType === "AI" && <BsRobot className="m-auto" />}
               </div>
-              <div className="whitespace-pre-wrap w-full text-sm">{message.body}</div>
+              <div className="whitespace-pre-wrap w-full text-sm">
+                {message.body}
+              </div>
               <div className="flex gap-2 relative items-start rounded-sm flex-shrink-0">
                 <FiThumbsUp />
                 <FiThumbsDown />
@@ -113,24 +131,26 @@ export default function ChatList() {
           </div>
         ))
       )}
-      {/* {isFetching && (
-        <div
-          className={cn("min-h-[85px]", {
-            "bg-gray-700": chat?.messages?.length % 2 === 0,
-          })}
-        >
-          <div className="text-base gap-4 md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto items-center">
-            <div className={cn("w-[30px] h-[30px] flex flex-col relative items-end rounded-sm flex-shrink-0 bg-gray-300/50")}>
-              <BiLoader className="m-auto" />
+      {inputPrompt && inputPrompt?.length > 0 && (
+        <div className={cn("min-h-[85px] bg-gray-700")}>
+          <div className="text-base gap-4 md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto">
+            <div
+              className={cn(
+                "bg-green-300/60 w-[30px] h-[30px] flex flex-col relative items-end rounded-sm flex-shrink-0"
+              )}
+            >
+              {<BiUser className="m-auto" />}
             </div>
-            <div className="whitespace-pre-wrap w-full text-sm">writing...</div>
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
-            </span>
+            <div className="whitespace-pre-wrap w-full text-sm">
+              {inputPrompt}
+            </div>
+            <div className="flex gap-2 relative items-start rounded-sm flex-shrink-0">
+              <FiThumbsUp />
+              <FiThumbsDown />
+            </div>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

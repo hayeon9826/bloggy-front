@@ -1,13 +1,18 @@
 import RegenerateIcon from "@/components/icons/RegenerateIcon";
 import { TbLoader } from "react-icons/tb";
 import ClickIcon from "@/components/icons/ClickIcon";
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
+import cn from "classnames";
 
-export default function ChatForm() {
+interface Props {
+  setInputPrompt: Dispatch<SetStateAction<string>>;
+}
+
+export default function ChatForm({ setInputPrompt }: Props) {
   const [prompt, setPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const textareaRef = useRef<any>(null);
@@ -85,8 +90,10 @@ export default function ChatForm() {
       setPrompt("");
       textareaRef?.current?.reset();
       setLoading(false);
+      () => setInputPrompt("");
     } catch (err) {
       setLoading(false);
+      () => setInputPrompt("");
       console.log("err", err);
     }
   };
@@ -95,7 +102,10 @@ export default function ChatForm() {
     <form className="stretch z-10 flex flex-row gap-3 pb-2 absolute w-full bottom-0 inset-x-0 mx-auto bg-gradient-to-t from-gray-800 to-gray-800/20">
       <div className="relative lg:flex h-full flex-1 md:flex-col lg:mx-auto lg:max-w-2xl xl:max-w-3xl mx-4 last:mb-6 ">
         <div className="flex ml-1 md:w-full md:m-auto md:mb-2 mb-2 gap-0 md:gap-2 justify-center">
-          <button disabled={loading} className="px-3 py-2 rounded-md relative text-sm border border-white/50 text-white bg-gray-800">
+          <button
+            disabled={loading}
+            className="px-3 py-2 rounded-md relative text-sm border border-white/50 text-white bg-gray-800"
+          >
             <div className="flex w-full items-center justify-center gap-2">
               <RegenerateIcon />
               Regenerate response
@@ -110,9 +120,17 @@ export default function ChatForm() {
             autoFocus
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
-            onKeyDown={(e) => submitPrompt(e)}
+            onKeyDown={(e) => {
+              submitPrompt(e);
+              if (e.key === "Enter") {
+                () => setInputPrompt(prompt);
+              }
+            }}
             placeholder="Send a message..."
-            className="m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0"
+            className={cn(
+              "m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0",
+              { "text-transparent": loading }
+            )}
             style={{
               maxHeight: "200px",
               height: "24px",

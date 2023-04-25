@@ -28,8 +28,6 @@ const ModelPage = () => {
     }
   );
 
-  console.log(data, "@@data");
-
   useEffect(() => {
     setParams({
       id: id,
@@ -39,7 +37,9 @@ const ModelPage = () => {
       orderBy: {
         createdAt: "desc",
       },
-      include: IncludeFields?.[model] ? JSON.stringify(IncludeFields?.[model]) : "{}",
+      include: IncludeFields?.[model]
+        ? JSON.stringify(IncludeFields?.[model])
+        : "",
     });
   }, [id, model, page]);
 

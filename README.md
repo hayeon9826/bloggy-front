@@ -27,7 +27,6 @@
   </tbody>
 </table>
 
-
 <table>
   <thead>
     <tr>
@@ -42,10 +41,6 @@
     </tr>
   </tbody>
 </table>
-
-
-
-
 
 ## 어드민 (/admin)
 
@@ -64,7 +59,6 @@
   </tbody>
 </table>
 
-
 <table>
   <thead>
     <tr>
@@ -79,7 +73,6 @@
     </tr>
   </tbody>
 </table>
-
 
 ## 채팅 (/chats)
 
@@ -97,8 +90,6 @@
     </tr>
   </tbody>
 </table>
-
-
 
 ---
 
@@ -138,7 +129,7 @@
 - [x] admin: 레이아웃 작업
 - [x] admin: pagination 작업
 - [x] admin: relations 업데이트 작업
-- [ ] admin: relations 보여주기 작업
+- [x] admin: relations 보여주기 작업
 - [ ] admin: amplitude 세팅
 - [ ] admin: 이미지 업로드 작업 (단일)
 - [ ] admin: 이미지 업로드 작업 (다중)

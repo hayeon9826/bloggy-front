@@ -1,13 +1,15 @@
+import { useState } from "react";
+
 import Sidebar from "@/components/chat/SideBar";
 import { ChatListLayout, Layout } from "@/components/chat";
 import ChatForm from "@/components/chat/ChatForm";
 import ChatList from "@/components/chat/ChatList";
 import { useSession } from "next-auth/react";
 import FullPageLoader from "@/components/FullPageLoader";
-import { useState } from "react";
 
 function App() {
   const { data: session } = useSession();
+  const [inputPrompt, setInputPrompt] = useState<string>("");
 
   if (!session?.user?.email) return <FullPageLoader />;
 
@@ -16,8 +18,8 @@ function App() {
       <Layout>
         <Sidebar />
         <ChatListLayout>
-          <ChatList />
-          <ChatForm />
+          <ChatList inputPrompt={inputPrompt} />
+          <ChatForm setInputPrompt={setInputPrompt} />
         </ChatListLayout>
       </Layout>
     </>
