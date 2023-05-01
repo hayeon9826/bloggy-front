@@ -7,7 +7,7 @@ import { AiOutlineThunderbolt, AiOutlineWarning } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import axios from "axios";
-import FullPageLoader from "../FullPageLoader";
+import { toast } from "react-hot-toast";
 
 export interface MessageData {
   id: number;
@@ -38,6 +38,15 @@ export default function ChatList({ inputPrompt }: Props) {
     }
   );
 
+  const handleCopyClipBoard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Copied to clipboard!");
+    } catch (e) {
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <div className="text-white pb-28 w-full min-h-screen mt-10 lg:mt-0">
       {chat?.messages?.length === 0 || !chat ? (
@@ -54,11 +63,20 @@ export default function ChatList({ inputPrompt }: Props) {
                     Examples
                   </h2>
                   <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <button className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900">{`"Explain quantum computing in simple terms" →`}</button>
-                    <button className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900">
+                    <button
+                      className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900"
+                      onClick={() => handleCopyClipBoard("Explain quantum computing in simple terms")}
+                    >{`"Explain quantum computing in simple terms" →`}</button>
+                    <button
+                      className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900"
+                      onClick={() => handleCopyClipBoard("Got any creative ideas for a 10 year old’s birthday?")}
+                    >
                       {` "Got any creative ideas for a 10 year old’s birthday?" →`}
                     </button>
-                    <button className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900">
+                    <button
+                      className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900"
+                      onClick={() => handleCopyClipBoard("How do I make an HTTP request in Javascript?")}
+                    >
                       {`"How do I make an HTTP request in Javascript?" →`}
                     </button>
                   </ul>
@@ -69,15 +87,9 @@ export default function ChatList({ inputPrompt }: Props) {
                     Capabilities
                   </h2>
                   <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      Remembers what user said earlier in the conversation
-                    </li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      Allows user to provide follow-up corrections
-                    </li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      Trained to decline inappropriate requests
-                    </li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Remembers what user said earlier in the conversation</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Allows user to provide follow-up corrections</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Trained to decline inappropriate requests</li>
                   </ul>
                 </div>
                 <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
@@ -86,15 +98,9 @@ export default function ChatList({ inputPrompt }: Props) {
                     Limitations
                   </h2>
                   <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      May occasionally generate incorrect information
-                    </li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      May occasionally produce harmful instructions
-                    </li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      Limited knowledge of world and events after 2021
-                    </li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">May occasionally generate incorrect information</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">May occasionally produce harmful instructions</li>
+                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">Limited knowledge of world and events after 2021</li>
                   </ul>
                 </div>
               </div>
@@ -120,9 +126,7 @@ export default function ChatList({ inputPrompt }: Props) {
                 {message.chatType === "USER" && <BiUser className="m-auto" />}
                 {message.chatType === "AI" && <BsRobot className="m-auto" />}
               </div>
-              <div className="whitespace-pre-wrap w-full text-sm">
-                {message.body}
-              </div>
+              <div className="whitespace-pre-wrap w-full text-sm">{message.body}</div>
               <div className="flex gap-2 relative items-start rounded-sm flex-shrink-0">
                 <FiThumbsUp />
                 <FiThumbsDown />
@@ -134,16 +138,10 @@ export default function ChatList({ inputPrompt }: Props) {
       {inputPrompt && inputPrompt?.length > 0 && (
         <div className={cn("min-h-[85px] bg-gray-700")}>
           <div className="text-base gap-4 md:gap-6 md:max-w-2xl lg:max-w-xl xl:max-w-3xl p-4 md:py-6 flex lg:px-0 m-auto">
-            <div
-              className={cn(
-                "bg-green-300/60 w-[30px] h-[30px] flex flex-col relative items-end rounded-sm flex-shrink-0"
-              )}
-            >
+            <div className={cn("bg-green-300/60 w-[30px] h-[30px] flex flex-col relative items-end rounded-sm flex-shrink-0")}>
               {<BiUser className="m-auto" />}
             </div>
-            <div className="whitespace-pre-wrap w-full text-sm">
-              {inputPrompt}
-            </div>
+            <div className="whitespace-pre-wrap w-full text-sm">{inputPrompt}</div>
             <div className="flex gap-2 relative items-start rounded-sm flex-shrink-0">
               <FiThumbsUp />
               <FiThumbsDown />

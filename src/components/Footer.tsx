@@ -4,7 +4,7 @@ const navigation = {
   solutions: [
     { name: "Marketing", href: "#" },
     { name: "Chat", href: "/chats" },
-    { name: "Commerce", href: "/shop" },
+    // { name: "Commerce", href: "/shop" },
     { name: "Admin", href: "/admin" },
   ],
   support: [

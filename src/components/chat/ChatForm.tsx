@@ -3,10 +3,12 @@ import { TbLoader } from "react-icons/tb";
 import ClickIcon from "@/components/icons/ClickIcon";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import axios from "axios";
+import Loader from "@/components/Loader";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
 import cn from "classnames";
+import { toast } from "react-hot-toast";
 
 interface Props {
   setInputPrompt: Dispatch<SetStateAction<string>>;
@@ -103,12 +105,21 @@ export default function ChatForm({ setInputPrompt }: Props) {
       <div className="relative lg:flex h-full flex-1 md:flex-col lg:mx-auto lg:max-w-2xl xl:max-w-3xl mx-4 last:mb-6 ">
         <div className="flex ml-1 md:w-full md:m-auto md:mb-2 mb-2 gap-0 md:gap-2 justify-center">
           <button
+            type="button"
             disabled={loading}
-            className="px-3 py-2 rounded-md relative text-sm border border-white/50 text-white bg-gray-800"
+            onClick={() => toast.error("Please try again.")}
+            className="min-w-[183px] min-h-[38px] px-3 py-2 rounded-md relative text-sm border border-white/50 text-white bg-gray-800"
           >
             <div className="flex w-full items-center justify-center gap-2">
-              <RegenerateIcon />
-              Regenerate response
+              {loading ? (
+                <Loader />
+              ) : (
+                <>
+                  {" "}
+                  <RegenerateIcon />
+                  Regenerate response
+                </>
+              )}
             </div>
           </button>
         </div>
@@ -118,6 +129,7 @@ export default function ChatForm({ setInputPrompt }: Props) {
             rows={1}
             disabled={loading}
             autoFocus
+            defaultValue={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
             onKeyDown={(e) => {
@@ -127,10 +139,9 @@ export default function ChatForm({ setInputPrompt }: Props) {
               }
             }}
             placeholder="Send a message..."
-            className={cn(
-              "m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0",
-              { "text-transparent": loading }
-            )}
+            className={cn("m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0", {
+              "text-transparent": loading,
+            })}
             style={{
               maxHeight: "200px",
               height: "24px",

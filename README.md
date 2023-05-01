@@ -1,7 +1,7 @@
 ## 서비스 설명
 
 - Open AI의 text-davinci-003를 이용한 프로젝트
-- 크게 Blog, Chat, Commerce, Admin 네 가지로 구성되어 있음
+- 크게 Blog, Chat, Admin 세 가지로 구성되어 있음
 - Open AI API 참고 링크: [Tutorial: Build a Chatbot with React and OpenAI](https://blog.bitsrc.io/tutorial-build-a-chatbot-with-react-and-openai-2c183c50991e)
 
 ## 사용 기술
@@ -133,16 +133,6 @@
 - [ ] admin: amplitude 세팅
 - [ ] admin: 이미지 업로드 작업 (단일)
 - [ ] admin: 이미지 업로드 작업 (다중)
-- [ ] commerce: amplitude 세팅
-- [ ] commerce: 아이템 등록 기능
-- [ ] commerce: 아이템 리스트
-- [ ] commerce: 아이템 상세
-- [ ] commerce: 장바구니
-- [ ] commerce: 주문하기
-- [ ] commerce: 결제
-- [ ] commerce: 주문 리스트
-- [ ] commerce: 마이페이지
-- [ ] commerce: 찜
 - [x] chat: 레이아웃 작업
 - [x] chat: 모바일 반응형 작업
 - [x] chat: api 작업
