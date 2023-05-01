@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import Sidebar from "@/components/chat/SideBar";
 import { ChatListLayout, Layout } from "@/components/chat";
 import ChatForm from "@/components/chat/ChatForm";
@@ -7,6 +9,7 @@ import FullPageLoader from "@/components/FullPageLoader";
 
 function App() {
   const { data: session } = useSession();
+  const [inputPrompt, setInputPrompt] = useState<string>("");
 
   if (!session?.user?.email) return <FullPageLoader />;
 
@@ -15,8 +18,8 @@ function App() {
       <Layout>
         <Sidebar />
         <ChatListLayout>
-          <ChatList />
-          <ChatForm />
+          <ChatList inputPrompt={inputPrompt} />
+          <ChatForm setInputPrompt={setInputPrompt} />
         </ChatListLayout>
       </Layout>
     </>
