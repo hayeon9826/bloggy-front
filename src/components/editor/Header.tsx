@@ -10,7 +10,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white border-b border-gray-200 w-full z-50">
+    <header className="bg-white border-b border-gray-200 w-full z-50 fixed top-0 h-[54px]">
       <nav className="flex items-center justify-between px-6 py-3 lg:px-8 max-w-5xl mx-auto" aria-label="Global">
         <div className="flex lg:flex-1 gap-4">
           <span className="-m-1.5">

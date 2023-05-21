@@ -5,19 +5,31 @@
 .ql-toolbar {
   display: flex;
   justify-content: center;
+  position: fixed;
+  top: 54px;
+  width: 100%;
+  border: none !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  background: white;
+  z-index: 100;
 }
 
 .ql-editor {
   max-width: 1048px;
   margin: 0 auto;
-  margin-top: 120px;
+  margin-top: 240px;
+  margin-bottom: 100px;
+  position: relative;
+}
+
+.ql-editor:focus {
+  background: #f9fafb;
 }
 
 .quill > .ql-container > .ql-editor.ql-blank::before {
   max-width: 1048px;
   margin: 0 auto;
   font-size: 18px;
-  padding-left: 14px;
   color: rgba(0, 0, 0, 0.3);
 }
 

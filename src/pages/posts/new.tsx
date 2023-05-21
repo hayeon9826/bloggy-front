@@ -234,8 +234,14 @@ export default function PostNewPage() {
           <input
             required
             {...register("title", { required: true })}
-            className="absolute top-[100px] inset-x-0 mx-auto w-full px-8 lg:px-0 max-w-5xl text-2xl border-transparent focus:border-transparent focus:ring-0 !outline-none placeholder:text-gray-400"
+            className="absolute top-[-100px] inset-x-0 mx-auto w-full px-8 lg:px-0 max-w-5xl text-2xl border-transparent focus:border-transparent focus:ring-0 !outline-none focus:bg-gray-50 py-1.5 placeholder:text-gray-400"
             placeholder="Title"
+          />
+          <input
+            required
+            {...register("summary", { required: true })}
+            className="absolute top-[-50px] inset-x-0 mx-auto w-full px-8 lg:px-0 max-w-5xl border-transparent focus:border-transparent focus:ring-0 !outline-none focus:bg-gray-50 py-1.5 placeholder:text-gray-400"
+            placeholder="Summarize your post in one sentence."
           />
         </div>
         <div className="min-h-screen md:hidden flex flex-col justify-center bg-black/50">

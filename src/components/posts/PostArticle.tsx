@@ -34,7 +34,7 @@ export default function PostArticle({ post }: Props) {
             {post?.title}
           </span>
         </h3>
-        <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">{RemoveHTMLTags(post?.content)}</p>
+        <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">{post?.summary}</p>
       </div>
       <div className="relative mt-4 flex items-center gap-x-4">
         {post?.user?.imageUrl ? (

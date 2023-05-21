@@ -64,10 +64,10 @@ export default function PostList() {
   return (
     <div className="bg-white pb-24 sm:pb-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 md:flex">
-        <div className="mx-auto max-w-2xl mt-32 lg:mt-20 pr-8 lg:pr-0">
+        <div className="mx-auto w-full max-w-2xl mt-32 lg:mt-20 pr-8 lg:pr-0">
           <div className="space-y-16 pt-10 sm:pt-16 overflow-y-scroll">
             {isFetching && <PostListSkeleton />}
-            {isSuccess && posts?.pages?.length > 0 ? (
+            {isSuccess && posts?.pages?.length > 1 ? (
               posts?.pages?.map((page) => page?.objects?.map((post: Post) => <PostArticle key={post.id} post={post} />))
             ) : (
               <>{!isFetching && <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">No Posts Yet 😂</div>}</>

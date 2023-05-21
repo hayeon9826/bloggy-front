@@ -106,7 +106,7 @@
 - [x] blog: AI create blog post 버튼 추가
 - [x] blog: get membership 배너 cookie 작업 (24시간)
 - [x] blog: 랜딩 페이지 작업
-- [x] blog: 게시글 수정 - 작업중 (editor 간헐적으로 내용 뜨지 않는 문제)
+- [x] blog: 게시글 수정
 - [x] blog: 게시글 삭제
 - [x] blog: FREE 멤버십 API 호출 월 10회 제한
 - [ ] blog: AI continue writing 버튼 기능 추가

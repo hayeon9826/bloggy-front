@@ -16,7 +16,7 @@ type Data = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.method === "POST") {
     let object;
-    const { title, content, email } = req.body;
+    const { title, content, email, summary } = req.body;
     const user = await prisma.user.findFirst({
       where: { email: email },
     });
@@ -26,6 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         data: {
           title: title,
           content: content,
+          summary: summary,
           userId: user?.id,
         },
       });
@@ -33,12 +34,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     res.json(object);
   } else if (req.method === "PUT") {
-    const { title, content, id } = req.body;
+    const { title, content, id, summary } = req.body;
     const object = await prisma.post.update({
       where: { id },
       data: {
         title,
         content,
+        summary,
       },
     });
     return res.json(object);
