@@ -129,7 +129,7 @@ export default function ChatForm({ setInputPrompt }: Props) {
             rows={1}
             disabled={loading}
             autoFocus
-            defaultValue={prompt}
+            // defaultValue={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
             onKeyDown={(e) => {
@@ -139,9 +139,12 @@ export default function ChatForm({ setInputPrompt }: Props) {
               }
             }}
             placeholder="Send a message..."
-            className={cn("m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0", {
-              "text-transparent": loading,
-            })}
+            className={cn(
+              "m-0 w-full resize-none border-0 bg-transparent p-0 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent pl-2 md:pl-0",
+              {
+                "text-transparent": loading,
+              }
+            )}
             style={{
               maxHeight: "200px",
               height: "24px",

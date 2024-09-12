@@ -10,14 +10,29 @@ export default function HeroSection() {
         aria-hidden="true"
       >
         <defs>
-          <pattern id="983e3e4c-de6d-4c3f-8d64-b9761d1534cc" width={200} height={200} x="50%" y={-1} patternUnits="userSpaceOnUse">
+          <pattern
+            id="983e3e4c-de6d-4c3f-8d64-b9761d1534cc"
+            width={200}
+            height={200}
+            x="50%"
+            y={-1}
+            patternUnits="userSpaceOnUse"
+          >
             <path d="M.5 200V.5H200" fill="none" />
           </pattern>
         </defs>
         <svg x="50%" y={-1} className="overflow-visible fill-gray-800/20">
-          <path d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z" strokeWidth={0} />
+          <path
+            d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z"
+            strokeWidth={0}
+          />
         </svg>
-        <rect width="100%" height="100%" strokeWidth={0} fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)" />
+        <rect
+          width="100%"
+          height="100%"
+          strokeWidth={0}
+          fill="url(#983e3e4c-de6d-4c3f-8d64-b9761d1534cc)"
+        />
       </svg>
       <div
         className="absolute left-[calc(50%-4rem)] top-10 -z-10 transform-gpu blur-3xl sm:left-[calc(50%-18rem)] lg:left-48 lg:top-[calc(50%-30rem)] xl:left-[calc(50%-24rem)]"
@@ -33,7 +48,13 @@ export default function HeroSection() {
       </div>
       <div className="mx-auto max-w-7xl px-6 pb-20 pt-10 lg:flex lg:px-8 lg:pt-40">
         <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-xl pt-8">
-          <Image className="h-11 hidden sm:block" src="/images/logo_black_lg.png" alt="Bloggy" width={44} height={44} />
+          <Image
+            className="h-11 hidden sm:block"
+            src="/images/logo_black_lg.png"
+            alt="Bloggy"
+            width={44}
+            height={44}
+          />
           <div className="mt-24 sm:mt-32 lg:mt-16">
             <a href="#" className="inline-flex space-x-6">
               <span className="rounded-full bg-blue-500/10 px-3 py-1 text-sm font-semibold leading-6 text-blue-400 ring-1 ring-inset ring-blue-500/20">
@@ -41,10 +62,13 @@ export default function HeroSection() {
               </span>
             </a>
           </div>
-          <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">Write Faster</h1>
+          <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
+            Write Faster
+          </h1>
           <p className="mt-6 text-lg leading-8 text-gray-300">
-            Write your blog article with ChatGPT text-davinci-003. It will write a proposal in one minute just as you fill in the title. What{`'`}s more, AI
-            could do the paraphrase, enhancement, and summary for you.
+            Write your blog article with ChatGPT gpt-4o-mini. It will write a
+            proposal in one minute just as you fill in the title. What{`'`}s
+            more, AI could do the paraphrase, enhancement, and summary for you.
           </p>
           <div className="mt-10 flex items-center gap-x-6">
             <Link href="/users/login">

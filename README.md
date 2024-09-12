@@ -1,6 +1,6 @@
 ## 서비스 설명
 
-- Open AI의 text-davinci-003를 이용한 프로젝트
+- Open AI의 gpt-4o-mini를 이용한 프로젝트
 - 크게 Blog, Chat, Admin 세 가지로 구성되어 있음
 - Open AI API 참고 링크: [Tutorial: Build a Chatbot with React and OpenAI](https://blog.bitsrc.io/tutorial-build-a-chatbot-with-react-and-openai-2c183c50991e)
 

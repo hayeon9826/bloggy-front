@@ -22,7 +22,10 @@ type RequestData = {
   userId: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
   if (req.method === "POST") {
     const { prompt, type, userId }: RequestData = req.body;
     let object;
@@ -45,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       }
       // trigger OpenAI completion
       const response = await openai.createCompletion({
-        model: "text-davinci-003",
+        model: "gpt-4o-mini",
         max_tokens: 100,
         prompt: `${PromptPrefix[type]}${prompt}`,
       });

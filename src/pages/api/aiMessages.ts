@@ -24,7 +24,10 @@ type RequestData = {
   email: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
   if (req.method === "POST") {
     const { prompt, type, chatId, email }: RequestData = req.body;
     let answer;
@@ -52,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
       // trigger OpenAI completion
       const response = await openai.createCompletion({
-        model: "text-davinci-003",
+        model: "gpt-4o-mini",
         max_tokens: 50,
         prompt: `${PromptPrefix[type]}${prompt} \nAI:`,
         temperature: 0.9,
