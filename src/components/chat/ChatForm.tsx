@@ -68,7 +68,6 @@ export default function ChatForm({ setInputPrompt }: Props) {
         router.replace(`/chats/${id}`);
       }
       setPrompt("");
-      textareaRef?.current?.reset();
       setLoading(false);
       () => setInputPrompt("");
     } catch (err) {

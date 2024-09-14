@@ -70,7 +70,7 @@ export default function PostList() {
     <div className="bg-white pb-24 sm:pb-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 md:flex">
         <div className="mx-auto w-full max-w-2xl mt-32 lg:mt-20 pr-8 lg:pr-0">
-          <div className="space-y-16 pt-10 sm:pt-16 overflow-y-scroll">
+          <div className="space-y-4 pt-10 sm:pt-16 overflow-y-scroll">
             {isFetching && <PostListSkeleton />}
             {isSuccess && posts?.pages?.length > 1 ? (
               posts?.pages?.map((page) =>

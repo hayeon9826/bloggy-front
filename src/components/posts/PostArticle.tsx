@@ -20,7 +20,7 @@ export default function PostArticle({ post }: Props) {
       role="presentation"
       onClick={() => handleClickLink(post.id)}
       key={post.id}
-      className="flex lg:min-w-[576px] max-w-xl flex-col items-start justify-between cursor-pointer"
+      className="flex lg:min-w-[576px] max-w-2xl flex-col items-start justify-between cursor-pointer hover:bg-gray-100/50 p-4"
     >
       <div className="flex items-center gap-x-4 text-xs">
         <time dateTime={post?.createdAt} className="text-gray-500">
@@ -34,11 +34,17 @@ export default function PostArticle({ post }: Props) {
             {post?.title}
           </span>
         </h3>
-        <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">{post?.summary}</p>
+        <p className="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">
+          {post?.summary}
+        </p>
       </div>
       <div className="relative mt-4 flex items-center gap-x-4">
         {post?.user?.imageUrl ? (
-          <img src={post?.user?.imageUrl} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
+          <img
+            src={post?.user?.imageUrl}
+            alt=""
+            className="h-10 w-10 rounded-full bg-gray-50"
+          />
         ) : (
           <BsPersonCircle className="w-10 h-10 text-gray-300" />
         )}
