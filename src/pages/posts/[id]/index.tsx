@@ -47,12 +47,16 @@ export default function PostPage() {
     <>
       <Header />
       <div className="bg-white py-24 px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl text-base leading-7 text-gray-700 md:flex">
-          <div className="max-w-2xl lg:min-w-[576px] pr-8 lg:pr-0">
+        <div className=" max-w-7xl text-base leading-7 text-gray-700 mx-auto">
+          <div className="max-w-3xl lg:min-w-[576px] mx-auto">
             <div className="flex justify-between mt-8 items-center">
               <div className="relative flex items-center gap-x-4">
                 {post?.user?.imageUrl ? (
-                  <img src={post?.user?.imageUrl} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
+                  <img
+                    src={post?.user?.imageUrl}
+                    alt=""
+                    className="h-10 w-10 rounded-full bg-gray-50"
+                  />
                 ) : (
                   <BsPersonCircle className="w-10 h-10 text-gray-300" />
                 )}
@@ -113,10 +117,14 @@ export default function PostPage() {
                 </div>
               )}
             </div>
-            <h1 className="mt-8 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{post?.title}</h1>
-            <div className="mt-6 leading-7 whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: post?.content as string }} />
+            <h1 className="mt-8 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              {post?.title}
+            </h1>
+            <div
+              className="mt-6 leading-7 whitespace-pre-wrap"
+              dangerouslySetInnerHTML={{ __html: post?.content as string }}
+            />
           </div>
-          <SideBar />
         </div>
       </div>
     </>

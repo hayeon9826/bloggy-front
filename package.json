@@ -28,6 +28,7 @@
     "change-case": "^4.1.2",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.7",
+    "deepl-node": "^1.13.1",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "highlight.js": "^11.7.0",

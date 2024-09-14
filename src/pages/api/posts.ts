@@ -1,19 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Configuration, OpenAIApi } from "openai";
 import prisma from "../../lib/prisma";
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
 
 type Data = {
   success?: boolean;
   message?: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<any>
+) {
   if (req.method === "POST") {
     let object;
     const { title, content, email, summary } = req.body;
@@ -49,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const object = await prisma.post.delete({ where: { id } });
     return res.json(object);
   } else {
-    const { id, email, limit = "10", page }: any = req.query;
+    const { id, email, limit = "10", page, q }: any = req.query;
     const where = JSON.parse((req.query.where as any) || "{}");
     let user;
 
@@ -61,13 +57,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     const count = await prisma.post.count({ where });
 
+    const postWhereClause = {
+      ...where,
+      id: id ? id : undefined, // Corrected: Use undefined instead of {} for optional fields
+      userId: email ? user?.id || undefined : undefined,
+      ...(q && {
+        OR: [
+          { title: { contains: q, mode: "insensitive" } },
+          { content: { contains: q, mode: "insensitive" } },
+          { summary: { contains: q, mode: "insensitive" } },
+        ],
+      }),
+    };
+
     const objects = await prisma.post.findMany({
       orderBy: { createdAt: "desc" },
-      where: {
-        ...where,
-        id: id ? id : {},
-        userId: email ? user?.id || "" : {},
-      },
+      where: postWhereClause,
       skip: page === undefined ? 0 : parseInt(page) * parseInt(limit),
       take: parseInt(limit),
       include: { user: true },

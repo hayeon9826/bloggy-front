@@ -46,7 +46,11 @@ export default function Sidebar() {
 
   return (
     <header>
-      <div className={cn("dark hidden bg-gray-900 md:flex md:w-[260px] md:flex-col")}>
+      <div
+        className={cn(
+          "dark hidden bg-gray-900 md:flex md:w-[260px] md:flex-col"
+        )}
+      >
         <div className="flex h-screen min-h-0 flex-col">
           <div className="scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20">
             <div className="scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20">
@@ -68,14 +72,8 @@ export default function Sidebar() {
                           className="flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 mr-2.5 bg-gray-800 hover:bg-gray-800 group animate-flash"
                         >
                           <ChatIcon />
-                          <div className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">{data?.title}</div>
-                          <div className="absolute flex right-1 z-10 text-gray-300 visible">
-                            <button className="p-1 hover:text-white">
-                              <EditIcon />
-                            </button>
-                            <button className="p-1 hover:text-white">
-                              <TrashIcon />
-                            </button>
+                          <div className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">
+                            {data?.title}
                           </div>
                         </a>
                       ) : (
@@ -95,28 +93,13 @@ export default function Sidebar() {
                     )}
                     {chats && chats?.length > 12 && (
                       <button className="btn relative btn-dark btn-small m-auto mb-2">
-                        <div className="flex w-full items-center justify-center gap-2">Show more</div>
+                        <div className="flex w-full items-center justify-center gap-2">
+                          Show more
+                        </div>
                       </button>
                     )}
                   </div>
                 </div>
-                <a className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm">
-                  <TrashIcon />
-                  Clear conversations
-                </a>
-                {/* <a className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm">
-                <span className="flex w-full flex-row justify-between">
-                  <span className="gold-new-button flex items-center gap-3">
-                    <ProfileIcon />
-                    Upgrade to Plus
-                  </span>
-                  <span className="rounded-md bg-yellow-200 py-0.5 px-1.5 text-xs font-medium uppercase text-gray-800">NEW</span>
-                </span>
-              </a>
-              <a className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm">
-                <DarkModeIcon />
-                Dark mode
-              </a> */}
                 <Link href="/">
                   <span className="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm">
                     <GetHelpIcon />
@@ -150,7 +133,9 @@ export default function Sidebar() {
         </button>
       </div>
       {mobileMenuOpen && (
-        <div className={cn("fixed w-full z-[100] bg-gray-900 overflow-y-scroll")}>
+        <div
+          className={cn("fixed w-full z-[100] bg-gray-900 overflow-y-scroll")}
+        >
           <div className="px-4 pb-2 pt-4 flex flex-row-reverse">
             <button type="button" onClick={() => setMobileMenuOpen(false)}>
               <AiOutlineClose className="my-auto text-white text-lg" />
@@ -177,7 +162,9 @@ export default function Sidebar() {
                             className="flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all pr-14 mr-2.5 bg-gray-800 hover:bg-gray-800 group animate-flash"
                           >
                             <ChatIcon />
-                            <div className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">{data?.title}</div>
+                            <div className="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative">
+                              {data?.title}
+                            </div>
                             <div className="absolute flex right-1 z-10 text-gray-300 visible">
                               <button className="p-1 hover:text-white">
                                 <EditIcon />
@@ -204,7 +191,9 @@ export default function Sidebar() {
                       )}
                       {chats && chats?.length > 12 && (
                         <button className="btn relative btn-dark btn-small m-auto mb-2">
-                          <div className="flex w-full items-center justify-center gap-2">Show more</div>
+                          <div className="flex w-full items-center justify-center gap-2">
+                            Show more
+                          </div>
                         </button>
                       )}
                     </div>

@@ -4,18 +4,21 @@ import { Post } from "@/interface";
 import axios from "axios";
 import { useInfiniteQuery } from "react-query";
 import { PostListSkeleton } from "./posts/Skeleton";
-import SideBar from "./SideBar";
+
 import dayjs from "dayjs";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 import PostArticle from "./posts/PostArticle";
 
 import Loader from "./Loader";
+import { useRouter } from "next/router";
 dayjs().format();
 
 export default function PostList() {
   const listRef = useRef<HTMLDivElement | null>(null);
   const listEnd = useIntersectionObserver(listRef, {});
   const isEndPage = !!listEnd?.isIntersecting;
+  const router = useRouter();
+  const { search } = router.query;
 
   const {
     data: posts,
@@ -25,12 +28,13 @@ export default function PostList() {
     isSuccess,
     hasNextPage,
   } = useInfiniteQuery(
-    ["posts"],
+    [`posts-${search}`],
     async ({ pageParam = 0 }) => {
       const result = await axios("/api/posts", {
         params: {
           limit: 10,
           page: pageParam,
+          q: search,
         },
       });
 
@@ -39,7 +43,8 @@ export default function PostList() {
     {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      getNextPageParam: (lastPage: any) => (lastPage.objects?.length > 0 ? lastPage.page + 1 : undefined),
+      getNextPageParam: (lastPage: any) =>
+        lastPage.objects?.length > 0 ? lastPage.page + 1 : undefined,
     }
   );
 
@@ -68,15 +73,24 @@ export default function PostList() {
           <div className="space-y-16 pt-10 sm:pt-16 overflow-y-scroll">
             {isFetching && <PostListSkeleton />}
             {isSuccess && posts?.pages?.length > 1 ? (
-              posts?.pages?.map((page) => page?.objects?.map((post: Post) => <PostArticle key={post.id} post={post} />))
+              posts?.pages?.map((page) =>
+                page?.objects?.map((post: Post) => (
+                  <PostArticle key={post.id} post={post} />
+                ))
+              )
             ) : (
-              <>{!isFetching && <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">No Posts Yet 😂</div>}</>
+              <>
+                {isSuccess && posts?.pages?.length === 0 && (
+                  <div className="w-full lg:w-[576px] rounded p-4 border border-gray-200 text-sm text-gray-500">
+                    No Posts Yet 😂
+                  </div>
+                )}
+              </>
             )}
             {(isFetching || hasNextPage || isFetchingNextPage) && <Loader />}
             <div className="w-full touch-none h-10" ref={listRef} />
           </div>
         </div>
-        <SideBar className="mt-28" />
       </div>
     </div>
   );
