@@ -124,7 +124,7 @@
   <tbody>
     <tr>
       <td><img src="https://github.com/user-attachments/assets/5dc22131-95a3-4bb1-b904-d1b12c698c54" alt="main page"/></td>
-      <td><img src="https://user-images.githubusercontent.com/38210233/233590744-8d294391-d42f-4a67-817f-d237d44eb872.png" alt="list 1" /></td>
+      <td><img src="https://github.com/user-attachments/assets/4b5e7878-cc56-4dd9-8a7f-57140bc89e5e" alt="list 1" /></td>
     </tr>
   </tbody>
 </table>
