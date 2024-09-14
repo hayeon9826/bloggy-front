@@ -17,15 +17,17 @@
 ### 1. DeeplAI 적용
 
 - DeeplAI API는 고급 번역 서비스로, 사용자가 입력한 텍스트를 다양한 언어로 번역할 수 있는 기능을 제공합니다.
-- DeeplAI를 활용하여 블로그 포스트 작성 시 다국어 지원을 제공하며, 사용자는 번역된 텍스트를 블로그에 쉽게 게시할 수 있습니다.
+- DeeplAI를 활용하여 블로그 포스트 작성 시 (한->영, 영->한) 다국어 지원을 제공하며, 사용자는 번역된 텍스트를 블로그에 쉽게 게시할 수 있습니다.
 - 문서의 번역 품질이 높아 사용자가 작성한 콘텐츠의 국제화가 용이하며, 다양한 언어로 독자에게 도달할 수 있습니다.
 
 ### 2. Clova Chat AI 적용
 
 - Clova Chatbot API는 사용자와의 대화 기능을 제공하며, 주로 채팅 모듈에서 사용됩니다.
 - 사용자가 채팅을 시작하면 Clova Chatbot이 입력된 질문을 처리하고, 해당 질문에 적절한 답변을 제공합니다.
-- 예를 들어, 사용자가 "Explain quantum computing in simple terms"와 같은 질문을 하면 Clova Chatbot이 이를 분석하여 간단하게 양자 컴퓨팅을 설명합니다.
+- 주로 'Bloggy' 사용 방법에 대한 내용을 트레이닝 하였으며 예시 질문을 통해 질문을 시작할 수 있습니다.
+- 예를 들어, 사용자가 "How do I start a new chat on Bloggy?"와 같은 질문을 하면, Clova Chatbot이 해당 질문을 분석하여 등록된 답변을 기반으로 Bloggy 챗봇 실행 방식을 설명합니다.
 - Chatbot은 사용자가 여러 번 질문해도 일관된 답변을 제공하도록 설계되어 있습니다.
+- Chatbot은 네이버 클라우드 콘솔을 통해 데이터셋을 빌드하고, 채팅 통계를 확인하고 있습니다.
 
 ### 3. 어드민 기능 (/admin)
 
@@ -123,6 +125,23 @@
     <tr>
       <td><img src="https://user-images.githubusercontent.com/38210233/233590696-40c9313f-480a-45be-ab31-401253ea0c42.png" alt="main page"/></td>
       <td><img src="https://user-images.githubusercontent.com/38210233/233590744-8d294391-d42f-4a67-817f-d237d44eb872.png" alt="list 1" /></td>
+    </tr>
+  </tbody>
+</table>
+
+## Clova AI 트레이닝 예시
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">대화 빌드 내역</th>
+      <th style="text-align: center">대화 통계 내역</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="https://github.com/user-attachments/assets/d051372f-fd84-41d2-9e07-47a5bbb57683" alt="clova build page"/></td>
+      <td><img src="https://github.com/user-attachments/assets/0b29e470-af1a-4aca-9a58-72144b6f40dd" alt="list 1" /></td>
     </tr>
   </tbody>
 </table>
