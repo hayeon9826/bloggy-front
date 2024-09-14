@@ -4,45 +4,69 @@ import LogOutIcon from "@/components/icons/LogOutIcon";
 import GetHelpIcon from "@/components/icons/GetHelpIcon";
 import EditIcon from "@/components/icons/EditIcon";
 import TrashIcon from "@/components/icons/TrashIcon";
-import DarkModeIcon from "@/components/icons/DarkModeIcon";
-import ProfileIcon from "@/components/icons/ProfileIcon";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { AiOutlineMenu, AiOutlinePlus, AiOutlineClose } from "react-icons/ai";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import cn from "classnames";
-import { Dialog } from "@headlessui/react";
 import Link from "next/link";
-import { XMarkIcon } from "@heroicons/react/20/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export interface ChatData {
+interface Chat {
   id: string;
   title: string;
   userId: string;
+}
+
+export interface ChatData {
+  objects: Chat[];
+  totalCount: number;
 }
 
 export default function Sidebar() {
   const router = useRouter();
   const { id } = router.query;
   const { data: session } = useSession();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [page, setPage] = useState<number>(1);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const queryClient = useQueryClient();
 
   const config = {
-    url: `/api/chat?email=${session?.user?.email}`,
+    url: `/api/chat?email=${session?.user?.email}&page=${page}&limit=12`,
   };
 
-  const { data: chats } = useQuery(
-    [config],
+  const {
+    data: chats,
+    refetch,
+    isFetching,
+  } = useQuery(
+    ["chats", page],
     async () => {
       const { data } = await axios(config);
-      return data as ChatData[];
+      return data as ChatData;
     },
     {
       refetchOnWindowFocus: false,
+      keepPreviousData: true,
     }
   );
+
+  const handleShowMore = async () => {
+    setPage((prevPage) => prevPage + 1);
+    await refetch();
+  };
+
+  useEffect(() => {
+    if (page > 1) {
+      queryClient.prefetchQuery(["chats", page + 1], async () => {
+        const { data } = await axios(
+          `/api/chat?email=${session?.user?.email}&page=${page + 1}&limit=12`
+        );
+        return data;
+      });
+    }
+  }, [page, queryClient, session?.user?.email]);
 
   return (
     <header>
@@ -65,7 +89,7 @@ export default function Sidebar() {
                 </div>
                 <div className="flex-col flex-1 overflow-y-auto border-b border-white/20 -mr-2">
                   <div className="flex flex-col gap-2 text-gray-100 text-sm">
-                    {chats?.slice(0, 12)?.map((data) =>
+                    {chats?.objects?.map((data) =>
                       data?.id === id ? (
                         <a
                           key={data?.id}
@@ -91,13 +115,19 @@ export default function Sidebar() {
                         </div>
                       )
                     )}
-                    {chats && chats?.length > 12 && (
-                      <button className="btn relative btn-dark btn-small m-auto mb-2">
-                        <div className="flex w-full items-center justify-center gap-2">
-                          Show more
-                        </div>
-                      </button>
-                    )}
+                    {chats &&
+                      chats?.totalCount > 0 &&
+                      chats?.totalCount > chats?.objects?.length && (
+                        <button
+                          className="btn relative btn-dark btn-small m-auto mb-2 disabled:text-gray-500"
+                          onClick={handleShowMore}
+                          disabled={isFetching}
+                        >
+                          <div className="flex w-full items-center justify-center gap-2">
+                            Show more
+                          </div>
+                        </button>
+                      )}
                   </div>
                 </div>
                 <Link href="/">
@@ -155,7 +185,7 @@ export default function Sidebar() {
                   </div>
                   <div className="flex-col flex-1  overflow-y-scroll border-b border-white/20 -mr-2">
                     <div className="flex flex-col gap-2 text-gray-100 text-sm">
-                      {chats?.slice(0, 5)?.map((data) =>
+                      {chats?.objects?.map((data) =>
                         data?.id === id ? (
                           <a
                             key={data?.id}
@@ -189,13 +219,19 @@ export default function Sidebar() {
                           </div>
                         )
                       )}
-                      {chats && chats?.length > 12 && (
-                        <button className="btn relative btn-dark btn-small m-auto mb-2">
-                          <div className="flex w-full items-center justify-center gap-2">
-                            Show more
-                          </div>
-                        </button>
-                      )}
+                      {chats &&
+                        chats?.totalCount > 0 &&
+                        chats?.totalCount > chats?.objects?.length && (
+                          <button
+                            className="btn relative btn-dark btn-small m-auto mb-2 disabled:text-gray-500"
+                            onClick={handleShowMore}
+                            disabled={isFetching}
+                          >
+                            <div className="flex w-full items-center justify-center gap-2">
+                              Show more
+                            </div>
+                          </button>
+                        )}
                     </div>
                   </div>
                   <div className="pt-4">

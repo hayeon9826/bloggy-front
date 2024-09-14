@@ -85,7 +85,7 @@ export default async function handler(
   } else if (req.method === "GET") {
     // GET 메서드 처리 (변경 없음)
     try {
-      const { id, email } = req.query;
+      const { id, email, page = 1, limit = 12 } = req.query;
 
       let user;
 
@@ -99,6 +99,14 @@ export default async function handler(
         }
       }
 
+      const totalCount = await prisma.chat.count({
+        where: {
+          ...(email && { userId: user?.id }),
+        },
+      });
+
+      const take = Number(page) * Number(limit);
+
       const objects = await prisma.chat.findMany({
         orderBy: { createdAt: "desc" },
         where: {
@@ -106,9 +114,10 @@ export default async function handler(
           ...(email && { userId: user?.id }),
         },
         include: { user: true, messages: true },
+        take: take,
       });
 
-      res.status(200).json(id ? objects[0] : objects);
+      res.status(200).json(id ? objects[0] : { objects, totalCount });
     } catch (error) {
       console.error("Error in GET handler:", error);
       res

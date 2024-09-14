@@ -66,48 +66,25 @@ export default function ChatList({ inputPrompt }: Props) {
                     <button
                       className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900"
                       onClick={() =>
-                        handleCopyClipBoard(
-                          "Explain quantum computing in simple terms"
-                        )
+                        handleCopyClipBoard("Hi, What's your name?")
                       }
-                    >{`"Explain quantum computing in simple terms" →`}</button>
+                    >{`"Hi, What's your name?" →`}</button>
                     <button
                       className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900"
                       onClick={() =>
-                        handleCopyClipBoard(
-                          "Got any creative ideas for a 10 year old’s birthday?"
-                        )
+                        handleCopyClipBoard("What have you been up to?")
                       }
                     >
-                      {` "Got any creative ideas for a 10 year old’s birthday?" →`}
+                      {` "What have you been up to?" →`}
                     </button>
                     <button
                       className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900"
                       onClick={() =>
-                        handleCopyClipBoard(
-                          "How do I make an HTTP request in Javascript?"
-                        )
+                        handleCopyClipBoard("Who are you, Cloudbot?")
                       }
                     >
-                      {`"How do I make an HTTP request in Javascript?" →`}
+                      {`"Who are you, Cloudbot?" →`}
                     </button>
-                  </ul>
-                </div>
-                <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
-                  <h2 className="flex gap-3 items-center m-auto text-lg font-normal md:flex-col md:gap-2">
-                    <AiOutlineThunderbolt />
-                    Capabilities
-                  </h2>
-                  <ul className="flex flex-col gap-3.5 w-full sm:max-w-md m-auto">
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      Remembers what user said earlier in the conversation
-                    </li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      Allows user to provide follow-up corrections
-                    </li>
-                    <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      Trained to decline inappropriate requests
-                    </li>
                   </ul>
                 </div>
                 <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
@@ -120,10 +97,10 @@ export default function ChatList({ inputPrompt }: Props) {
                       May occasionally generate incorrect information
                     </li>
                     <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      May occasionally produce harmful instructions
+                      Could sometimes offer incomplete instructions
                     </li>
                     <li className="w-full bg-gray-50 bg-white/5 p-3 rounded-md">
-                      Limited knowledge of world and events after 2021
+                      Responses are based on trained data only
                     </li>
                   </ul>
                 </div>
