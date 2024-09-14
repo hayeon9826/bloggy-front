@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useEffect, useRef } from "react";
 
 export interface MessageData {
   id: number;
@@ -22,6 +23,7 @@ interface Props {
 export default function ChatList({ inputPrompt }: Props) {
   const router = useRouter();
   const { id } = router.query;
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const config = {
     url: `/api/chat?id=${id}`,
@@ -46,6 +48,10 @@ export default function ChatList({ inputPrompt }: Props) {
       toast.error("Something went wrong. Please try again.");
     }
   };
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chat, inputPrompt]);
 
   return (
     <div className="text-white pb-28 w-full min-h-screen mt-10 lg:mt-0">
@@ -72,18 +78,18 @@ export default function ChatList({ inputPrompt }: Props) {
                     <button
                       className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900"
                       onClick={() =>
-                        handleCopyClipBoard("What have you been up to?")
+                        handleCopyClipBoard("Tell me about Bloggy")
                       }
                     >
-                      {` "What have you been up to?" →`}
+                      {` "Tell me about Bloggy" →`}
                     </button>
                     <button
                       className="w-full bg-gray-50 bg-white/5 p-3 rounded-md hover:bg-gray-900"
                       onClick={() =>
-                        handleCopyClipBoard("Who are you, Cloudbot?")
+                        handleCopyClipBoard("Is Bloggy suitable for beginners?")
                       }
                     >
-                      {`"Who are you, Cloudbot?" →`}
+                      {`"Is Bloggy suitable for beginners?" →`}
                     </button>
                   </ul>
                 </div>
@@ -154,6 +160,7 @@ export default function ChatList({ inputPrompt }: Props) {
           </div>
         </div>
       )}
+      <div ref={chatEndRef} />
     </div>
   );
 }

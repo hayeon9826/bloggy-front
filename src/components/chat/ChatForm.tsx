@@ -30,7 +30,6 @@ export default function ChatForm({ setInputPrompt }: Props) {
 
     try {
       setLoading(true);
-
       if (id) {
         const res = await axios.post(`/api/messages`, {
           prompt: prompt,
@@ -43,17 +42,6 @@ export default function ChatForm({ setInputPrompt }: Props) {
           throw new Error("Something went wrong");
         }
         queryClient.invalidateQueries([`chat-${id}`]);
-
-        // const aiRes = await axios.post(`/api/aiMessages`, {
-        //   prompt: prompt,
-        //   type: "CHAT",
-        //   chatId: id,
-        //   email: session?.user?.email,
-        // });
-        // queryClient.invalidateQueries([`chat-${id}`]);
-        // if (!aiRes.data) {
-        //   throw new Error("Something went wrong");
-        // }
       } else {
         const chatRes = await axios.post(`/api/chat`, {
           prompt: prompt,
@@ -75,16 +63,6 @@ export default function ChatForm({ setInputPrompt }: Props) {
           throw new Error("Something went wrong");
         }
 
-        // const aiRes = await axios.post(`/api/aiMessages`, {
-        //   prompt: prompt,
-        //   type: "CHAT",
-        //   chatId: id,
-        //   email: session?.user?.email,
-        // });
-        // queryClient.invalidateQueries([`chat-${id}`]);
-        // if (!aiRes.data) {
-        //   throw new Error("Something went wrong");
-        // }
         setPrompt("");
         queryClient.invalidateQueries([`chat-${id}`]);
         router.replace(`/chats/${id}`);
@@ -101,7 +79,7 @@ export default function ChatForm({ setInputPrompt }: Props) {
   };
 
   return (
-    <form className="stretch z-10 flex flex-row gap-3 pb-2 absolute w-full bottom-0 inset-x-0 mx-auto bg-gradient-to-t from-gray-800 to-gray-800/20">
+    <form className="stretch z-10 flex flex-row gap-3 pb-2 absolute w-full bottom-0 inset-x-0 mx-auto bg-gradient-to-t from-gray-800 to-gray-800/0">
       <div className="relative lg:flex h-full flex-1 md:flex-col lg:mx-auto lg:max-w-2xl xl:max-w-3xl mx-4 last:mb-6 ">
         <div className="flex ml-1 md:w-full md:m-auto md:mb-2 mb-2 gap-0 md:gap-2 justify-center">
           <button
@@ -129,7 +107,6 @@ export default function ChatForm({ setInputPrompt }: Props) {
             rows={1}
             disabled={loading}
             autoFocus
-            // defaultValue={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
             onKeyDown={(e) => {
