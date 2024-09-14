@@ -123,7 +123,7 @@
   </thead>
   <tbody>
     <tr>
-      <td><img src="https://user-images.githubusercontent.com/38210233/233590696-40c9313f-480a-45be-ab31-401253ea0c42.png" alt="main page"/></td>
+      <td><img src="https://github.com/user-attachments/assets/5dc22131-95a3-4bb1-b904-d1b12c698c54" alt="main page"/></td>
       <td><img src="https://user-images.githubusercontent.com/38210233/233590744-8d294391-d42f-4a67-817f-d237d44eb872.png" alt="list 1" /></td>
     </tr>
   </tbody>
