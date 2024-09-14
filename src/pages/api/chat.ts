@@ -1,13 +1,10 @@
-import { PromptPrefix, PromptType } from "@/interface";
 import type { NextApiRequest, NextApiResponse } from "next";
-import OpenAI from "openai";
 import prisma from "@/lib/prisma";
+import axios from "axios";
+import { makeSignature } from "./signature"; // 위에서 만든 Signature 생성 함수 임포트
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  organization: process.env.OPEN_AI_ORGANIZATION_KEY,
-  project: process.env.OPEN_AI_PROJECT_ID,
-});
+const CLOVA_CHATBOT_API_URL = process.env.CLOVA_CHAT_API_URL as string;
+const CLOVA_SECRET_KEY = process.env.CLOVA_CHAT_SECRET as string;
 
 type Data = {
   success?: boolean;
@@ -18,7 +15,7 @@ type Data = {
 type RequestData = {
   email: string;
   prompt: string;
-  type: PromptType;
+  type: string;
 };
 
 export default async function handler(
@@ -27,9 +24,9 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      const { email, prompt, type }: RequestData = req.body;
+      const { email, prompt }: RequestData = req.body;
 
-      // Fetch the current user from the database
+      // 데이터베이스에서 현재 사용자 검색
       const currentUser = await prisma.user.findFirst({
         where: { email },
       });
@@ -38,29 +35,43 @@ export default async function handler(
         return res.status(404).json({ message: "User not found." });
       }
 
-      // Make a request to the OpenAI API using the gpt-4o-mini model
-      const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
+      // CLOVA Chatbot 요청 바디 생성
+      const requestBody = {
+        version: "v2",
+        userId: currentUser.id, // 사용자 고유 ID
+        timestamp: Date.now(),
+        bubbles: [
           {
-            role: "user",
-            content: `${PromptPrefix[type]}${prompt}`,
+            type: "text",
+            data: {
+              description: prompt, // 사용자의 질의
+            },
           },
         ],
-        temperature: 0.7,
+        event: "send", // 이벤트 타입
+      };
+
+      // Signature 생성
+      const signature = makeSignature(
+        CLOVA_SECRET_KEY,
+        JSON.stringify(requestBody)
+      );
+
+      // CLOVA Chatbot API 호출
+      const response = await axios.post(CLOVA_CHATBOT_API_URL, requestBody, {
+        headers: {
+          "Content-Type": "application/json;UTF-8",
+          "X-NCP-CHATBOT_SIGNATURE": signature,
+        },
       });
 
-      const title = response.choices[0]?.message?.content?.trim();
+      const chatbotResponse = response.data;
 
-      if (!title) {
-        return res.status(500).json({ message: "Failed to generate title." });
-      }
-
-      // Create a chat record in the database
+      // 결과를 데이터베이스에 저장하거나 필요한 처리를 진행
       const object = await prisma.chat.create({
         data: {
           userId: currentUser.id,
-          title,
+          title: chatbotResponse.bubbles[0]?.data?.description || "No Title",
         },
       });
 
@@ -72,6 +83,7 @@ export default async function handler(
         .json({ success: false, message: "Internal server error", error });
     }
   } else if (req.method === "GET") {
+    // GET 메서드 처리 (변경 없음)
     try {
       const { id, email } = req.query;
 

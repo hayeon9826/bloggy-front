@@ -1,13 +1,12 @@
 import { PromptPrefix, PromptType } from "@/interface";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Configuration, OpenAIApi } from "openai";
+import { makeSignature } from "./signature";
+
 import prisma from "@/lib/prisma";
+import axios from "axios";
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
+const CLOVA_CHATBOT_API_URL = process.env.CLOVA_CHAT_API_URL as string;
+const CLOVA_SECRET_KEY = process.env.CLOVA_CHAT_SECRET as string;
 
 type Data = {
   success?: boolean;
@@ -54,36 +53,52 @@ export default async function handler(
         },
       });
 
-      // trigger OpenAI completion
-      // const response = await openai.createCompletion({
-      //   model: "gpt-4o-mini",
-      //   max_tokens: 50,
-      //   prompt: `${PromptPrefix[type]}${prompt} \nAI:`,
-      //   temperature: 0.9,
-      //   top_p: 1,
-      //   frequency_penalty: 0.0,
-      //   presence_penalty: 0.6,
-      //   stop: [" Human:", " AI:"],
-      // });
+      // CLOVA Chatbot API 요청 설정
+      const timestamp = Date.now();
+      const requestBody = {
+        version: "v2",
+        userId: user.id,
+        timestamp,
+        bubbles: [{ type: "text", data: { description: prompt } }],
+        event: "send",
+      };
 
-      // retrieve the completion text from response
-      // const completion = response.data.choices[0]?.text;
+      const signature = makeSignature(
+        CLOVA_SECRET_KEY,
+        JSON.stringify(requestBody)
+      );
 
-      // if (completion) {
-      //   answer = await prisma.message.create({
-      //     data: {
-      //       chatType: "AI",
-      //       chatId,
-      //       body: completion,
-      //     },
-      //     include: {
-      //       chat: true,
-      //     },
-      //   });
-      // }
+      const response = await axios.post(CLOVA_CHATBOT_API_URL, requestBody, {
+        headers: {
+          "Content-Type": "application/json;UTF-8",
+          "X-NCP-CHATBOT_SIGNATURE": signature,
+        },
+      });
+
+      const botResponse = response.data.bubbles[0]?.data?.description;
+
+      if (!botResponse) {
+        return res
+          .status(500)
+          .json({ message: "Failed to generate response." });
+      }
+
+      // AI 응답을 데이터베이스에 저장
+      answer = await prisma.message.create({
+        data: {
+          chatType: "AI",
+          chatId,
+          body: botResponse,
+        },
+        include: {
+          chat: true,
+        },
+      });
+
       return res.status(200).json({
         success: true,
         message: object,
+        answer,
       });
     } catch (error: any) {
       console.log(error.message);

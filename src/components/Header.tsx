@@ -140,14 +140,23 @@ export default function Header() {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="py-6">
-                <span className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-light leading-7 text-gray-900 hover:bg-gray-50">
-                  {status === "authenticated" && (
+                {status === "authenticated" && (
+                  <span className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-light leading-7 text-gray-900 hover:bg-gray-50">
                     <div className="mb-2">
                       <Link href={`/profile/${session?.user?.email}`}>
                         Profile
                       </Link>
                     </div>
-                  )}
+                  </span>
+                )}
+                {status === "authenticated" && (
+                  <span className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-light leading-7 text-gray-900 hover:bg-gray-50">
+                    <div className="mb-2">
+                      <Link href={`/chats`}>Chat</Link>
+                    </div>
+                  </span>
+                )}
+                <span className="-mx-3 block rounded-lg py-2.5 px-3 text-base font-light leading-7 text-gray-900 hover:bg-gray-50">
                   {status === "authenticated" ? (
                     <button
                       type="button"

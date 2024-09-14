@@ -44,16 +44,16 @@ export default function ChatForm({ setInputPrompt }: Props) {
         }
         queryClient.invalidateQueries([`chat-${id}`]);
 
-        const aiRes = await axios.post(`/api/aiMessages`, {
-          prompt: prompt,
-          type: "CHAT",
-          chatId: id,
-          email: session?.user?.email,
-        });
-        queryClient.invalidateQueries([`chat-${id}`]);
-        if (!aiRes.data) {
-          throw new Error("Something went wrong");
-        }
+        // const aiRes = await axios.post(`/api/aiMessages`, {
+        //   prompt: prompt,
+        //   type: "CHAT",
+        //   chatId: id,
+        //   email: session?.user?.email,
+        // });
+        // queryClient.invalidateQueries([`chat-${id}`]);
+        // if (!aiRes.data) {
+        //   throw new Error("Something went wrong");
+        // }
       } else {
         const chatRes = await axios.post(`/api/chat`, {
           prompt: prompt,
@@ -75,16 +75,16 @@ export default function ChatForm({ setInputPrompt }: Props) {
           throw new Error("Something went wrong");
         }
 
-        const aiRes = await axios.post(`/api/aiMessages`, {
-          prompt: prompt,
-          type: "CHAT",
-          chatId: id,
-          email: session?.user?.email,
-        });
-        queryClient.invalidateQueries([`chat-${id}`]);
-        if (!aiRes.data) {
-          throw new Error("Something went wrong");
-        }
+        // const aiRes = await axios.post(`/api/aiMessages`, {
+        //   prompt: prompt,
+        //   type: "CHAT",
+        //   chatId: id,
+        //   email: session?.user?.email,
+        // });
+        // queryClient.invalidateQueries([`chat-${id}`]);
+        // if (!aiRes.data) {
+        //   throw new Error("Something went wrong");
+        // }
         setPrompt("");
         queryClient.invalidateQueries([`chat-${id}`]);
         router.replace(`/chats/${id}`);

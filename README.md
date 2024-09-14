@@ -1,14 +1,20 @@
 ## 서비스 설명
 
-- Open AI의 gpt-4o-mini를 이용한 프로젝트
+- DeeplAI 및 Clova Chat AI를 이용한 프로젝트
 - 크게 Blog, Chat, Admin 세 가지로 구성되어 있음
-- Open AI API 참고 링크: [Tutorial: Build a Chatbot with React and OpenAI](https://blog.bitsrc.io/tutorial-build-a-chatbot-with-react-and-openai-2c183c50991e)
+- Deepl API Docs: [Learn more about the DeepL API's capabilities and common use cases.](https://developers.deepl.com/docs)
+- Clova Chatbot API Docs: [CLOVA Chatbot 개요](https://api.ncloud-docs.com/docs/ai-application-service-chatbot)
 
 ## 사용 기술
 
 - Frontend: React.js, Next.js, Typescript, Tailwindcss
 - Backend: Prisma, Supabase, Next.js API Routes
 - Deployment: Vercel
+- AI: DeeplAI API, Clova Chabot AI API
+
+## 구현 기능
+
+## 상세 코드 설명
 
 ## 메인 페이지 & 블로그 (/)
 
@@ -90,53 +96,3 @@
     </tr>
   </tbody>
 </table>
-
----
-
-## 구현 기능
-
-- [x] 전체: tailwind 세팅, 레이아웃 작업
-- [x] blog: react-quill 적용
-- [x] blog: react-quill codeblock 적용
-- [x] blog: prisma, supabase db 연결
-- [x] blog: 에디터로 post 생성하기
-- [x] blog: next-auth 구글 로그인
-- [x] blog: next-auth 구글 로그인 후 데이터 저장
-- [x] blog: profile 페이지 작업
-- [x] blog: AI create blog post 버튼 추가
-- [x] blog: get membership 배너 cookie 작업 (24시간)
-- [x] blog: 랜딩 페이지 작업
-- [x] blog: 게시글 수정
-- [x] blog: 게시글 삭제
-- [x] blog: FREE 멤버십 API 호출 월 10회 제한
-- [ ] blog: AI continue writing 버튼 기능 추가
-- [ ] blog: AI enhancement 버튼 추가
-- [ ] blog: blog: AI summarize 버튼 추가
-- [x] blog: infinite scroll 추가
-- [ ] blog: 사이드 바 구성 (recent, recommendation)
-- [ ] blog: 유료 멤버십 request access 페이지 작업
-- [x] blog: amplitude 세팅
-- [ ] blog: 공개 url 작업
-- [ ] blog: sns 공유 작업
-- [ ] blog: 전체 복사 작업
-- [ ] blog: 검색창 작업
-- [ ] blog: 임시저장 작업
-- [ ] blog: 헤더 드롭 다운 항목 추가 (이미지 사진 -> profile, logout)
-- [ ] blog: 댓글 기능
-- [ ] blog: 좋아요 기능
-- [ ] blog: 조회수 기능
-- [x] admin: 기본 CRUD 작업
-- [x] admin: 레이아웃 작업
-- [x] admin: pagination 작업
-- [x] admin: relations 업데이트 작업
-- [x] admin: relations 보여주기 작업
-- [ ] admin: amplitude 세팅
-- [ ] admin: 이미지 업로드 작업 (단일)
-- [ ] admin: 이미지 업로드 작업 (다중)
-- [x] chat: 레이아웃 작업
-- [x] chat: 모바일 반응형 작업
-- [x] chat: api 작업
-- [x] chat: gpt 연동 작업
-- [ ] chat: 실시간 스트리밍
-- [ ] chat: regenerate 작업
-- [ ] chat: clear all 작업
