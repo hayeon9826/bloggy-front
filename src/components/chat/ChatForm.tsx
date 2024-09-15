@@ -99,6 +99,7 @@ export default function ChatForm({ setInputPrompt }: Props) {
           <div className="w-full flex gap-4 overflow-x-scroll mb-4 items-center">
             {FAQS?.map((faq) => (
               <button
+                key={faq}
                 type="button"
                 onClick={() => {
                   setPrompt(faq);
