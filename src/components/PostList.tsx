@@ -32,7 +32,7 @@ export default function PostList() {
     async ({ pageParam = 0 }) => {
       const result = await axios("/api/posts", {
         params: {
-          limit: 10,
+          limit: 5,
           page: pageParam,
           q: search,
         },

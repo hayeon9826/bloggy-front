@@ -2,13 +2,27 @@ import RegenerateIcon from "@/components/icons/RegenerateIcon";
 import { TbLoader } from "react-icons/tb";
 import ClickIcon from "@/components/icons/ClickIcon";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
 import axios from "axios";
 import Loader from "@/components/Loader";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useQueryClient } from "react-query";
 import cn from "classnames";
-import { toast } from "react-hot-toast";
+
+const FAQS = [
+  "How to use Bloggy?",
+  "Does Bloggy support multiple languages?",
+  "What is Bloggy?",
+  "What is Deepl?",
+  "What is Clova Chat AI?",
+  "How do I start a new chat on Bloggy?",
+  "What are the limitations of Clova Chat AI?",
+  "What is the pricing of the service?",
+  "Is Bloggy secure?",
+  "How do I get help on Bloggy?",
+  "What makes Bloggy different from other platforms?",
+];
 
 interface Props {
   setInputPrompt: Dispatch<SetStateAction<string>>;
@@ -17,6 +31,7 @@ interface Props {
 export default function ChatForm({ setInputPrompt }: Props) {
   const [prompt, setPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [showFaqs, setShowFaqs] = useState<boolean>(false);
   const textareaRef = useRef<any>(null);
   const router = useRouter();
   const { id } = router.query;
@@ -80,26 +95,46 @@ export default function ChatForm({ setInputPrompt }: Props) {
   return (
     <form className="stretch z-10 flex flex-row gap-3 pb-2 absolute w-full bottom-0 inset-x-0 mx-auto bg-gradient-to-t from-gray-800 to-gray-800/0">
       <div className="relative lg:flex h-full flex-1 md:flex-col lg:mx-auto lg:max-w-2xl xl:max-w-3xl mx-4 last:mb-6 ">
-        <div className="flex ml-1 md:w-full md:m-auto md:mb-2 mb-2 gap-0 md:gap-2 justify-center">
-          <button
-            type="button"
-            disabled={loading}
-            onClick={() => toast.error("Please try again.")}
-            className="min-w-[183px] min-h-[38px] px-3 py-2 rounded-md relative text-sm border border-white/50 text-white bg-gray-800"
-          >
-            <div className="flex w-full items-center justify-center gap-2">
-              {loading ? (
-                <Loader />
-              ) : (
-                <>
-                  {" "}
-                  <RegenerateIcon />
-                  Regenerate response
-                </>
-              )}
-            </div>
-          </button>
-        </div>
+        {showFaqs ? (
+          <div className="w-full flex gap-4 overflow-x-scroll mb-4 items-center">
+            {FAQS?.map((faq) => (
+              <button
+                type="button"
+                onClick={() => {
+                  setPrompt(faq);
+                  setShowFaqs((val) => !val);
+                }}
+                className="min-w-[200px] min-h-[24px] px-4 py-2 rounded-lg relative text-sm border border-white/50 text-white bg-gray-800 hover:bg-gray-900"
+              >
+                <div className="flex w-full items-center justify-center gap-2">
+                  {faq}
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="flex ml-1 md:w-full md:m-auto md:mb-2 mb-2 gap-0 md:gap-2 justify-center">
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => setShowFaqs((val) => !val)}
+              className="min-w-[183px] min-h-[38px] px-3 py-2 rounded-md relative text-sm border border-white/50 text-white bg-gray-800 hover:bg-gray-900"
+            >
+              <div className="flex w-full items-center justify-center gap-2">
+                {loading ? (
+                  <Loader />
+                ) : (
+                  <>
+                    {" "}
+                    <AiOutlineQuestionCircle />
+                    Frequently asked questions
+                  </>
+                )}
+              </div>
+            </button>
+          </div>
+        )}
+
         <div className="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-gray-700 dark:border-gray-900/50 text-white rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
           <textarea
             ref={textareaRef}
