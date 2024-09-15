@@ -58,7 +58,7 @@ export default function HeroSection() {
           <div className="mt-24 sm:mt-32 lg:mt-16">
             <a href="#" className="inline-flex space-x-6">
               <span className="rounded-full bg-blue-500/10 px-3 py-1 text-sm font-semibold leading-6 text-blue-400 ring-1 ring-inset ring-blue-500/20">
-                Blog with ChatGPT
+                Blog with Deepl AI and Clova Chat AI
               </span>
             </a>
           </div>
@@ -66,9 +66,9 @@ export default function HeroSection() {
             Write Faster
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-300">
-            Write your blog article with ChatGPT gpt-4o-mini. It will write a
-            proposal in one minute just as you fill in the title. What{`'`}s
-            more, AI could do the paraphrase, enhancement, and summary for you.
+            Write your blog article with Deepl AI. It will translate entire
+            article from Korean to English or vice versa. Just write the article
+            with the favor language and AI will do the rest for you!
           </p>
           <div className="mt-10 flex items-center gap-x-6">
             <Link href="/users/login">

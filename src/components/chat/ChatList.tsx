@@ -3,7 +3,7 @@ import { BiUser, BiLoader } from "react-icons/bi";
 import { BsRobot } from "react-icons/bs";
 import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { BsSun } from "react-icons/bs";
-import { AiOutlineThunderbolt, AiOutlineWarning } from "react-icons/ai";
+import { AiOutlineWarning } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -60,7 +60,7 @@ export default function ChatList({ inputPrompt }: Props) {
           <div className="flex flex-col items-center text-sm bg-gray-800">
             <div className="w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 text-gray-100">
               <h1 className="text-3xl font-semibold text-center mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 sm:mb-16 flex gap-2 items-center justify-center">
-                ChatGPT
+                BloggChat
               </h1>
               <div className="md:flex items-start text-center gap-3.5">
                 <div className="flex flex-col mb-8 md:mb-auto gap-3.5 flex-1">
