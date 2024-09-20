@@ -38,11 +38,7 @@ export default function ChatForm({ setInputPrompt }: Props) {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
-  const submitPrompt = async (event: any) => {
-    if (event.key !== "Enter") {
-      return;
-    }
-
+  const submitPrompt = async () => {
     try {
       setLoading(true);
       if (id) {
@@ -145,9 +141,9 @@ export default function ChatForm({ setInputPrompt }: Props) {
             onChange={(e) => setPrompt(e.target.value)}
             value={prompt}
             onKeyDown={(e) => {
-              submitPrompt(e);
               if (e.key === "Enter") {
                 () => setInputPrompt(prompt);
+                submitPrompt();
               }
             }}
             placeholder="Send a message..."
@@ -164,7 +160,11 @@ export default function ChatForm({ setInputPrompt }: Props) {
             }}
           />
           <button
-            disabled={false}
+            disabled={loading}
+            onClick={(e) => {
+              e.preventDefault();
+              submitPrompt();
+            }}
             className="absolute p-1 rounded-md text-gray-500 bottom-1.5 md:bottom-2.5 hover:bg-gray-100 enabled:dark:hover:text-gray-400 dark:hover:bg-gray-900 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent right-1 md:right-2 disabled:opacity-40"
           >
             {loading ? <TbLoader className="h-4 w-4 mr-1" /> : <ClickIcon />}
